@@ -41,6 +41,7 @@ import { Tooltip } from "antd";
 import moment from "moment";
 import { Help } from "components/common/help";
 import { HelpListCamporee } from "help/camporee/listado";
+import { ExtendedTypesSelectEnums } from "consts/typesSelectEnum";
 
 // import Image from "next/image";
 type Params = {
@@ -50,6 +51,7 @@ type Params = {
   page?: number;
   limit?: number;
   userId?: number;
+	type?: ExtendedTypesSelectEnums;
 };
 
 const HeaderClassName = `
@@ -70,7 +72,7 @@ const DataClassName = `
     text-white
 `;
 
-const CamporeeList = () => {
+const CamporeeList = ({ type, festival = false }: { type: ExtendedTypesSelectEnums, festival?: boolean }) => {
   const {
     Modal: ModalCreate,
     hide: hideCreate,
@@ -88,7 +90,7 @@ const CamporeeList = () => {
   const [dataView, setDataView] = React.useState<any>();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [subject, setSubject] = React.useState(new Subject<string>());
-  const [params, setValue] = useQueryParams<Params>({ limit: 8 });
+  const [params, setValue] = useQueryParams<Params>({ limit: 8, type });
   const {
     data: response,
     isLoading,
@@ -119,7 +121,7 @@ const CamporeeList = () => {
       tdClassName: DataClassName,
       selector: (value: any) => (
         <Link
-          href={`${appRouter.dashboard.href}${appRouter.dashboard.subLinks.camporee.href}/${appRouter.dashboard.subLinks.camporee.subLinks.detail.href}/${value.id}`}
+          href={`${appRouter.dashboard.href}${festival ? appRouter.dashboard.subLinks.festival.href : appRouter.dashboard.subLinks.camporee.href}/${appRouter.dashboard.subLinks.camporee.subLinks.detail.href}/${value.id}`}
         >
           <a>
             <IconWithText icon={value?.logo} text={value?.nombre} />
@@ -175,7 +177,7 @@ const CamporeeList = () => {
             <Tooltip title="Ver detalle">
               <div className="flex-shrink-0 h-10 w-8 ml-5">
                 <Link
-                  href={`${appRouter.dashboard.href}${appRouter.dashboard.subLinks.camporee.href}/${appRouter.dashboard.subLinks.camporee.subLinks.detail.href}/${value.id}`}
+                  href={`${appRouter.dashboard.href}${festival ? appRouter.dashboard.subLinks.festival.href : appRouter.dashboard.subLinks.camporee.href}/${appRouter.dashboard.subLinks.camporee.subLinks.detail.href}/${value.id}`}
                 >
                   <a>
                     <Icon
@@ -332,9 +334,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
-  
+
+  const { type } = context.query;
 	return {
-		props: {},
+		props: { type: type || null },
 	};
 };
 

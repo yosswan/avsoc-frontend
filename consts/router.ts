@@ -16,6 +16,9 @@ export const appRouter = {
       estadisticas: {
         href: "/estadisticas",
       },
+			festival: {
+        href: "/festival",
+      },
       camporee: {
         href: "/camporee",
         subLinks: {
