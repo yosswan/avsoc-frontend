@@ -28,7 +28,7 @@ export const ItemNavbar: React.FC<itemNavbarsProps> = ({
       <p className="text-white f-18 font-semibold px-3 pt-7">{item.label}</p>
       {item?.subNavigation?.map((subItem: any, positionSubMenu: any) => {
         return (
-          <Fragment key={subItem.name}>
+          <Fragment key={subItem.id}>
             {subItem.dropdown ? (
               <div
                 className={clsx(
