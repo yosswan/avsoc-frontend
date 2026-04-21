@@ -13,7 +13,7 @@ import EditProfile from "components/profile/editRole";
 
 export const DropdownProfile = () => {
   const { Modal, hide, isShow, show } = useModal();
-  const profile = useUser();
+  const profile = useUser(true);
 
   const data = get(profile, "data", []);
   const user = get(data, "user", []);

@@ -22,8 +22,8 @@ const EditProfile = ({ data, hide, refetch }: any) => {
   //   [UseQueryEnums.GET_ALL_CARGOS],
   //   () => CargosServices.getAll()
   // );
-  const profile = useUser();
-  const dataUser = get(profile, "data", []);
+  // const profile = useUser();
+  // const dataUser = get(profile, "data", []);
   const { addToast } = useToasts();
   const router = useRouter();
 
@@ -186,7 +186,7 @@ const EditProfile = ({ data, hide, refetch }: any) => {
                 size="full"
                 type="submit"
                 sizesButton="py-3"
-                disabled={watch("rol") === dataUser.scope_actual}
+                disabled={watch("rol") === scopes_actual}
                 // disabled={
                 //   !isDirty || !isValid || !!isLoading
                 //   // isEmpty(selectValueMiembros?.label) ||

@@ -130,6 +130,20 @@ export const isRole = (dataUser: any, roles: string[]) => {
 };
 
 export const getSession = (context: GetServerSidePropsContext<ParsedUrlQuery, PreviewData>) => {
+
+	// const cookies = context.req.cookies;
+	// const possibleCookieNames = [
+	// 	'__Secure-next-auth.session-token',
+	// 	'next-auth.session-token',
+	// 	'__Host-next-auth.session-token',
+	// ];
+	
+	// for (const cookieName of possibleCookieNames) {
+	// 	if (cookies[cookieName]) {
+	// 		return jwt.decode(cookies[cookieName]) as DecodedSessionToken;
+	// 	}
+	// }
+
 	if (context.req.cookies['__Secure-next-auth.session-token']) {
 		return jwt.decode(context.req.cookies['__Secure-next-auth.session-token']) as DecodedSessionToken;
 	}

@@ -12,9 +12,8 @@ import { useToasts } from "react-toast-notifications";
 import { AuthService } from "services";
 
 const Dashboard = () => {
-  const user = useUser();
+  const user = useUser(true);
   const profile = get(user, "data.user", []);
-  const { refetch } = user;
   const { addToast } = useToasts();
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -26,7 +25,6 @@ const Dashboard = () => {
         addToast("Correo de verificacion enviado exitosamente", {
           appearance: "success",
         });
-        refetch();
         setIsLoading(false);
       })
       .catch((e: any) => {

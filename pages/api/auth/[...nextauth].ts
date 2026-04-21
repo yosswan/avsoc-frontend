@@ -27,11 +27,19 @@ const options: NextAuthOptions = {
         try {
           if (credentials?.newData) {
             const newSession = JSON.parse(credentials?.newData);
-            return {
-              access_token: newSession.access_token,
-              expires_at: newSession.expires_at,
-							scope_actual: newSession.scope_actual,
+						const oldSession = JSON.parse(credentials?.oldSession);
+            const response = {
+							...oldSession,
+              access_token: newSession.access_token || oldSession.access_token,
+              expires_at: newSession.expires_at || oldSession.expires_at,
+							scope_actual: newSession.scope_actual || oldSession.scope_actual,
+							user: {
+								...oldSession.user,
+								verificado: newSession.user.verificado || oldSession.user.verificado
+							}
             };
+						// console.log('response', response)
+						return response;
           } else {
             const res = await fetch(
               `${process.env.NEXT_PUBLIC_API}/auth/login`,
@@ -54,7 +62,7 @@ const options: NextAuthOptions = {
                   ...responseData,
                   user: {
                     ...responseData?.user,
-                    foto: "",
+										foto: "",
                   },
                 };
               }
@@ -80,6 +88,19 @@ const options: NextAuthOptions = {
         session.tokenExpired = token.expires_at;
 				session.scope_actual = token.scope_actual;
         // session.roles = token.user.roles;
+        
+        // Guardar información del usuario en la sesión
+        if (token.user) {
+          session.user = {
+            ...session.user,
+            id: token.user.id_user,
+            email: token.user.email,
+            verificado: token.user.verificado,
+						foto: token.user.foto,
+						nombres: token.user.nombres,
+						apellidos: token.user.apellidos,
+          };
+        }
       }
 
       return session;

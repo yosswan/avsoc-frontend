@@ -39,7 +39,7 @@ const Profile = () => {
     show: showEditEmail,
   } = useModal();
 
-  const profile = useUser();
+  const profile = useUser(true);
   const data = get(profile, "data", []);
   const user = get(data, "user", []);
   const isLoading = get(profile, "loading", undefined);
