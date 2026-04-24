@@ -43,7 +43,7 @@ type Params = {
   id: any;
 };
 
-const CamporeeDetail = () => {
+const CamporeeDetail = ({ festival = false }: { festival?: boolean }) => {
   const { Modal, hide, isShow, show } = useModal();
   const router = useRouter();
   const { id } = router.query;
@@ -176,7 +176,7 @@ const CamporeeDetail = () => {
   };
 
   return (
-    <LayoutDashboard title="Detalle Camporee">
+    <LayoutDashboard title={festival ? 'Detalle Festival' : 'Detalle Camporee'}>
       <div className="px-4 mt-12">
         <Back className="mb-12" />
         <div className="flex flex-wrap flex-row">
@@ -188,10 +188,10 @@ const CamporeeDetail = () => {
               type="card"
               className="tabs-antd-custom overflow-x-auto flex-wrap"
             >
-              <TabPane tab="Eventos Precamporee" key="1">
+              <TabPane tab={festival ? 'Eventos Prefestival' : 'Eventos Precamporee'} key="1">
                 <EventosPrecamporee idCamporee={id} className="px-2" />
               </TabPane>
-              <TabPane tab="Eventos Camporee" key="2">
+              <TabPane tab={festival ? 'Eventos Festival' : 'Eventos Camporee'} key="2">
                 <EventosCamporee
                   tipoCamporee={values?.tipo}
                   idCamporee={id}
@@ -199,7 +199,7 @@ const CamporeeDetail = () => {
                 />
               </TabPane>
               <TabPane tab="Resultados" key="3">
-                <ResultadosCamporee idCamporee={id} className="px-2" />
+                <ResultadosCamporee idCamporee={id} festival={festival} className="px-2" />
               </TabPane>
             </Tabs>
 

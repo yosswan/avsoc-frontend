@@ -239,7 +239,7 @@ const CamporeeList = ({ type, festival = false }: { type: ExtendedTypesSelectEnu
   };
 
   return (
-    <LayoutDashboard title="Camporee">
+    <LayoutDashboard title={festival ? 'Festival' : 'Camporee'}>
       <div className="lg:px-20 mt-12">
         {isLoading && !onSearch ? (
           <Spinner type="loadingPage" className="py-10" />

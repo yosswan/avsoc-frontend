@@ -71,7 +71,7 @@ type Params = {
 
 const classNamesForms = "w-full px-4 md:w-[550px] mx-auto md:mt-8";
 
-const ResultadosCamporee = ({ idCamporee, className }: any) => {
+const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
   const { Modal, hide, isShow, show } = useModal();
   const router = useRouter();
 
@@ -534,7 +534,7 @@ const ResultadosCamporee = ({ idCamporee, className }: any) => {
                 <SelectInput
                   className="mb-10 z-50 flex-auto"
                   name="id_camporee_evento"
-                  label="Evento camporee"
+                  label={festival ? 'Evento festival' : 'Evento camporee'}
                   options={eventoCamporeeTypeMap}
                   maxwidth="max-w-[208px]"
                   value={params.id_camporee_evento}
@@ -543,7 +543,7 @@ const ResultadosCamporee = ({ idCamporee, className }: any) => {
                 <SelectInput
                   className="mb-10 z-50 flex-auto"
                   name="id_camporee_precamporee"
-                  label="Evento preCamporee"
+                  label={festival ? 'Evento prefestival' : 'Evento precamporee'}
                   options={eventoPrecamporeeTypeMap}
                   maxwidth="max-w-[208px]"
                   value={params.id_camporee_precamporee}

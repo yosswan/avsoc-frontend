@@ -9,7 +9,7 @@ import {
 import CamporeeDetail from "pages/dashboard/camporee/detail/[id]";
 
 const FestivalDetail = () => {
-  return <CamporeeDetail />;
+  return <CamporeeDetail festival={true} />;
 };
 
 // AGREGAR VALIDACION DE PERMISOS A ESTA VISTA
