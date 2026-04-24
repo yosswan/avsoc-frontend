@@ -11,5 +11,6 @@
 	"editor.insertSpaces": false,
 	"css.customData": [
 		".vscode/css_custom_data.json"
-	]
+	],
+	"js/ts.tsdk.path": "node_modules\\typescript\\lib"
 }

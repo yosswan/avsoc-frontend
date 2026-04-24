@@ -30,15 +30,14 @@ const options: NextAuthOptions = {
 						const oldSession = JSON.parse(credentials?.oldSession);
             const response = {
 							...oldSession,
-              access_token: newSession.access_token || oldSession.access_token,
-              expires_at: newSession.expires_at || oldSession.expires_at,
+              access_token: newSession.access_token || oldSession.accessToken,
+              expires_at: newSession.expires_at || oldSession.tokenExpired,
 							scope_actual: newSession.scope_actual || oldSession.scope_actual,
 							user: {
 								...oldSession.user,
 								verificado: newSession.user.verificado || oldSession.user.verificado
 							}
             };
-						// console.log('response', response)
 						return response;
           } else {
             const res = await fetch(
@@ -137,12 +136,11 @@ const options: NextAuthOptions = {
       // console.log('expired antes:', token.accessTokenExpires);
       // console.log('token antes:', token);
       const expiredDay = new Date(token.accessTokenExpires);
-      // console.log('expired:', expiredDay);
       if (actuallyDay < expiredDay) {
         return token;
       }
 
-      return signOut();
+      return {};
     },
   },
 };
