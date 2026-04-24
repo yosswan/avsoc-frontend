@@ -58,7 +58,7 @@ export const navigation = [
         name: "listado",
         label: "Festival SJ",
         href: `${appRouter.dashboard.href}${appRouter.dashboard.subLinks.festival.href}`,
-        icon: Icons.camporee,
+        icon: Icons.festival,
       },
       {
         id: 4,
