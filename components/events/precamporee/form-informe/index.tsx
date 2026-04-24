@@ -177,6 +177,7 @@ export const InformeForm: React.FC<InformeFormProps> = ({
         });
         refetch();
 				queryClient.invalidateQueries(`${UseQueryEnums.GET_ALL_PRECAMPOREE_CAMPOREE}_${idCamporee}`);
+				queryClient.invalidateQueries(`${UseQueryEnums.GET_CAMPOREE_BY_ID}_${idCamporee}`);
         setIsLoading(false);
       })
       .catch((e: any) => {
