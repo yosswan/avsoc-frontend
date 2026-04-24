@@ -136,18 +136,34 @@ export const InformeMensual: React.FC<InformeMensualProps> = ({
 					</span>
 				</p>
 			</Alert>
+			{itemClub?.informe?.observacion && (
+				<Alert className=" bg-overlay rounded-xl mb-5" whiteIcon={true}>
+					<div className="flex items-center gap-2 text-[white] text-base py-5">
+						<span className="whitespace-nowrap">Observación:</span>
+						<div className="bg-white text-[black] rounded-lg px-3 py-1 text-center w-full">
+							{itemClub?.informe?.observacion}
+						</div>
+					</div>
+				</Alert>
+			)}
+			{itemClub?.informe?.alert > 0 && (
+				<Alert className=" bg-[#ffc107] rounded-xl mb-5">
+					<div className="flex items-center gap-2 text-[black] text-base py-5">
+						<span className="whitespace-nowrap">Estado:</span>
+						<div className="bg-white rounded-lg px-3 py-1 text-center w-full">
+							{
+								itemClub?.informe?.alert == 1 ?
+								'Informe fuera de tiempo'
+								: itemClub?.informe?.alert == 2 ?
+								'Actividad fuera de tiempo'
+								: 'Informe y actividad fuera de tiempo'
+							}
+						</div>
+					</div>
+				</Alert>
+			)}
 		</div>
 
-		{itemClub?.informe?.observacion && (
-			<Alert className=" bg-[#ffc107] rounded-xl mb-10">
-				<p className="text-[black] text-base py-5">
-					Observación:{" "}
-					<span className="bg-white text-[black] rounded-lg px-2 py-2 text-center">
-						{itemClub?.informe?.observacion}
-					</span>
-				</p>
-			</Alert>
-		)}
 
 		<Restricted
 			module={ModuleEnums.INFORMES_MENSUALES}

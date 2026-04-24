@@ -19,6 +19,7 @@ export interface AlertProps {
   customIcon?: string;
   className?: string;
   hideIcon?: boolean;
+	whiteIcon?: boolean;
 }
 
 /**
@@ -31,6 +32,7 @@ export const Alert: React.FC<AlertProps> = ({
   children,
   color,
   hideIcon,
+	whiteIcon=false,
 }) => {
   return (
     <div
@@ -46,7 +48,7 @@ export const Alert: React.FC<AlertProps> = ({
         <Icon
           src={Icons.exclamation}
           fillPath
-          className="text-[black] w-4 mr-2"
+          className={`text-[${whiteIcon ? 'white' : 'black'}] w-4 mr-2 flex-shrink-0`}
         ></Icon>
       )}
 

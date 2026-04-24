@@ -248,6 +248,32 @@ export const InformeView: React.FC<InformeViewProps> = ({ index, informe, handle
 								"ml-3 font-bold mb-2 block f-18"
 							)}
 						>
+							Estado
+						</Typography>
+						<Typography
+							type="span"
+							className={clsx(
+								"ml-3 font-normal mb-2 block f-18"
+							)}
+						>
+							{
+								informe?.alert > 0
+								? informe?.alert == 1 ?
+									'Informe fuera de tiempo'
+									: informe?.alert == 2 ?
+									'Actividad fuera de tiempo'
+									: 'Informe y actividad fuera de tiempo'
+								: "N/A"
+							}
+						</Typography>
+					</div>
+					<div className="item col-span-1">
+						<Typography
+							type="label"
+							className={clsx(
+								"ml-3 font-bold mb-2 block f-18"
+							)}
+						>
 							Puntuación Maxima
 						</Typography>
 						<Typography

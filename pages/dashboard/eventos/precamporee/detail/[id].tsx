@@ -289,6 +289,24 @@ const EventPrecamporeeDetail = () => {
                     </ul>
                   </div>
                 )}
+								{!values.mensual && (
+                  <div className="item col-span-1">
+                    <Typography
+                      type="label"
+                      className={clsx("ml-3 font-bold mb-2 block f-18")}
+                    >
+                      Fecha
+                    </Typography>
+										<Typography
+											type="span"
+											className={clsx("ml-3 font-normal mb-2 block f-18")}
+										>
+											{
+												`${moment(values?.fecha_inicio).format(formatDateComplete)} a ${moment(values?.fecha_fin).format(formatDateComplete)}`
+											}
+										</Typography>
+                  </div>
+                )}
                 <div className="item col-span-1">
                   <Typography
                     type="label"
@@ -526,17 +544,33 @@ const EventPrecamporeeDetail = () => {
 																					</span>
 																				</p>
 																			</Alert>
+																			{informe?.observacion && (
+																				<Alert className="bg-overlay rounded-xl mb-5" whiteIcon={true}>
+																					<div className="flex items-center gap-2 text-[white] text-base py-5">
+																						<span className="whitespace-nowrap">Observación:</span>
+																						<div className="bg-white text-[black] rounded-lg px-3 py-1 text-center w-full">
+																							{informe?.observacion}
+																						</div>
+																					</div>
+																				</Alert>
+																			)}
+																			{informe?.alert > 0 && (
+																				<Alert className=" bg-[#ffc107] rounded-xl mb-5">
+																					<div className="flex items-center gap-2 text-[black] text-base py-5">
+																						<span className="whitespace-nowrap">Estado:</span>
+																						<div className="bg-white rounded-lg px-3 py-1 text-center w-full">
+																							{
+																								informe?.alert == 1 ?
+																								'Informe fuera de tiempo'
+																								: informe?.alert == 2 ?
+																								'Actividad fuera de tiempo'
+																								: 'Informe y actividad fuera de tiempo'
+																							}
+																						</div>
+																					</div>
+																				</Alert>
+																			)}
                                     </div>
-                                    {informe?.observacion && (
-                                      <Alert className=" bg-[#ffc107] rounded-xl mb-10">
-                                        <p className="text-[black] text-base py-5">
-                                          Observación:{" "}
-                                          <span className="bg-white text-[black] rounded-lg px-2 py-2 text-center">
-                                            {informe?.observacion}
-                                          </span>
-                                        </p>
-                                      </Alert>
-                                    )}
                                   </>
                                 )}
 																<div className="px-1">
@@ -644,17 +678,33 @@ const EventPrecamporeeDetail = () => {
 																</span>
 															</p>
 														</Alert>
+														{values?.informes[0]?.informes[0]?.observacion && (
+															<Alert className=" bg-overlay rounded-xl mb-5" whiteIcon={true}>
+																<div className="flex items-center gap-2 text-[white] text-base py-5">
+																	<span className="whitespace-nowrap">Observación:</span>
+																	<div className="bg-white text-[black] rounded-lg px-3 py-1 text-center w-full">
+																		{values?.informes[0]?.informes[0]?.observacion}
+																	</div>
+																</div>
+															</Alert>
+														)}
+														{values?.informes[0]?.informes[0]?.alert > 0 && (
+															<Alert className=" bg-[#ffc107] rounded-xl mb-5">
+																<div className="flex items-center gap-2 text-[black] text-base py-5">
+																	<span className="whitespace-nowrap">Estado:</span>
+																	<div className="bg-white rounded-lg px-3 py-1 text-center w-full">
+																		{
+																			values?.informes[0]?.informes[0]?.alert == 1 ?
+																			'Informe fuera de tiempo'
+																			: values?.informes[0]?.informes[0]?.alert == 2 ?
+																			'Actividad fuera de tiempo'
+																			: 'Informe y actividad fuera de tiempo'
+																		}
+																	</div>
+																</div>
+															</Alert>
+														)}
 													</div>
-													{values?.informes[0]?.informes[0]?.observacion && (
-														<Alert className=" bg-[#ffc107] rounded-xl mb-10">
-															<p className="text-[black] text-base py-5">
-																Observación:{" "}
-																<span className="bg-white text-[black] rounded-lg px-2 py-2 text-center">
-																	{values?.informes[0]?.informes[0]?.observacion}
-																</span>
-															</p>
-														</Alert>
-													)}
 												</>
 											)}
 											<InformeForm
