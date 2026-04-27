@@ -22,6 +22,8 @@ export const appRouter = {
       camporee: {
         href: "/camporee",
         subLinks: {
+					integrado: { href: "integrado" },
+					aventureros: { href: "aventureros" },
           detail: { href: "detail" },
           events: {
             href: "eventos",

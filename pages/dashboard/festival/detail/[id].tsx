@@ -6,7 +6,7 @@ import {
   getSession,
   routeValidForUser,
 } from "lib/helper";
-import CamporeeDetail from "pages/dashboard/camporee/detail/[id]";
+import CamporeeDetail from "components/camporee/detalle";
 
 const FestivalDetail = () => {
   return <CamporeeDetail festival={true} />;

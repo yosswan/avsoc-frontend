@@ -50,8 +50,23 @@ export const navigation = [
         id: 2,
         name: "listado",
         label: "Camporee",
-        href: `${appRouter.dashboard.href}${appRouter.dashboard.subLinks.camporee.href}`,
+        href: `${appRouter.dashboard.subLinks.camporee.href}`,
         icon: Icons.camporee,
+				dropdownVisible: false,
+        dropdown: [
+          {
+            name: "listado",
+            label: "Integrado",
+            href: `${appRouter.dashboard.subLinks.camporee.href}/${appRouter.dashboard.subLinks.camporee.subLinks.integrado.href}`,
+            icon: Icons.card,
+          },
+					{
+            name: "listado",
+            label: "Aventureros",
+            href: `${appRouter.dashboard.subLinks.camporee.href}/${appRouter.dashboard.subLinks.camporee.subLinks.aventureros.href}`,
+            icon: Icons.card,
+          }
+				]
       },
 			{
         id: 3,

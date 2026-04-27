@@ -2,11 +2,12 @@ import { GetServerSideProps } from "next";
 import * as React from "react";
 import { PermissionsEnums } from "consts/permissionsEnum";
 import { ModuleEnums } from "consts/modulesEmuns";
-import { formatDateComplete, getSession, routeValidForUser } from "lib/helper";
+import { getSession, routeValidForUser } from "lib/helper";
+import { ExtendedTypesSelectEnums } from "consts/typesSelectEnum";
 import CamporeeList from "components/camporee/listado";
 
-const CamporeeIndex = () => {
-  return <CamporeeList />
+const CamporeeAventurerosList = () => {
+  return <CamporeeList type={ExtendedTypesSelectEnums.AVENTUREROS} />
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -36,10 +37,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  const { type } = context.query;
 	return {
-		props: { type: type || null },
+		props: {},
 	};
 };
 
-export default CamporeeIndex;
+export default CamporeeAventurerosList;

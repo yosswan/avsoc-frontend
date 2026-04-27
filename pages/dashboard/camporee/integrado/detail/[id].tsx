@@ -1,30 +1,33 @@
 import { GetServerSideProps } from "next";
-import * as React from "react";
 import { PermissionsEnums } from "consts/permissionsEnum";
 import { ModuleEnums } from "consts/modulesEmuns";
-import { formatDateComplete, getSession, routeValidForUser } from "lib/helper";
-import CamporeeList from "components/camporee/listado";
+import {
+  getSession,
+  routeValidForUser,
+} from "lib/helper";
+import CamporeeDetail from "components/camporee/detalle";
 
-const CamporeeIndex = () => {
-  return <CamporeeList />
+const CamporeeIntegradoDetail = () => {
+	return <CamporeeDetail />
 };
 
+// AGREGAR VALIDACION DE PERMISOS A ESTA VISTA
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = getSession(context);
 
 	if (!session) {
-		return {
-			redirect: {
-				destination: "/",
-				permanent: false,
-			},
-		};
-	}
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
 
   const isValid = routeValidForUser(
     session,
     PermissionsEnums.VIEW,
-    ModuleEnums.CLUBES
+    ModuleEnums.EVENTO_PRECAMPOREE
   );
 
   if (!isValid) {
@@ -36,10 +39,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  const { type } = context.query;
-	return {
-		props: { type: type || null },
-	};
+  return {
+    props: {},
+  };
 };
 
-export default CamporeeIndex;
+export default CamporeeIntegradoDetail;
