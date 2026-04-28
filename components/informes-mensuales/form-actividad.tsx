@@ -67,29 +67,10 @@ export const ActividadForm: React.FC<InformeFormProps> = ({
     tipo: {
       required: { value: true, message: "Este campo es requerido" },
     },
-    lugar: {
-      required: { value: true, message: "Este campo es requerido" },
-    },
-    description: {
-      required: { value: true, message: "Este campo es requerido" },
-    },
-    objetive: {
-      required: { value: true, message: "Este campo es requerido" },
-    },
     mes: {
       required: { value: true, message: "Este campo es requerido" },
     },
     fecha_realizado: {
-      required: { value: true, message: "Este campo es requerido" },
-    },
-    participantes: {
-      required: { value: true, message: "Este campo es requerido" },
-      min: { value: 1, message: "Debe ser mayor a 0" },
-    },
-    nro_visitas: {
-      required: { value: true, message: "Este campo es requerido" },
-    },
-    nro_miembros: {
       required: { value: true, message: "Este campo es requerido" },
     },
     files: {
@@ -258,7 +239,6 @@ export const ActividadForm: React.FC<InformeFormProps> = ({
               isFill={!!watch("lugar")}
               isTextArea
               register={register}
-              rules={rules.lugar}
               error={errors.lugar}
               className="mb-3 md:mb-5"
               otherStyles="pt-3 pb-3 rounded-lg text-sm"
@@ -272,7 +252,6 @@ export const ActividadForm: React.FC<InformeFormProps> = ({
               isTextArea
               isFill={!!watch("description")}
               register={register}
-              rules={rules.description}
               error={errors.description}
               className="mb-3 md:mb-5"
               otherStyles="pt-3 pb-3 rounded-lg text-sm"
@@ -285,7 +264,6 @@ export const ActividadForm: React.FC<InformeFormProps> = ({
               isTextArea
               isFill={!!watch("objetive")}
               register={register}
-              rules={rules.objetive}
               error={errors.objetive}
               className="mb-3 md:mb-5"
               otherStyles="pt-3 pb-3 rounded-lg text-sm"
@@ -310,7 +288,6 @@ export const ActividadForm: React.FC<InformeFormProps> = ({
                   labelVisible
                   isFill={!!watch("nro_miembros")}
                   register={register}
-                  rules={rules.nro_miembros}
                   error={errors.nro_miembros}
                   className="mb-3 md:mb-5"
                   otherStyles="pt-3 pb-3 rounded-lg text-sm"
@@ -325,7 +302,6 @@ export const ActividadForm: React.FC<InformeFormProps> = ({
                   labelVisible
                   isFill={!!watch("nro_visitas")}
                   register={register}
-                  rules={rules.nro_visitas}
                   error={errors.nro_visitas}
                   className="mb-3 md:mb-5"
                   otherStyles="pt-3 pb-3 rounded-lg text-sm"
