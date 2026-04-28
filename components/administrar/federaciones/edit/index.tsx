@@ -17,6 +17,8 @@ import { GenerateErrorToast } from "lib/helper";
 import { isNil, isEmpty } from "lodash";
 import { PresidentesConsejoRegional } from "services/PresidentesConsejoRegional";
 import { customStyles } from "consts/stylesReactSelect.helper";
+import { FileService } from "services/Image";
+import { RcFile } from "antd/lib/upload";
 
 const EditFederacion = ({ data, hide, refetch }: any) => {
   const [selectValue, setSelectValue] = React.useState<{
@@ -151,17 +153,16 @@ const EditFederacion = ({ data, hide, refetch }: any) => {
     return isJpgOrPng && isLt2M;
   }
 
-  const handleChange = (info: any) => {
+  const handleChange = async (info: any) => {
     if (info.file.status === "uploading") {
+			setImageUrl('');
       setLoading(true);
       return;
     }
     if (info.file.status === "done") {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, (imageUrl: any) => {
-        setImageUrl(imageUrl);
-        setLoading(false);
-      });
+      const imageUrl = await FileService.upload(info.file.originFileObj as RcFile);
+			setImageUrl(imageUrl);
+			setLoading(false);
     }
   };
 

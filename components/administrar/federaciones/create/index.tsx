@@ -17,6 +17,8 @@ import { GenerateErrorToast } from "lib/helper";
 import { isNil, isEmpty } from "lodash";
 import { PresidentesConsejoRegional } from "services/PresidentesConsejoRegional";
 import { customStyles } from "consts/stylesReactSelect.helper";
+import { FileService } from "services/Image";
+import { RcFile } from "antd/lib/upload";
 
 const CreateFederacion = ({ hide, refetch }: any) => {
   const [selectValue, setSelectValue] =
@@ -25,7 +27,7 @@ const CreateFederacion = ({ hide, refetch }: any) => {
 
   const [isLoading, setIsLoading] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
-  const [imageUrl, setImageUrl] = React.useState();
+  const [imageUrl, setImageUrl] = React.useState<string>();
   const [dataPresidentesConsejo, setDataPresidentesConsejo] =
     React.useState<any>();
   // const { data: presidentesConsejo, isLoading } = useQuery<any>(
@@ -127,17 +129,16 @@ const CreateFederacion = ({ hide, refetch }: any) => {
     return isJpgOrPng && isLt2M;
   }
 
-  const handleChange = (info: any) => {
+  const handleChange = async (info: any) => {
     if (info.file.status === "uploading") {
+			setImageUrl('');
       setLoading(true);
       return;
     }
     if (info.file.status === "done") {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, (imageUrl: any) => {
-        setImageUrl(imageUrl);
-        setLoading(false);
-      });
+      const imageUrl = await FileService.upload(info.file.originFileObj as RcFile);
+			setImageUrl(imageUrl);
+			setLoading(false);
     }
   };
 

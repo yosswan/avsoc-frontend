@@ -10,6 +10,7 @@ import { Icons } from "consts";
 import { Typography } from "../typography";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import clsx from "clsx";
+import { FileService } from "services/Image";
 
 const { Dragger } = Upload;
 
@@ -87,18 +88,17 @@ export const InputImage: React.FC<AlertProps> = ({
     return isJpgOrPng && isLt2M;
   }
 
-  const handleChange = (info: any) => {
+  const handleChange = async (info: any) => {
     if (info.file.status === "uploading") {
+			setImageUrl('');
       setLoading(true);
       return;
     }
     if (info.file.status === "done") {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, (imageUrl: any) => {
-        setImageUrl(imageUrl);
-        setValueRHF(name, imageUrl, { shouldValidate: true });
-        setLoading(false);
-      });
+			const imageUrl = await FileService.upload(info.file.originFileObj as RcFile);
+			setImageUrl(imageUrl);
+			setValueRHF(name, imageUrl, { shouldValidate: true });
+			setLoading(false);
     }
   };
   const uploadButton = (
