@@ -97,7 +97,7 @@ export const DropdownProfile = () => {
                         active ? "bg-transparent text-white" : "text-gray-500"
                       } group flex flex-1 rounded-md items-center w-full  py-5 justify-center text-gray-500 f-18 font-normal hover:text-gray-800`}
                       onClick={() => {
-                        signOut();
+                        signOut({ callbackUrl: '/auth/signin' });
                       }}
                     >
                       Cerrar sesión

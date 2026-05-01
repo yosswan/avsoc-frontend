@@ -166,7 +166,7 @@ export const SidebarMobile: React.FC<LayoutDashboardProps> = ({
                     type="span"
                     className="text-white font-semibold  f-18 "
                     onClick={() => {
-                      signOut();
+                      signOut({ callbackUrl: '/auth/signin' });
                     }}
                   >
                     Salir del sistema

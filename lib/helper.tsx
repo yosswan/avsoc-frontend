@@ -146,6 +146,8 @@ export const getSession = (context: GetServerSidePropsContext<ParsedUrlQuery, Pr
 
 	if (context.req.cookies['__Secure-next-auth.session-token']) {
 		return jwt.decode(context.req.cookies['__Secure-next-auth.session-token']) as DecodedSessionToken;
+	} else if (context.req.cookies['next-auth.session-token']) {
+		return jwt.decode(context.req.cookies['next-auth.session-token']) as DecodedSessionToken;
 	}
 	return null;
 }

@@ -9,37 +9,4 @@ const CamporeeIndex = () => {
   return <CamporeeList />
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = getSession(context);
-
-	if (!session) {
-		return {
-			redirect: {
-				destination: "/",
-				permanent: false,
-			},
-		};
-	}
-
-  const isValid = routeValidForUser(
-    session,
-    PermissionsEnums.VIEW,
-    ModuleEnums.CLUBES
-  );
-
-  if (!isValid) {
-    return {
-      redirect: {
-        destination: "/dashboard/permission-denied",
-        permanent: false,
-      },
-    };
-  }
-
-  const { type } = context.query;
-	return {
-		props: { type: type || null },
-	};
-};
-
 export default CamporeeIndex;

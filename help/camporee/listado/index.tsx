@@ -8,7 +8,7 @@ export interface HelpProps {
   hide: any;
 }
 
-export const HelpListCamporee: React.FC<HelpProps> = ({ hide }) => {
+const HelpListCamporee: React.FC<HelpProps> = ({ hide }) => {
   const profile = useUser();
   const dataUser = get(profile, "data", []);
   return (
@@ -53,3 +53,5 @@ export const HelpListCamporee: React.FC<HelpProps> = ({ hide }) => {
     </>
   );
 };
+
+export default HelpListCamporee;

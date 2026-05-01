@@ -2,7 +2,7 @@ import React from "react";
 import type { AppProps } from "next/app";
 import clsx from "clsx";
 import { ToastProvider } from "react-toast-notifications";
-import { Provider } from "next-auth/client";
+import { Provider, signOut } from "next-auth/client";
 import { ThemeContext, ThemeType } from "context";
 import { QueryClientProvider, QueryClient } from "react-query";
 import "styles/global-tailwind.scss";
@@ -23,7 +23,22 @@ function MyApp({ Component, pageProps }: AppProps<{ session: Session }>): JSX.El
 			defaultOptions: {
 				queries: {
 					staleTime: 24 * 60 * 60 * 1000, // 1 dia
-					cacheTime: 24 * 60 * 60 * 1000, // 1 dia
+					cacheTime: 25 * 60 * 60 * 1000, // 1 dia y 1 hora
+					retry: false, // Evita reintentar si el token ya no sirve
+					onError: (error: any) => {
+						// Asumiendo que tu API devuelve el status en el error
+						if (error?.status === 401) {
+							// Borra la cookie de NextAuth y redirige al login
+							signOut({ callbackUrl: '/auth/signin' });
+						}
+					},
+				},
+				mutations: {
+					onError: (error: any) => {
+						if (error?.status === 401) {
+							signOut({ callbackUrl: '/auth/signin' });
+						}
+					},
 				},
 			},
 		});
@@ -41,6 +56,7 @@ function MyApp({ Component, pageProps }: AppProps<{ session: Session }>): JSX.El
         <meta name="msapplication-TileColor" content="#e68fa7" />
         <meta name="theme-color" content="#e68fa7" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+				<link rel="manifest" href="/manifest.json" />
         <meta property="og:title" content="CMS Ministerio Juvenil AVSOC" />
         <meta property="og:site_name" content="CMS Ministerio Juvenil AVSOC" />
         <meta

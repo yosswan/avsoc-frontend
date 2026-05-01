@@ -1,8 +1,9 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import type { NextApiResponse } from "next";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import Providers from "next-auth/providers";
 // import { UsersApiServices } from 'api/users/UsersService';
 import { signOut } from "next-auth/client";
+import { NextApiRequest } from "next-auth/internals/utils";
 const options: NextAuthOptions = {
   debug: true,
   providers: [

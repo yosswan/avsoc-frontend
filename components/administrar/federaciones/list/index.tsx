@@ -129,19 +129,4 @@ const TableFederacion = ({ data }: any) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = getSession(context);
-  if (session && session.access_token) {
-    return {
-      props: {},
-    };
-  }
-  return {
-    redirect: {
-      destination: "/",
-      permanent: false,
-    },
-  };
-};
-
 export default TableFederacion;

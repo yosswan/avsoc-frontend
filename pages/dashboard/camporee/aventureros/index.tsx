@@ -10,36 +10,4 @@ const CamporeeAventurerosList = () => {
   return <CamporeeList type={ExtendedTypesSelectEnums.AVENTUREROS} />
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = getSession(context);
-
-	if (!session) {
-		return {
-			redirect: {
-				destination: "/",
-				permanent: false,
-			},
-		};
-	}
-
-  const isValid = routeValidForUser(
-    session,
-    PermissionsEnums.VIEW,
-    ModuleEnums.CLUBES
-  );
-
-  if (!isValid) {
-    return {
-      redirect: {
-        destination: "/dashboard/permission-denied",
-        permanent: false,
-      },
-    };
-  }
-
-	return {
-		props: {},
-	};
-};
-
 export default CamporeeAventurerosList;

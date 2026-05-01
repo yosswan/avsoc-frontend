@@ -10,36 +10,36 @@ const CamporeeIntegradoList = () => {
   return <CamporeeList type={ExtendedTypesSelectEnums.INTEGRADO} />
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = getSession(context);
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const session = getSession(context);
 
-	if (!session) {
-		return {
-			redirect: {
-				destination: "/",
-				permanent: false,
-			},
-		};
-	}
+// 	if (!session) {
+// 		return {
+// 			redirect: {
+// 				destination: "/",
+// 				permanent: false,
+// 			},
+// 		};
+// 	}
 
-  const isValid = routeValidForUser(
-    session,
-    PermissionsEnums.VIEW,
-    ModuleEnums.CLUBES
-  );
+//   const isValid = routeValidForUser(
+//     session,
+//     PermissionsEnums.VIEW,
+//     ModuleEnums.CLUBES
+//   );
 
-  if (!isValid) {
-    return {
-      redirect: {
-        destination: "/dashboard/permission-denied",
-        permanent: false,
-      },
-    };
-  }
+//   if (!isValid) {
+//     return {
+//       redirect: {
+//         destination: "/dashboard/permission-denied",
+//         permanent: false,
+//       },
+//     };
+//   }
 
-	return {
-		props: {},
-	};
-};
+// 	return {
+// 		props: {},
+// 	};
+// };
 
 export default CamporeeIntegradoList;
