@@ -57,6 +57,7 @@ import { Progress } from "antd";
 import { start } from "repl";
 import { LightHelp } from "components/common/help/light";
 import { DownloadFile } from "./download";
+import { TableSkeleton } from "components/common/skeleton";
 const { Panel } = Collapse;
 const { TabPane } = Tabs;
 
@@ -495,10 +496,6 @@ const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
     <>
       <div className="text-center w-full">
         <div className={clsx("container-form mb-40 text-left", className)}>
-          {isLoading && !onSearch ? (
-            <Spinner type="loadingPage" className="py-10" />
-          ) : (
-            <>
 							<div className="flex justify-end mb-6 items-center w-full">
 								<DownloadFile download={downloadSecureFile} />
 								<LightHelp showModal={showHelp} />
@@ -550,6 +547,9 @@ const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
                   setValue={updateQuery}
                 ></SelectInput>
               </div>
+							{isLoading ? (
+                <TableSkeleton rows={10} columns={4} />
+              ) : (
               <Table
                 columns={columns}
                 dataSource={values?.entidades}
@@ -565,6 +565,7 @@ const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
                   rowExpandable: (record) => record.items,
                 }}
               />
+							)}
               {/* {!isEmpty(allPrecamporee) && !isLoading ? (
                 <div className="mt-10 justify-center flex">
                   <Pagination
@@ -584,8 +585,6 @@ const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
               <ModalHelp isShow={isShowHelp}>
                 <HelpResultadosCamporee hide={hideHelp} />
               </ModalHelp>
-            </>
-          )}
         </div>
       </div>
     </>

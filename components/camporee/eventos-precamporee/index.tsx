@@ -4,9 +4,8 @@ import { useQuery } from "react-query";
 import { UseQueryEnums } from "consts/useQueryEnums";
 import { useQueryParams } from "consts/query.helper";
 import { CamporeeServices } from "services/Camporee";
-import { get, isEmpty, isNil } from "lodash";
+import { get, isEmpty, isNil, debounce } from "lodash";
 import { useForm } from "react-hook-form";
-import { debounceTime, distinctUntilChanged, map, Subject } from "rxjs";
 import { InputText } from "components/common/form/input-text";
 import { ModuleEnums } from "consts/modulesEmuns";
 import { PermissionsEnums } from "consts/permissionsEnum";
@@ -23,9 +22,8 @@ import {
   PlusIcon,
 } from "@heroicons/react/solid";
 import Link from "next/link";
-import EditEventPrecamporee from "./edit";
+import dynamic from "next/dynamic";
 import clsx from "clsx";
-import CreateEventPrecamporee from "./create";
 import moment from "moment";
 import { formatDateComplete } from "lib/helper";
 import { Tooltip } from "antd";
@@ -33,6 +31,10 @@ import { Button } from "components/common/button";
 import { Alert } from "components/common/alert";
 import { SelectInput } from "components/common/form/select/SelectInput";
 import { TypesSelectPrecamporeeMap } from "consts/typesSelectEnum";
+import { AlertSkeleton, CardSkeleton } from "components/common/skeleton";
+
+const CreateEventPrecamporee = dynamic(() => import("./create"));
+const EditEventPrecamporee = dynamic(() => import("./edit"));
 
 interface EventosPrecamporeeProps {
   idCamporee: number | string | string[] | undefined;
@@ -73,7 +75,6 @@ const EventosPrecamporee = ({
   } = useModal();
   const [onSearch, setOnSearch] = React.useState(false);
   const [dataEdit, setDataEdit] = React.useState();
-  const [subject, setSubject] = React.useState(new Subject<string>());
 
   const { data, isLoading, refetch } = useQuery<any>(
     [`${UseQueryEnums.GET_ALL_PRECAMPOREE_CAMPOREE}_${idCamporee}`, params],
@@ -86,6 +87,19 @@ const EventosPrecamporee = ({
   const limit = get(data, "data.limit", params.limit);
 	const informeMensualReady = get(data, "data.informe_mensual_ready");
 	const mes = get(data, "data.mes");
+
+	const debouncedSearch = React.useMemo(
+		() =>
+			debounce((term: string) => {
+				if (isEmpty(term)) {
+					updateQuery("search", undefined);
+				} else {
+					updateQuery("search", term);
+				}
+				updateQuery("page", undefined);
+			}, 1000),
+		[]
+	);
 
   const {
     register,
@@ -115,28 +129,6 @@ const EventosPrecamporee = ({
   };
 
   React.useEffect(() => {
-    subject
-      .pipe(
-        // wait 300ms after each keystroke before considering the term
-        debounceTime(1000),
-        // ignore new term if same as previous term
-        distinctUntilChanged(),
-        // switch to new search observable each time the term changes
-        map((term: string) => {
-          if (isEmpty(term)) {
-            updateQuery("search", undefined);
-          } else {
-            updateQuery("search", term);
-          }
-          updateQuery("page", undefined);
-        })
-      )
-      .subscribe(onResponseData);
-
-    return () => subject.unsubscribe();
-  }, []);
-
-  React.useEffect(() => {
     if (!isNil(params.search) && !isEmpty(params.search)) {
       setValueForm("search", params.search);
       updateQuery("page", undefined);
@@ -146,17 +138,13 @@ const EventosPrecamporee = ({
   const handleChangeSearch = (e: any) => {
     const value = e.target.value;
     setOnSearch(true);
-    return subject.next(value);
+    return debouncedSearch(value);
   };
 
   return (
     <div className="text-center w-full">
       <div className={clsx("container-form mt-5 mb-11 text-left", className)}>
-        {isLoading && !onSearch ? (
-          <Spinner type="loadingPage" className="py-10" />
-        ) : (
-          <>
-            <form
+        <form
               className="w-full text-left"
               onSubmit={handleSubmit(handleSubmitData)}
             >
@@ -172,6 +160,7 @@ const EventosPrecamporee = ({
                   error={errors.search}
                   leftImg={Icons.search}
                   otherStyles="pt-3 pb-3 rounded-full"
+                  disabled={isLoading}
                 />
                 {data?.data?.modificacion && (
                   <Restricted
@@ -179,7 +168,10 @@ const EventosPrecamporee = ({
                     typePermisse={PermissionsEnums.ADD}
                   >
                     <Tooltip title="Agregar">
-                      <div className="px-2" onClick={showCreatePrecamporee}>
+                      <div
+                        className={clsx("px-2", { "pointer-events-none opacity-50": isLoading })}
+                        onClick={isLoading ? undefined : showCreatePrecamporee}
+                      >
                         <Button
                           labelProps="text-sm text-[black] font-bold"
                           label={"Añadir"}
@@ -189,6 +181,7 @@ const EventosPrecamporee = ({
                           type="submit"
                           sizesButton="py-3"
                           className="bg-yellow w-[100px]"
+                          disabled={isLoading}
                         />
                       </div>
                     </Tooltip>
@@ -213,6 +206,18 @@ const EventosPrecamporee = ({
 							></SelectInput>
 						</Restricted>
 
+						{isLoading ? (
+              <>
+								<Restricted
+									module={ModuleEnums.EVENTO_PRECAMPOREE}
+									typePermisse={PermissionsEnums.LOAD_FORMS}
+								>
+									 <AlertSkeleton />
+								</Restricted>
+                <CardSkeleton rows={limit} />
+              </>
+            ) : (
+              <>
 						{
 							informeMensualReady !== null &&
 							<Link
@@ -233,7 +238,6 @@ const EventosPrecamporee = ({
 								</a>
 							</Link>
 						}
-
             <ul
               role="list"
               className="grid grid-cols-1 gap-6 lg:grid-cols-2 3xl:grid-cols-3 "
@@ -363,8 +367,8 @@ const EventosPrecamporee = ({
                 </h3>
               </div>
             )}
-          </>
-        )}
+              </>
+            )}
       </div>
       <ModalCreatePrecamporee isShow={isShowCreatePrecamporee}>
         <CreateEventPrecamporee

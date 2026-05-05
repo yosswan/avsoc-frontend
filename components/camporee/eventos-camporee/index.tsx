@@ -4,9 +4,8 @@ import { useQuery } from "react-query";
 import { UseQueryEnums } from "consts/useQueryEnums";
 import { useQueryParams } from "consts/query.helper";
 import { CamporeeServices } from "services/Camporee";
-import { get, isEmpty, isNil } from "lodash";
+import { get, isEmpty, isNil, debounce } from "lodash";
 import { useForm } from "react-hook-form";
-import { debounceTime, distinctUntilChanged, map, Subject } from "rxjs";
 import { InputText } from "components/common/form/input-text";
 import { ModuleEnums } from "consts/modulesEmuns";
 import { PermissionsEnums } from "consts/permissionsEnum";
@@ -24,16 +23,18 @@ import {
   ClipboardCheckIcon,
 } from "@heroicons/react/solid";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import clsx from "clsx";
-import CreateEventPrecamporee from "./create";
 import {
   TypesSelectCapellanMap,
   TypesSelectYesOrNot,
 } from "consts/typesSelectEnum";
-import CreateEventCamporee from "./create";
-import EditEventCamporee from "./edit";
 import { Tooltip } from "antd";
 import { Button } from "components/common/button";
+import { CardSkeleton } from "components/common/skeleton";
+
+const CreateEventCamporee = dynamic(() => import("./create"));
+const EditEventCamporee = dynamic(() => import("./edit"));
 
 interface EventosCamporeeProps {
   idCamporee: number | string | string[] | undefined;
@@ -74,7 +75,6 @@ const EventosCamporee = ({
   } = useModal();
   const [onSearch, setOnSearch] = React.useState(false);
   const [dataEdit, setDataEdit] = React.useState();
-  const [subject, setSubject] = React.useState(new Subject<string>());
 
   const { data, isLoading, refetch } = useQuery<any>(
     [`${UseQueryEnums.GET_EVENT_CAMPOREE_BY_ID}_${idCamporee}`, params],
@@ -85,6 +85,19 @@ const EventosCamporee = ({
   const total = get(data, "data.total", 1);
   const currentPage = get(data, "data.page", 1);
   const limit = get(data, "data.limit", params.limit);
+
+	const debouncedSearch = React.useMemo(
+		() =>
+			debounce((term: string) => {
+				if (isEmpty(term)) {
+					updateQuery("search", undefined);
+				} else {
+					updateQuery("search", term);
+				}
+				updateQuery("page", undefined);
+			}, 1000),
+		[]
+	);
 
   const {
     register,
@@ -114,28 +127,6 @@ const EventosCamporee = ({
   };
 
   React.useEffect(() => {
-    subject
-      .pipe(
-        // wait 300ms after each keystroke before considering the term
-        debounceTime(1000),
-        // ignore new term if same as previous term
-        distinctUntilChanged(),
-        // switch to new search observable each time the term changes
-        map((term: string) => {
-          if (isEmpty(term)) {
-            updateQuery("search", undefined);
-          } else {
-            updateQuery("search", term);
-          }
-          updateQuery("page", undefined);
-        })
-      )
-      .subscribe(onResponseData);
-
-    return () => subject.unsubscribe();
-  }, []);
-
-  React.useEffect(() => {
     if (!isNil(params.search) && !isEmpty(params.search)) {
       setValueForm("search", params.search);
       updateQuery("page", undefined);
@@ -145,22 +136,18 @@ const EventosCamporee = ({
   const handleChangeSearch = (e: any) => {
     const value = e.target.value;
     setOnSearch(true);
-    return subject.next(value);
+    return debouncedSearch(value);
   };
 
   return (
     <div className="text-center w-full">
       <div className={clsx("container-form mt-5 mb-11 text-left", className)}>
-        {isLoading && !onSearch ? (
-          <Spinner type="loadingPage" className="py-10" />
-        ) : (
-          <>
-            <form
-              className="w-full text-left"
-              onSubmit={handleSubmit(handleSubmitData)}
-            >
-              <div className="flex justify-center items-center mb-5">
-                <InputText
+        <form
+          className="w-full text-left"
+          onSubmit={handleSubmit(handleSubmitData)}
+        >
+          <div className="flex justify-center items-center mb-5">
+            <InputText
                   name="search"
                   title="Search"
                   labelVisible={false}
@@ -171,6 +158,7 @@ const EventosCamporee = ({
                   error={errors.search}
                   leftImg={Icons.search}
                   otherStyles="pt-3 pb-3 rounded-full"
+                  disabled={isLoading}
                 />
                 {data?.data?.plazo_modificacion && (
                   <Restricted
@@ -178,7 +166,10 @@ const EventosCamporee = ({
                     typePermisse={PermissionsEnums.ADD}
                   >
                     <Tooltip title="Agregar">
-                      <div className="px-2" onClick={showCreateCamporee}>
+                      <div
+                        className={clsx("px-2", { "pointer-events-none opacity-50": isLoading })}
+                        onClick={isLoading ? undefined : showCreateCamporee}
+                      >
                         <Button
                           labelProps="text-sm text-[black] font-bold"
                           label={"Añadir"}
@@ -188,14 +179,19 @@ const EventosCamporee = ({
                           type="submit"
                           sizesButton="py-3"
                           className="bg-yellow w-[100px]"
+                          disabled={isLoading}
                         />
                       </div>
                     </Tooltip>
                   </Restricted>
                 )}
               </div>
-            </form>
+          </form>
 
+					{isLoading ? (
+            <CardSkeleton rows={limit} />
+          ) : (
+            <>
             <ul
               role="list"
               className="grid grid-cols-1 gap-6 lg:grid-cols-2 3xl:grid-cols-3 "
@@ -336,8 +332,8 @@ const EventosCamporee = ({
                 </h3>
               </div>
             )}
-          </>
-        )}
+              </>
+            )}
       </div>
       <ModalCreateCamporee isShow={isShowCreateCamporee}>
         <CreateEventCamporee
