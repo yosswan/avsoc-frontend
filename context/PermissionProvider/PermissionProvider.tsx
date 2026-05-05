@@ -18,13 +18,12 @@ const PermissionProvider: React.FunctionComponent<any> = ({ children }) => {
   const profile = useUser();
   const data = get(profile, "data", undefined);
   const rol = get(data, "scope_actual", undefined);
-  const router = useRouter();
 
   // Creates a method that returns whether the requested permission is available in the list of permissions
   // passed as parameter
   const isAllowedTo = (permission: Permission, module: string) => {
-    if (!data?.user?.verificado) {
-      router.push("/dashboard");
+    if (data?.user?.verificado === false) {
+      return false;
     }
 
     const findUserRole = PermissionByRol.find((item) => item.role === rol);

@@ -8,11 +8,13 @@ import { useForm } from "react-hook-form";
 import { UseQueryEnums } from "consts/useQueryEnums";
 import { useQuery } from "react-query";
 import { Spinner } from "components/common/spinner/spinner";
+import { TableSkeleton } from "components/common/skeleton";
 import { useQueryParams } from "consts/query.helper";
 import { IconWithText } from "components/icon-with-text";
 import DataTableComponent, {
   TableColumnType,
 } from "components/data-table/DataTableComponent";
+import clsx from "clsx";
 import { get, isNil, isEmpty, debounce } from "lodash";
 import { CamporeeServices } from "services/Camporee";
 import { PermissionsEnums } from "consts/permissionsEnum";
@@ -216,61 +218,60 @@ const CamporeeList = ({ type, festival = false }: { type?: ExtendedTypesSelectEn
   return (
     <LayoutDashboard title={festival ? 'Festival' : 'Camporee'}>
       <div className="lg:px-20 mt-12">
-        {isLoading && !onSearch ? (
-          <Spinner type="loadingPage" className="py-10" />
-        ) : (
-          <>
-            <Help showModal={showHelp} />
+        <Help showModal={showHelp} />
 
-            <form
-              className="w-full text-left"
-              onSubmit={handleSubmit(handleSubmitData)}
+        <form
+          className="w-full text-left"
+          onSubmit={handleSubmit(handleSubmitData)}
+        >
+          <div className="flex justify-center items-center mb-5">
+            <InputText
+              name="search"
+              title="Search"
+              labelVisible={false}
+              isFill={!!watch("search")}
+              register={register}
+              // rules={rules.search}
+              onChangeCustom={handleChangeSearch}
+              error={errors.search}
+              leftImg={Icons.search}
+              otherStyles="pt-3 pb-3 rounded-full"
+              disabled={isLoading}
+            />
+            <Restricted
+              module={ModuleEnums.CAMPOREE}
+              typePermisse={PermissionsEnums.ADD}
             >
-              <div className="flex justify-center items-center mb-5">
-                <InputText
-                  name="search"
-                  title="Search"
-                  labelVisible={false}
-                  isFill={!!watch("search")}
-                  register={register}
-                  // rules={rules.search}
-                  onChangeCustom={handleChangeSearch}
-                  error={errors.search}
-                  leftImg={Icons.search}
-                  otherStyles="pt-3 pb-3 rounded-full"
+              <div
+                className={clsx("px-2", { "pointer-events-none opacity-50": isLoading })}
+                onClick={isLoading ? undefined : showCreate}
+              >
+                <Button
+                  labelProps="text-sm text-[black] font-bold"
+                  label={"Añadir"}
+                  fill
+                  boderRadius="rounded-full"
+                  size="full"
+                  type="submit"
+                  sizesButton="py-3"
+                  className="bg-yellow w-[100px]"
+                  disabled={isLoading}
                 />
-                <Restricted
-                  module={ModuleEnums.CAMPOREE}
-                  typePermisse={PermissionsEnums.ADD}
-                >
-                  <div className="px-2" onClick={showCreate}>
-                    <Button
-                      labelProps="text-sm text-[black] font-bold"
-                      label={"Añadir"}
-                      fill
-                      boderRadius="rounded-full"
-                      size="full"
-                      type="submit"
-                      sizesButton="py-3"
-                      className="bg-yellow w-[100px]"
-                    />
-                  </div>
-                </Restricted>
               </div>
-            </form>
-            {isLoading ? (
-              <Spinner type="loadingPage" className="py-10" />
-            ) : (
-              <DataTableComponent
-                columns={columns}
-                data={values}
-                currentPage={parseInt(currentPage)}
-                total={parseInt(total)}
-                limit={parseInt(limit)}
-                setPage={(value) => updateQuery("page", value)}
-              />
-            )}
-          </>
+            </Restricted>
+          </div>
+        </form>
+        {isLoading ? (
+          <TableSkeleton rows={limit} columns={columns.length} />
+        ) : (
+          <DataTableComponent
+            columns={columns}
+            data={values}
+            currentPage={parseInt(currentPage)}
+            total={parseInt(total)}
+            limit={parseInt(limit)}
+            setPage={(value) => updateQuery("page", value)}
+          />
         )}
       </div>
       <ModalCreate isShow={isShowCreate}>
