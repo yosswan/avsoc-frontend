@@ -15,7 +15,7 @@ export const useUser = (fetchData = false) => {
 			[GET_USER],
 			() => ProfilApiService.getUser(),
 			{
-				refetchInterval: !session?.user?.verificado ? 3000 : false
+				refetchInterval: session?.user && !session?.user?.verificado ? 3000 : false
 			}
 		));
 		if (session?.user?.email && !session?.user.verificado && data?.user?.verificado) {

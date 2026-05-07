@@ -24,22 +24,8 @@ function MyApp({ Component, pageProps }: AppProps<{ session: Session }>): JSX.El
 				queries: {
 					staleTime: 24 * 60 * 60 * 1000, // 1 dia
 					cacheTime: 25 * 60 * 60 * 1000, // 1 dia y 1 hora
-					retry: false, // Evita reintentar si el token ya no sirve
-					onError: (error: any) => {
-						// Asumiendo que tu API devuelve el status en el error
-						if (error?.status === 401) {
-							// Borra la cookie de NextAuth y redirige al login
-							signOut({ callbackUrl: '/auth/signin' });
-						}
-					},
-				},
-				mutations: {
-					onError: (error: any) => {
-						if (error?.status === 401) {
-							signOut({ callbackUrl: '/auth/signin' });
-						}
-					},
-				},
+					retry: false,
+				}
 			},
 		});
   }

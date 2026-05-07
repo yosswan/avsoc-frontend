@@ -81,14 +81,21 @@ const CamporeeList = ({ type, festival = false }: { type?: ExtendedTypesSelectEn
   const debouncedSearch = React.useMemo(
     () => debounce((term: string) => {
       if (isEmpty(term)) {
-        updateQuery("search", undefined);
+        updateQueryRef.current("search", undefined);
       } else {
-        updateQuery("search", term);
+        updateQueryRef.current("search", term);
       }
-      updateQuery("page", undefined);
+      updateQueryRef.current("page", undefined);
     }, 1000),
     []
   );
+
+	React.useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
+
   const {
     data: response,
     isLoading,
@@ -96,9 +103,18 @@ const CamporeeList = ({ type, festival = false }: { type?: ExtendedTypesSelectEn
   } = useQuery<any>([UseQueryEnums.GET_ALL_CAMPOREE, params], () =>
     CamporeeServices.getAll(params)
   );
-  const updateQuery = (key: string, value: number | string | undefined) => {
-    setValue({ [key]: value });
-  };
+  
+	const updateQuery = React.useCallback(
+		(key: string, value: number | string | undefined) => {
+			setValue({ [key]: value });
+		},
+		[setValue]
+	);
+  const updateQueryRef = React.useRef(updateQuery);
+
+  React.useEffect(() => {
+    updateQueryRef.current = updateQuery;
+  }, [updateQuery]);
 
   const {
     register,

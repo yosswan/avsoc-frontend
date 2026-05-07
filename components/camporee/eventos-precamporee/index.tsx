@@ -92,14 +92,20 @@ const EventosPrecamporee = ({
 		() =>
 			debounce((term: string) => {
 				if (isEmpty(term)) {
-					updateQuery("search", undefined);
+					updateQueryRef.current("search", undefined);
 				} else {
-					updateQuery("search", term);
+					updateQueryRef.current("search", term);
 				}
-				updateQuery("page", undefined);
+				updateQueryRef.current("page", undefined);
 			}, 1000),
 		[]
 	);
+
+	React.useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
 
   const {
     register,
@@ -112,12 +118,17 @@ const EventosPrecamporee = ({
   const handleSubmitData = (data: any) => {
   };
 
-  const updateQuery = (key: string, value: number | string | undefined) => {
-    setValue({ [key]: value });
-  };
-  const onResponseData = () => {
-    refetch();
-  };
+  const updateQuery = React.useCallback(
+		(key: string, value: number | string | undefined) => {
+			setValue({ [key]: value });
+		},
+		[setValue]
+	);
+  const updateQueryRef = React.useRef(updateQuery);
+
+  React.useEffect(() => {
+    updateQueryRef.current = updateQuery;
+  }, [updateQuery]);
 
   const handleOnEdit = (selected: any) => {
     const findSelected = allPrecamporee.find(
@@ -138,7 +149,7 @@ const EventosPrecamporee = ({
   const handleChangeSearch = (e: any) => {
     const value = e.target.value;
     setOnSearch(true);
-    return debouncedSearch(value);
+    debouncedSearch(value);
   };
 
   return (

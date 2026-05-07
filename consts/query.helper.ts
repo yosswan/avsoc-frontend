@@ -28,8 +28,7 @@ export function useQueryParams<T = any>(
         set(queryParams, key, value);
       }
     });
-    router.push({
-      pathname,
+    router.replace({
       query: qs.stringify(queryParams),
     });
   };
