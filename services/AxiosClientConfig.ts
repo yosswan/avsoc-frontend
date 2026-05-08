@@ -77,17 +77,4 @@ client.interceptors.response.use(
   }
 );
 
-client.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error?.response?.status === 401) {
-      window.location.href = '/auth/signin';
-    }
-    return Promise.reject({
-      ...error?.response?.data,
-      status: error?.response?.status,
-    });
-  }
-);
-
 export default client;
