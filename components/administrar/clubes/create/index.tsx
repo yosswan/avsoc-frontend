@@ -75,7 +75,6 @@ const CreateClub = ({ hide, refetch }: any) => {
       tipo: data.tipo.value,
     };
 
-    console.log("FinalData", FinalData);
     setIsLoading(true);
 
     ClubesServices.create(FinalData)
@@ -83,7 +82,6 @@ const CreateClub = ({ hide, refetch }: any) => {
         addToast("Club creado exitosamente", {
           appearance: "success",
         });
-        console.log("response create:", response);
         refetch();
         hide();
         setIsLoading(false);
@@ -100,9 +98,6 @@ const CreateClub = ({ hide, refetch }: any) => {
   const handleChangeSelectConsejosIglesias = (selected: any) => {
     setSelectValueIglesias(selected);
   };
-  React.useEffect(() => {
-    console.log("cambia", selectValueDirector);
-  }, [selectValueDirector]);
 
   const promiseOptionsDirector = (inputValue: any, callback: any) => {
     if (!inputValue && !dataDirector) {

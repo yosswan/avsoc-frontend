@@ -8,6 +8,7 @@ import { GetServerSideProps } from "next";
 
 import { AuthService } from "services";
 import { GenerateErrorToast, getSession } from "lib/helper";
+import { getToken } from "next-auth/jwt";
 
 const ForgotPassword = () => {
   const router = useRouter();
@@ -63,8 +64,8 @@ const ForgotPassword = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = getSession(context);
-  if (session && session.access_token) {
+  const session = await getToken({ req: context.req as any, secret: process.env.NEXTAUTH_SECRET });
+  if (session) {
     return {
       redirect: {
         destination: "/dashboard",

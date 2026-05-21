@@ -46,7 +46,7 @@ const BoxInfo = ({
             {headItems && (
               <div className="flex gap-4 justify-center items-center text-center mt-3 border border-[black] bg-white py-2 rounded-md">
                 {headItems.map((item, index) => (
-                  <div className="flex-col justify-center items-center text-center text-[black]">
+                  <div key={index} className="flex-col justify-center items-center text-center text-[black]">
                     <h5>{item?.title}</h5>
                     <>{item?.content}</>
                   </div>

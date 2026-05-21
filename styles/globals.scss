@@ -146,7 +146,8 @@ body {
   border-radius: 20px;
 }
 
-.table_club_miembros table thead th {
+.table_club_miembros table thead th,
+.table_club_miembros .ant-table-thead > tr > th {
   background-color: var(--color-yellow);
 }
 .table_ant_custom .ant-table .ant-table-container {

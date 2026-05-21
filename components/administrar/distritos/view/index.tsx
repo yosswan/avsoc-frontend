@@ -5,7 +5,6 @@ import { ValidateString } from "lib/helper";
 import { IconWithText } from "components/icon-with-text";
 
 const ViewDistrito = ({ data, hide, refetch }: any) => {
-  console.log("detalle", data);
   const {
     pastor,
     consejo_regional,

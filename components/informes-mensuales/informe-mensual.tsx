@@ -204,36 +204,37 @@ export const InformeMensual: React.FC<InformeMensualProps> = ({
 					className="tabs-antd-custom justify-center"
 					onEdit={ onEdit }
 					hideAdd
-				>
-					{itemClub?.informe?.actividades?.map(
-						(item: any, index: any) => {
-							return (
-								<TabPane
-									tab={item?.name}
-									key={index}
-									className="mb-10"
-									closeIcon={ <div className="w-4 text-overlay hover:text-primary"><TrashIcon /></div> }
-								>
-									<div
-										key={index}
-										className="mt-0 w-full md:max-w-[650px] mx-auto mb-20"
-									>
-										<ActividadForm
+					items={
+						itemClub?.informe?.actividades?.map(
+							(item: any, index: any) => {
+								return {
+									key: index,
+									label: item?.name,
+									className: "mb-10",
+									closeIcon: <div className="w-4 text-overlay hover:text-primary"><TrashIcon /></div>,
+									children: (
+										<div
 											key={index}
-											className="shadow-lg"
-											refetch={refetch}
-											hide={hideCreateActivity}
-											data={item}
-											isEditable={
-												itemClub.informe?.editar
-											}
-											dateSelected={params.fecha}
-										></ActividadForm>
-									</div>
-								</TabPane>
-							);
-						}
-					)}
+											className="mt-0 w-full md:max-w-[650px] mx-auto mb-20"
+										>
+											<ActividadForm
+												key={index}
+												className="shadow-lg"
+												refetch={refetch}
+												hide={hideCreateActivity}
+												data={item}
+												isEditable={
+													itemClub.informe?.editar
+												}
+												dateSelected={params.fecha}
+											></ActividadForm>
+										</div>
+									)
+								}
+							}
+						)
+					}
+				>
 				</Tabs>
 			</div>
 			<ModalDelete isShow={isShowDelete}>

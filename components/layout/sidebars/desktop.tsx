@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Typography } from "components/common/typography";
 import { useRouter } from "next/router";
 import { Icons } from "consts/icons";
-import { signOut } from "next-auth/client";
+import { signOut } from "next-auth/react";
 import { Images } from "consts";
 // import { appRouter } from "consts/router";
 import { Icon } from "components/icon";
@@ -33,18 +33,18 @@ export const SidebarDesktop: React.FC<LayoutDashboardProps> = ({
           <div className="flex flex-col h-0 flex-1">
             <div className="flex-1 flex flex-col pt-8 pb-4 overflow-y-auto scroll-custom">
               <div className="flex items-center flex-shrink-0 px-7 justify-center">
-                <Link href="/">
-                  <a
-                    className={clsx(
-                      "cursor-pointer flex items-center justify-center"
-                    )}
-                  >
-                    <img
-                      className="max-w-[184px]"
-                      src={Images.logoWithColor}
-                      alt=""
-                    />
-                  </a>
+                <Link
+                  href="/"
+                  className={clsx(
+                    "cursor-pointer flex items-center justify-center"
+                  )}>
+
+                  <img
+                    className="max-w-[184px]"
+                    src={Images.logoWithColor}
+                    alt=""
+                  />
+
                 </Link>
               </div>
               {profile?.verificado && (

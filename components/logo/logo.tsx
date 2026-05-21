@@ -9,13 +9,13 @@ export const Logo: React.FC<{
 	classNameImg?: string;
 }> = ({ className, type, classNameImg }) => {
 	return (
-		<Link href="/">
-			<a className={clsx('cursor-pointer', className)}>
-				<img
-					className={clsx(classNameImg)}
-					src={type === 'white' ? Images.logoWhite : Images.logoWithColor}
-				/>
-			</a>
-		</Link>
-	);
+        <Link href="/" className={clsx('cursor-pointer', className)}>
+
+            <img
+                className={clsx(classNameImg)}
+                src={type === 'white' ? Images.logoWhite : Images.logoWithColor}
+            />
+
+        </Link>
+    );
 };

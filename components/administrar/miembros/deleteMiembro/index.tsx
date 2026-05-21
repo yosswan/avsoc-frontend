@@ -9,7 +9,6 @@ const DeleteMiembro = ({ data, hide, refetch }: any) => {
   const { addToast } = useToasts();
 
   const [isLoading, setIsLoading] = React.useState(false);
-  console.log("a eliminar", data);
 
   const onDelete = () => {
     setIsLoading(true);
@@ -18,7 +17,6 @@ const DeleteMiembro = ({ data, hide, refetch }: any) => {
         addToast("Se ha dado de baja al miembro exitosamente", {
           appearance: "success",
         });
-        console.log("response dar de baja miembro:", response);
         refetch();
         hide();
         setIsLoading(false);

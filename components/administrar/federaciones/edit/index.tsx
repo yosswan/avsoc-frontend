@@ -38,7 +38,6 @@ const EditFederacion = ({ data, hide, refetch }: any) => {
   // );
 
   // console.log("presiii", presidentesConsejo);
-  console.log("a editar", data);
   const {
     register,
     handleSubmit,
@@ -82,14 +81,12 @@ const EditFederacion = ({ data, hide, refetch }: any) => {
       cedula_presidente: selectValue?.value,
     };
 
-    console.log("FinalData", FinalData);
     setIsLoading(true);
     ConsejosRegionalesServices.edit(FinalData, data?.id)
       .then((response: any) => {
         addToast("Consejo Regional editado exitosamente", {
           appearance: "warning",
         });
-        console.log("response edit:", response);
         refetch();
         hide();
         setIsLoading(false);
@@ -104,9 +101,6 @@ const EditFederacion = ({ data, hide, refetch }: any) => {
   const handleChangeSelect = (selected: any) => {
     setSelectValue(selected);
   };
-  React.useEffect(() => {
-    console.log("cambia", selectValue);
-  }, [selectValue]);
 
   const promiseOptions = (inputValue: any, callback: any) => {
     if (!inputValue && !dataPresidentesConsejo) {

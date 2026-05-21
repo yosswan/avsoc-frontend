@@ -10,7 +10,6 @@ const DesactivarFederacion = ({ data, hide, refetch }: any) => {
   const { addToast } = useToasts();
 
   const [isLoading, setIsLoading] = React.useState(false);
-  console.log("a desactivar", data);
 
   const onDelete = () => {
     setIsLoading(true);
@@ -19,7 +18,6 @@ const DesactivarFederacion = ({ data, hide, refetch }: any) => {
         addToast("Se ha dado desactivado el federacion exitosamente", {
           appearance: "success",
         });
-        console.log("response dar de desactivar federacion:", response);
         refetch();
         hide();
         setIsLoading(false);

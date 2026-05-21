@@ -8,6 +8,7 @@ type Props = {
   typePermisse: Permission;
   module: any;
   fallback?: JSX.Element | string;
+  children?: React.ReactNode;
 };
 
 // This component is meant to be used everywhere a restriction based on user permission is needed

@@ -7,7 +7,7 @@ import { Typography } from "components/common/typography";
 import { useRouter } from "next/router";
 import { navigation } from "consts/navigation";
 import { Icons } from "consts/icons";
-import { signOut } from "next-auth/client";
+import { signOut } from "next-auth/react";
 import { Images } from "consts";
 import { ItemNavbar } from "./item";
 import { useUser } from "hooks/user";
@@ -91,31 +91,24 @@ export const SidebarMobile: React.FC<LayoutDashboardProps> = ({
               </Transition.Child>
               <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
                 <div className="flex-shrink-0 flex items-center px-4">
-                  <Link href="/">
-                    <a
-                      className={clsx(
-                        "cursor-pointer flex items-center justify-center"
-                      )}
-                    >
-                      <img
-                        className="max-w-[244px]"
-                        src={Images.logoWithColor}
-                        alt=""
-                      />
-                    </a>
+                  <Link
+                    href="/"
+                    className={clsx(
+                      "cursor-pointer flex items-center justify-center"
+                    )}>
+
+                    <img
+                      className="max-w-[244px]"
+                      src={Images.logoWithColor}
+                      alt=""
+                    />
+
                   </Link>
                 </div>
                 {profile?.verificado && (
                   <nav className="mt-5 flex-1 px-7">
                     {navigation.map((item: any, positionMenu: any) => {
                       return (
-                        <ItemNavbar
-                          key={positionMenu}
-                          item={item}
-                          positionMenu={positionMenu}
-                          setNavigation={setNavigation}
-                          showSubmenu={showSubmenu}
-                        />
                         // <Fragment key={"nav-desktop-" + item.id}>
                         //   <p className="text-white f-18 font-semibold px-3 pt-7">
                         //     {item.label}
@@ -144,6 +137,13 @@ export const SidebarMobile: React.FC<LayoutDashboardProps> = ({
                         //   })}
                         //   <div className="divider mx-3 mt-7"></div>
                         // </Fragment>
+                        <ItemNavbar
+                          key={positionMenu}
+                          item={item}
+                          positionMenu={positionMenu}
+                          setNavigation={setNavigation}
+                          showSubmenu={showSubmenu}
+                        />
                       );
                     })}
                   </nav>

@@ -72,14 +72,12 @@ const EditIglesia = ({ data, hide, refetch }: any) => {
       id_anciano: selectValueAncianos?.value,
     };
 
-    console.log("FinalData", FinalData);
     setIsLoading(true);
     IglesiasServices.edit(FinalData, data.id)
       .then((response: any) => {
         addToast("Iglesia actualizada exitosamente", {
           appearance: "success",
         });
-        console.log("response create:", response);
         refetch();
         hide();
         setIsLoading(false);
@@ -96,9 +94,6 @@ const EditIglesia = ({ data, hide, refetch }: any) => {
   const handleChangeSelectConsejosDistritos = (selected: any) => {
     setSelectValueDistritos(selected);
   };
-  React.useEffect(() => {
-    console.log("cambia", selectValueAncianos);
-  }, [selectValueAncianos]);
 
   const promiseOptionsAncianos = (inputValue: any, callback: any) => {
     if (!inputValue && !dataAncianos) {

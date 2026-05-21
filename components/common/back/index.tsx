@@ -11,7 +11,7 @@ export default function Back({ className }: any) {
       className={clsx("flex justify-items-start text-left w-full", className)}
     >
       <div
-        className="container-back flex gap-3 border-yellow px-4 border rounded-md py-1 hover:bg-yellow cursor-pointer"
+        className="container-back flex gap-3 items-center border-yellow px-4 border rounded-md py-1 hover:bg-yellow cursor-pointer"
         onClick={() => router.back()}
       >
         <Icon

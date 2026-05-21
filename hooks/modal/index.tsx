@@ -14,7 +14,7 @@ export const useModal = () => {
 		setIsShow(true);
 	};
 
-	const Modal = useCallback(({ children, isShow }) => {
+	const Modal = useCallback(({ children, isShow }: { children?: React.ReactNode; isShow: boolean }) => {
 		return (
 			isShow && (
 				<Transition.Root show={isShow} as={Fragment}>

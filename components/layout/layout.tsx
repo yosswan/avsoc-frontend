@@ -13,6 +13,7 @@ import Styles from "./styles.module.scss";
 interface LayoutDashboardProps {
   title?: string;
   isLoading?: boolean;
+  children?: React.ReactNode;
 }
 export const LayoutDashboard: React.FC<LayoutDashboardProps> = ({
   title,

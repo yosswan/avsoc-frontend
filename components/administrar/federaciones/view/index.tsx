@@ -5,7 +5,6 @@ import { ValidateImage, ValidateString } from "lib/helper";
 import { IconWithText } from "components/icon-with-text";
 
 const ViewFederacion = ({ data, hide, refetch }: any) => {
-  console.log("detalle", data);
   const {
     presidente,
     abreviatura,

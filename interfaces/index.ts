@@ -42,7 +42,7 @@ export type OptionType = {
   placeholder: boolean;
 };
 
-export interface DecodedSessionToken {
+export interface TokenData {
   access_token: string;
   expires_at: string;
   scope_actual: string;

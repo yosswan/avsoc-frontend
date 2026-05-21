@@ -1,4 +1,4 @@
-import { getSession, signIn } from "next-auth/client";
+import { signIn, useSession } from "next-auth/react";
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "components/common/button/button";
@@ -8,9 +8,10 @@ import { useToasts } from "react-toast-notifications";
 import { GenerateErrorToast } from "lib/helper";
 import { get } from "lodash";
 import { InputListSearch } from "components/common/form/input-list-search";
-import { OptionType } from "interfaces";
+import { OptionType, TokenData } from "interfaces";
 import { useRouter } from "next/router";
 import { useUser } from "hooks/user";
+import { useQueryClient } from "react-query";
 
 interface TypeMiembros {
   value: Number;
@@ -26,6 +27,8 @@ const EditProfile = ({ data, hide, refetch }: any) => {
   // const dataUser = get(profile, "data", []);
   const { addToast } = useToasts();
   const router = useRouter();
+  const { data: session, update } = useSession();
+	const queryClient = useQueryClient();
 
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -66,37 +69,19 @@ const EditProfile = ({ data, hide, refetch }: any) => {
   const handleSubmitData = (form: any) => {
     setIsLoading(true);
     AuthService.changeRol({ scope: form?.rol?.value })
-      .then((response: any) => {
+      .then((response: TokenData) => {
         addToast("Rol cambiado exitosamente", {
           appearance: "success",
         });
-
-        getSession()
-          .then((res) => {
-            signIn("credentials", {
-              newData: JSON.stringify(response),
-              redirect: false,
-              oldSession: JSON.stringify(res),
-            })
-              .then((response) => {
-                refetch();
-                hide();
-                router.reload();
-              })
-              .catch((e: any) => {
-                console.log("Error signin: ", e);
-                // GenerateErrorToast(e, addToast);
-                setIsLoading(false);
-              })
-              .finally(() => {
-                setIsLoading(false);
-              });
-
-            setIsLoading(false);
+				update(response)
+          .then((res: any) => {
+            hide();
+            queryClient.invalidateQueries();
           })
           .catch((e: any) => {
-            console.log("Error get session: ", e);
-            // GenerateErrorToast(e, addToast);
+            console.log("Error update token: ", e);
+          })
+          .finally(() => {
             setIsLoading(false);
           });
       })

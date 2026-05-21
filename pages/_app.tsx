@@ -2,9 +2,10 @@ import React from "react";
 import type { AppProps } from "next/app";
 import clsx from "clsx";
 import { ToastProvider } from "react-toast-notifications";
-import { Provider, signOut } from "next-auth/client";
+import { SessionProvider } from "next-auth/react";
 import { ThemeContext, ThemeType } from "context";
-import { QueryClientProvider, QueryClient } from "react-query";
+import { QueryClient, QueryClientProvider } from "react-query";
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import "styles/global-tailwind.scss";
 import "styles/globals.scss";
 import "styles/fonts.scss";
@@ -13,21 +14,36 @@ import PermissionProvider from "context/PermissionProvider/PermissionProvider";
 import Head from "next/head";
 import { Session } from "next-auth";
 
-function MyApp({ Component, pageProps }: AppProps<{ session: Session }>): JSX.Element {
-  const [theme, setTheme] = React.useState<ThemeType>("light");
-  const queryClientRef = React.useRef<QueryClient | null>(null);
-  const permissionsRef = React.useRef<any>(null);
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 24 * 60 * 60 * 1000,
+      cacheTime: 48 * 60 * 60 * 1000,
+      retry: false,
+    },
+  },
+});
 
-  if (!queryClientRef.current) {
-		queryClientRef.current = new QueryClient({
-			defaultOptions: {
-				queries: {
-					staleTime: 24 * 60 * 60 * 1000, // 1 dia
-					cacheTime: 25 * 60 * 60 * 1000, // 1 dia y 1 hora
-					retry: false,
-				}
-			},
-		});
+function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps<{ session: Session }>): JSX.Element {
+  const [theme, setTheme] = React.useState<ThemeType>("light");
+  const permissionsRef = React.useRef<any>(null);
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <>
+        <Head>
+          <title>Ministerio Juvenil AVSOC</title>
+        </Head>
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="animate-pulse">Loading...</div>
+        </div>
+      </>
+    );
   }
 
   return (
@@ -58,8 +74,9 @@ function MyApp({ Component, pageProps }: AppProps<{ session: Session }>): JSX.El
         <meta property="og:image:width" content="300" />
         <meta property="og:image:height" content="200" /> */}
       </Head>
-      <Provider session={pageProps.session}>
-        <QueryClientProvider client={queryClientRef.current}>
+      <SessionProvider session={session}>
+        {/* @ts-ignore - react-query v3 type compatibility */}
+        <QueryClientProvider client={queryClient}>
           <PermissionProvider client={permissionsRef}>
             <ToastProvider
               autoDismissTimeout={4000}
@@ -80,7 +97,7 @@ function MyApp({ Component, pageProps }: AppProps<{ session: Session }>): JSX.El
             </ToastProvider>
           </PermissionProvider>
         </QueryClientProvider>
-      </Provider>
+      </SessionProvider>
     </>
   );
 }

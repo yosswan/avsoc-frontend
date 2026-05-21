@@ -59,14 +59,12 @@ const CreateFederacion = ({ hide, refetch }: any) => {
       cedula_presidente: selectValue?.value,
     };
 
-    console.log("FinalData", FinalData);
     setIsLoading(true);
     ConsejosRegionalesServices.create(FinalData)
       .then((response: any) => {
         addToast("Consejo Regional creado exitosamente", {
           appearance: "success",
         });
-        console.log("response create:", response);
         refetch();
         hide();
         setIsLoading(false);
@@ -80,9 +78,6 @@ const CreateFederacion = ({ hide, refetch }: any) => {
   const handleChangeSelect = (selected: any) => {
     setSelectValue(selected);
   };
-  React.useEffect(() => {
-    console.log("cambia", selectValue);
-  }, [selectValue]);
 
   const promiseOptions = (inputValue: any, callback: any) => {
     if (!inputValue && !dataPresidentesConsejo) {

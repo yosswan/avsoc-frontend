@@ -93,6 +93,7 @@ export const InformeView: React.FC<InformeViewProps> = ({ index, informe, handle
 						{
 							informe?.fecha_realizado.map((f: string) => 
 								<Typography
+									key={f}
 									type="span"
 									className={clsx(
 										"ml-3 font-normal mb-2 block f-18"
@@ -309,6 +310,7 @@ export const InformeView: React.FC<InformeViewProps> = ({ index, informe, handle
 								if (informe['imagen'+i]) {
 									return informe['imagen'+i].endsWith('jpg') || informe['imagen'+i].startsWith('data:') ? 
 											<img
+												key={i}
 												src={informe['imagen'+i]}
 												className="hover:opacity-50 cursor-pointer w-52 h-40 md:w-64  md:h-64 object-cover rounded-2xl"
 												alt={'archivo '+i}
@@ -316,7 +318,7 @@ export const InformeView: React.FC<InformeViewProps> = ({ index, informe, handle
 													handlePreviewImage(informe['imagen'+i])
 												}
 											/>
-										: <a target="_blank" className="hover:opacity-50 cursor-pointer w-52 h-40 md:w-64  md:h-64" href={informe['imagen'+i]}>
+										: <a key={i} target="_blank" className="hover:opacity-50 cursor-pointer w-52 h-40 md:w-64  md:h-64" href={informe['imagen'+i]}>
 											<DocumentTextIcon />
 											<Typography type="title" className="font-bold text-center">
 												{ informe['imagen'+i].split('.').at(-1)?.toLocaleUpperCase() }

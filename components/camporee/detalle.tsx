@@ -31,8 +31,6 @@ import Restricted from "context/PermissionProvider/Restricted";
 import { Icon } from "components/icon";
 import moment from "moment";
 
-const { TabPane } = Tabs;
-
 type Params = {
   id: any;
 };
@@ -68,7 +66,8 @@ const CamporeeDetail = ({ festival = false }: { festival?: boolean }) => {
     isLoading,
     refetch,
   } = useQuery<any>([`${UseQueryEnums.GET_CAMPOREE_BY_ID}_${id}`], () =>
-    CamporeeServices.getById(id)
+    CamporeeServices.getById(id),
+		{ enabled: !!id }
   );
 
   const {
@@ -181,25 +180,28 @@ const CamporeeDetail = ({ festival = false }: { festival?: boolean }) => {
             <Tabs
               type="card"
               className="tabs-antd-custom overflow-x-auto flex-wrap"
-            >
-              <TabPane tab={festival ? 'Eventos Prefestival' : 'Eventos Precamporee'} key="1">
-                <EventosPrecamporee idCamporee={id} className="px-2" />
-              </TabPane>
-              <TabPane tab={festival ? 'Eventos Festival' : 'Eventos Camporee'} key="2">
-                <EventosCamporee
-                  tipoCamporee={values?.tipo}
-                  idCamporee={id}
-                  className="px-2"
-                />
-              </TabPane>
-              <TabPane tab="Resultados" key="3">
-                <ResultadosCamporee idCamporee={id} festival={festival} className="px-2" />
-              </TabPane>
-            </Tabs>
+              items={[
+                {
+                  key: '1',
+                  label: festival ? 'Eventos Prefestival' : 'Eventos Precamporee',
+                  children: <EventosPrecamporee idCamporee={id} className="px-2" />,
+                },
+                {
+                  key: '2',
+                  label: festival ? 'Eventos Festival' : 'Eventos Camporee',
+                  children: <EventosCamporee tipoCamporee={values?.tipo} idCamporee={id} className="px-2" />,
+                },
+                {
+                  key: '3',
+                  label: 'Resultados',
+                  children: <ResultadosCamporee idCamporee={id} festival={festival} className="px-2" />,
+                },
+              ]}
+            />
 
             {/* <EventosPrecamporee idCamporee={id} /> */}
           </div>
-          {isLoading ? (
+          {isLoading || !id ? (
             <Spinner type="loadingPage" className="py-10" />
           ) : (
             <>

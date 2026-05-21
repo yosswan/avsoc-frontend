@@ -15,9 +15,7 @@ import { IconWithText } from "components/icon-with-text";
 import DataTableComponent, {
   TableColumnType,
 } from "components/data-table/DataTableComponent";
-import { get, isNil, isEmpty } from "lodash";
-import { Subject } from "rxjs";
-import { debounceTime, map, distinctUntilChanged } from "rxjs/operators";
+import { get, isNil, isEmpty, debounce } from "lodash";
 import { DistritosServices } from "services/Distritos";
 import ViewDistrito from "components/administrar/distritos/view";
 import EditDistrito from "components/administrar/distritos/edit";
@@ -101,10 +99,37 @@ const Iglesias = () => {
   const [onSearch, setOnSearch] = React.useState(false);
   const [dataView, setDataView] = React.useState<any>();
   const [distritosTypeMap, setDistritosTypeMap] = React.useState<any>({});
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [subject, setSubject] = React.useState(new Subject<string>());
   const [params, setValue] = useQueryParams<Params>({ limit: 8 });
+
+  const debouncedSearch = React.useMemo(
+    () => debounce((term: string) => {
+      if (isEmpty(term)) {
+        updateQueryRef.current("search", undefined);
+      } else {
+        updateQueryRef.current("search", term);
+      }
+      updateQueryRef.current("page", undefined);
+    }, 1000),
+    []
+  );
+
+  React.useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
+
+  const updateQuery = React.useCallback(
+    (key: string, value: number | string | undefined) => {
+      setValue({ [key]: value });
+    },
+    [setValue]
+  );
+  const updateQueryRef = React.useRef(updateQuery);
+
+  React.useEffect(() => {
+    updateQueryRef.current = updateQuery;
+  }, [updateQuery]);
   const {
     data: response,
     isLoading,
@@ -131,9 +156,7 @@ const Iglesias = () => {
       setDistritosTypeMap(aux);
     }
   }, [distritosFilter]);
-  const updateQuery = (key: string, value: number | string | undefined) => {
-    setValue({ [key]: value });
-  };
+
   const handleOnDelete = (selected: any) => {
     setDataDelete(selected);
     showDelete();
@@ -321,27 +344,6 @@ const Iglesias = () => {
   const onResponseData = () => {
     refetch();
   };
-  React.useEffect(() => {
-    subject
-      .pipe(
-        // wait 300ms after each keystroke before considering the term
-        debounceTime(1000),
-        // ignore new term if same as previous term
-        distinctUntilChanged(),
-        // switch to new search observable each time the term changes
-        map((term: string) => {
-          if (isEmpty(term)) {
-            updateQuery("search", undefined);
-          } else {
-            updateQuery("search", term);
-          }
-          updateQuery("page", undefined);
-        })
-      )
-      .subscribe(onResponseData);
-
-    return () => subject.unsubscribe();
-  }, []);
 
   React.useEffect(() => {
     if (!isNil(params.search) && !isEmpty(params.search)) {
@@ -353,7 +355,7 @@ const Iglesias = () => {
   const handleChangeSearch = (e: any) => {
     const value = e.target.value;
     setOnSearch(true);
-    return subject.next(value);
+    debouncedSearch(value);
   };
 
   return (
@@ -394,7 +396,7 @@ const Iglesias = () => {
                         boderRadius="rounded-full"
                         size="full"
                         type="submit"
-                        sizesButton="py-3"
+                        sizesButton="py-3 px-4"
                         className="bg-yellow w-[100px]"
                       />
                     </div>

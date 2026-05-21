@@ -17,11 +17,7 @@ import { IconWithText } from "components/icon-with-text";
 import DataTableComponent, {
   TableColumnType,
 } from "components/data-table/DataTableComponent";
-import { get, isNil, isEmpty } from "lodash";
-import EditFederacion from "components/administrar/federaciones/edit";
-import ViewFederacion from "components/administrar/federaciones/view";
-import { Subject } from "rxjs";
-import { debounceTime, map, distinctUntilChanged } from "rxjs/operators";
+import { get, isNil, isEmpty, debounce } from "lodash";
 import Restricted from "context/PermissionProvider/Restricted";
 import { ModuleEnums } from "consts/modulesEmuns";
 import { PermissionsEnums } from "consts/permissionsEnum";
@@ -29,6 +25,8 @@ import { getSession, routeValidForUser } from "lib/helper";
 import { Tooltip } from "antd";
 import { Button } from "components/common/button";
 import DesactivarFederacion from "components/administrar/federaciones/desactivar";
+import EditFederacion from "components/administrar/federaciones/edit";
+import ViewFederacion from "components/administrar/federaciones/view";
 import { TrashIcon } from "@heroicons/react/solid";
 import { HelpListFederaciones } from "help/administrar/federaciones/list";
 import { Help } from "components/common/help";
@@ -94,9 +92,37 @@ const Federaciones = () => {
   const [dataEdit, setDataEdit] = React.useState<any>();
   const [onSearch, setOnSearch] = React.useState(false);
   const [dataView, setDataView] = React.useState<any>();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [subject, setSubject] = React.useState(new Subject<string>());
   const [params, setValue] = useQueryParams<Params>({ limit: 8 });
+
+  const debouncedSearch = React.useMemo(
+    () => debounce((term: string) => {
+      if (isEmpty(term)) {
+        updateQueryRef.current("search", undefined);
+      } else {
+        updateQueryRef.current("search", term);
+      }
+      updateQueryRef.current("page", undefined);
+    }, 1000),
+    []
+  );
+
+  React.useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
+
+  const updateQuery = React.useCallback(
+    (key: string, value: number | string | undefined) => {
+      setValue({ [key]: value });
+    },
+    [setValue]
+  );
+  const updateQueryRef = React.useRef(updateQuery);
+
+  React.useEffect(() => {
+    updateQueryRef.current = updateQuery;
+  }, [updateQuery]);
   const {
     data: response,
     isLoading,
@@ -104,9 +130,6 @@ const Federaciones = () => {
   } = useQuery<any>([UseQueryEnums.GET_ALL_FEDERACIONES, params], () =>
     ConsejosRegionalesServices.getAll(params)
   );
-  const updateQuery = (key: string, value: number | string | undefined) => {
-    setValue({ [key]: value });
-  };
 
   const handleOnDelete = (selected: any) => {
     setDataDelete(selected);
@@ -301,27 +324,6 @@ const Federaciones = () => {
   const onResponseData = () => {
     refetch();
   };
-  React.useEffect(() => {
-    subject
-      .pipe(
-        // wait 300ms after each keystroke before considering the term
-        debounceTime(1000),
-        // ignore new term if same as previous term
-        distinctUntilChanged(),
-        // switch to new search observable each time the term changes
-        map((term: string) => {
-          if (isEmpty(term)) {
-            updateQuery("search", undefined);
-          } else {
-            updateQuery("search", term);
-          }
-          updateQuery("page", undefined);
-        })
-      )
-      .subscribe(onResponseData);
-
-    return () => subject.unsubscribe();
-  }, []);
 
   React.useEffect(() => {
     if (!isNil(params.search) && !isEmpty(params.search)) {
@@ -333,7 +335,7 @@ const Federaciones = () => {
   const handleChangeSearch = (e: any) => {
     const value = e.target.value;
     setOnSearch(true);
-    return subject.next(value);
+    debouncedSearch(value);
   };
 
   return (
@@ -374,7 +376,7 @@ const Federaciones = () => {
                         boderRadius="rounded-full"
                         size="full"
                         type="submit"
-                        sizesButton="py-3"
+                        sizesButton="py-3 px-4"
                         className="bg-yellow w-[100px]"
                       />
                     </div>

@@ -1,11 +1,9 @@
 import { Icons, Images } from "consts";
 import { PermissionByRol } from "consts/permissionByRol";
-import { useUser } from "hooks/user";
-import { isNil, isEmpty, get } from "lodash";
+import { isNil, get } from "lodash";
 import { GetServerSidePropsContext, PreviewData } from "next";
 import { ParsedUrlQuery } from "querystring";
-import jwt from 'jsonwebtoken';
-import { DecodedSessionToken } from "interfaces";
+import { TokenData } from "interfaces";
 
 export const formatDates = "YYYY-MM-DD";
 export const formatDateComplete = "MMM DD, YYYY";
@@ -94,7 +92,6 @@ export const GenerateErrorToast = (error: any, addToast: any) => {
         });
       });
     }
-    // console.log(errors.propertiesErrors);
   } else {
     addToast(`${"Error: "} ${error.message}`, {
       appearance: "error",
@@ -129,25 +126,28 @@ export const isRole = (dataUser: any, roles: string[]) => {
   return roles.includes(rol);
 };
 
-export const getSession = (context: GetServerSidePropsContext<ParsedUrlQuery, PreviewData>) => {
+export const getSession = async (context: GetServerSidePropsContext<ParsedUrlQuery, PreviewData>): Promise<TokenData | null> => {
+  const cookies = context.req.cookies;
+  
+  const tokenName = 
+    cookies["authjs.session-token"] || 
+    cookies["__Secure-authjs.session-token"];
+  
+  if (!tokenName) {
+    return null;
+  }
 
-	// const cookies = context.req.cookies;
-	// const possibleCookieNames = [
-	// 	'__Secure-next-auth.session-token',
-	// 	'next-auth.session-token',
-	// 	'__Host-next-auth.session-token',
-	// ];
-	
-	// for (const cookieName of possibleCookieNames) {
-	// 	if (cookies[cookieName]) {
-	// 		return jwt.decode(cookies[cookieName]) as DecodedSessionToken;
-	// 	}
-	// }
-
-	if (context.req.cookies['__Secure-next-auth.session-token']) {
-		return jwt.decode(context.req.cookies['__Secure-next-auth.session-token']) as DecodedSessionToken;
-	} else if (context.req.cookies['next-auth.session-token']) {
-		return jwt.decode(context.req.cookies['next-auth.session-token']) as DecodedSessionToken;
-	}
-	return null;
+  try {
+    const base64Url = tokenName.split(".")[1];
+    if (!base64Url) {
+      return null;
+    }
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = Buffer.from(base64, "base64").toString("utf-8");
+    const decoded = JSON.parse(jsonPayload) as TokenData;
+    return decoded;
+  } catch (error) {
+    console.error("Error decoding session:", error);
+    return null;
+  }
 }

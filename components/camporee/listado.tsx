@@ -137,9 +137,9 @@ const CamporeeList = ({ type, festival = false }: { type?: ExtendedTypesSelectEn
         <Link
           href={`${appRouter.dashboard.href}${festival ? appRouter.dashboard.subLinks.festival.href : appRouter.dashboard.subLinks.camporee.href}${type && !festival ? `/${type}` : ''}/${appRouter.dashboard.subLinks.camporee.subLinks.detail.href}/${value.id}`}
         >
-          <a>
-            <IconWithText icon={value?.logo} text={value?.nombre} />
-          </a>
+
+          <IconWithText icon={value?.logo} text={value?.nombre} />
+
         </Link>
       ),
       // <IconWithText icon={value?.logo} text={value?.nombre} />
@@ -193,13 +193,13 @@ const CamporeeList = ({ type, festival = false }: { type?: ExtendedTypesSelectEn
                 <Link
                   href={`${appRouter.dashboard.href}${festival ? appRouter.dashboard.subLinks.festival.href : appRouter.dashboard.subLinks.camporee.href}${type ? `/${type}` : ''}/${appRouter.dashboard.subLinks.camporee.subLinks.detail.href}/${value.id}`}
                 >
-                  <a>
-                    <Icon
-                      src={Icons.more}
-                      fill="var(--color-primary)"
-                      className="max-w-[50px] w-8 cursor-pointer"
-                    />
-                  </a>
+
+                  <Icon
+                    src={Icons.more}
+                    fill="var(--color-primary)"
+                    className="max-w-[50px] w-8 cursor-pointer"
+                  />
+
                 </Link>
               </div>
             </Tooltip>
@@ -269,7 +269,7 @@ const CamporeeList = ({ type, festival = false }: { type?: ExtendedTypesSelectEn
                   boderRadius="rounded-full"
                   size="full"
                   type="submit"
-                  sizesButton="py-3"
+                  sizesButton="py-3 px-4"
                   className="bg-yellow w-[100px]"
                   disabled={isLoading}
                 />

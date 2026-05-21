@@ -8,6 +8,7 @@ export const IconWithText: React.FC<{
   isUser?: boolean;
   classNameContainer?: string;
   isVertical?: boolean;
+  children?: React.ReactNode;
 }> = ({
   icon,
   text,

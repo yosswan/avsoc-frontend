@@ -57,14 +57,12 @@ const CreateDistrito = ({ hide, refetch }: any) => {
       id_pastor: selectValuePastores?.value,
     };
 
-    console.log("FinalData", FinalData);
     setIsLoading(true);
     DistritosServices.create(FinalData)
       .then((response: any) => {
         addToast("Distrito creado exitosamente", {
           appearance: "success",
         });
-        console.log("response create:", response);
         refetch();
         hide();
         setIsLoading(false);
@@ -81,9 +79,6 @@ const CreateDistrito = ({ hide, refetch }: any) => {
   const handleChangeSelectConsejosRegionales = (selected: any) => {
     setSelectValueConsejosRegionales(selected);
   };
-  React.useEffect(() => {
-    console.log("cambia", selectValuePastores);
-  }, [selectValuePastores]);
 
   const promiseOptionsPastores = (inputValue: any, callback: any) => {
     if (!inputValue && !dataPastores) {

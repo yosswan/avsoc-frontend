@@ -103,7 +103,8 @@ const EventPrecamporeeDetail = () => {
     refetch,
   } = useQuery<any>(
     [`${UseQueryEnums.GET_EVENT_PRECAMPOREE_BY_ID}_${id}`],
-    () => CamporeeServices.getEventPrecamporeeById(id)
+    () => CamporeeServices.getEventPrecamporeeById(id),
+    { enabled: !!id }
   );
 
   const [tabs, setTabs] = React.useState<any>();
@@ -229,7 +230,7 @@ const EventPrecamporeeDetail = () => {
     <LayoutDashboard title="Detalle Precamporee">
       <div className="lg:px-20 mt-12">
         <div className="flex flex-wrap justify-center flex-row">
-          {isLoading ? (
+          {!id || isLoading ? (
             <Spinner type="loadingPage" className="py-10" />
           ) : (
             <>
@@ -383,33 +384,38 @@ const EventPrecamporeeDetail = () => {
 															<Tabs
 																type="card"
 																className="tabs-antd-custom justify-center"
+																items={
+																	itemClub?.informes?.map(
+																		(informe: any, index: any) => {
+																			return {
+																				key: index,
+																				label: informe?.nombre_mes,
+																				children: (
+																					<div
+																						className="mb-10"
+																					>
+																						<InformeView
+																							handlePreviewImage={handlePreviewImage}
+																							handleShowApprove={handleShowApprove}
+																							handleShowLoadScore={handleShowLoadScore}
+																							index={index}
+																							informe={informe}
+																							isFirmado={isFirmado}
+																						/>
+																					</div>
+																				)
+																			}
+																		}
+																	)
+																}
 															>
-																{itemClub?.informes?.map(
-																	(informe: any, index: any) => {
-																		return (
-																			<TabPane
-																				tab={informe?.nombre_mes}
-																				key={index}
-																				className="mb-10"
-																			>
-																				<InformeView
-																					handlePreviewImage={handlePreviewImage}
-																					handleShowApprove={handleShowApprove}
-																					handleShowLoadScore={handleShowLoadScore}
-																					index={index}
-																					informe={informe}
-																					isFirmado={isFirmado}
-																				/>
-																			</TabPane>
-																		);
-																	}
-																)}
 															</Tabs>
 														: 
 															itemClub?.informes?.map(
 																(informe: any, index: any) => {
 																	return (
 																		<InformeView
+																			key={index}
 																			handlePreviewImage={handlePreviewImage}
 																			handleShowApprove={handleShowApprove}
 																			handleShowLoadScore={handleShowLoadScore}
@@ -449,146 +455,150 @@ const EventPrecamporeeDetail = () => {
                       <Tabs
                         type="card"
                         className="tabs-antd-custom justify-center"
-                      >
-                        {values.meses?.map((item: any, index: number) => {
-                          const informe = findInforme(item.value);
-                          return (
-                            <TabPane
-                              tab={item?.mes}
-                              key={index}
-                              className="mb-10"
-                            >
-                              <>
-                                {!isNil(informe) && (
-                                  <>
-                                    <div className="flex gap-2 flex-wrap">
-                                      {informe?.puntuacion && (
-                                        <Alert
-                                          className="mb-5 bg-alert-success rounded-xl"
-                                          hideIcon
-                                        >
-                                          <p className="text-[white] text-base py-5">
-                                            Puntuación:{"  "}
-                                            <span className="bg-white text-[black] rounded-lg px-2 py-2 text-center">
-                                              {informe?.puntuacion}/
-                                              {informe?.puntuacion_maxima}
-                                            </span>
-                                          </p>
-                                        </Alert>
-                                      )}
-                                      <Alert
-                                        className="mb-5 bg-primary rounded-xl"
-                                        hideIcon
-                                      >
-                                        <p className="text-[white] text-base py-5">
-                                          Firma Anciano:{"  "}
-                                          <span className="bg-white text-[black] rounded-lg px-2 py-2 text-center">
-                                            {informe?.firma_anciano ? (
-                                              <span className="text-secondary font-bold">
-                                                SI
-                                              </span>
-                                            ) : (
-                                              <span className="text-alert-error font-bold">
-                                                NO
-                                              </span>
-                                            )}
-                                          </span>
-                                        </p>
-                                      </Alert>
-                                      <Alert
-                                        className="mb-5 bg-secondary rounded-xl"
-                                        hideIcon
-                                      >
-                                        <p className="text-[white] text-base py-5">
-                                          Firma Pastor:{"  "}
-                                          <span className="bg-white text-[black] rounded-lg px-2 py-2 text-center">
-                                            {informe?.firma_pastor ? (
-                                              <span className="text-secondary font-bold">
-                                                SI
-                                              </span>
-                                            ) : (
-                                              <span className="text-alert-error font-bold">
-                                                NO
-                                              </span>
-                                            )}
-                                          </span>
-                                        </p>
-                                      </Alert>
-                                      <Alert
-                                        className="mb-5 bg-overlay rounded-xl"
-                                        hideIcon
-                                      >
-                                        <p className="text-[white] text-base py-5">
-                                          Firma Consejo Regional:{"  "}
-                                          <span className="bg-white text-[black] rounded-lg px-2 py-2 text-center">
-                                            {informe?.firma_consejo_regional ? (
-                                              <span className="text-secondary font-bold">
-                                                SI
-                                              </span>
-                                            ) : (
-                                              <span className="text-alert-error font-bold">
-                                                NO
-                                              </span>
-                                            )}
-                                          </span>
-                                        </p>
-                                      </Alert>
-																			<Alert
-																				className="mb-5 bg-secondary rounded-xl"
-																				hideIcon
-																			>
-																				<p className="text-[white] text-base py-5">
-																					Fecha de envío:{" "}
-																					<span className="bg-white text-[black] rounded-lg px-2 py-2 text-center">
-																						{informe?.fecha_enviado}
-																					</span>
-																				</p>
-																			</Alert>
-																			{informe?.observacion && (
-																				<Alert className="bg-overlay rounded-xl mb-5" whiteIcon={true}>
-																					<div className="flex items-center gap-2 text-[white] text-base py-5">
-																						<span className="whitespace-nowrap">Observación:</span>
-																						<div className="bg-white text-[black] rounded-lg px-3 py-1 text-center w-full">
-																							{informe?.observacion}
-																						</div>
-																					</div>
-																				</Alert>
-																			)}
-																			{informe?.alert > 0 && (
-																				<Alert className=" bg-[#ffc107] rounded-xl mb-5">
-																					<div className="flex items-center gap-2 text-[black] text-base py-5">
-																						<span className="whitespace-nowrap">Estado:</span>
-																						<div className="bg-white rounded-lg px-3 py-1 text-center w-full">
-																							{
-																								informe?.alert == 1 ?
-																								'Informe fuera de tiempo'
-																								: informe?.alert == 2 ?
-																								'Actividad fuera de tiempo'
-																								: 'Informe y actividad fuera de tiempo'
-																							}
-																						</div>
-																					</div>
-																				</Alert>
-																			)}
-                                    </div>
-                                  </>
-                                )}
-																<div className="px-1">
-																	<InformeForm
-																		refetch={refetch}
-																		informe={informe ? informe : null}
-																		isAvailable={item?.activo}
-																		idPrecamporee={id}
-																		isRecurrent
-																		mes={item.value}
-																		className={classNamesForms}
-																		idCamporee={response?.data?.id_camporee}
-																	/>
+												items={
+													values.meses?.map((item: any, index: number) => {
+														const informe = findInforme(item.value);
+														return {
+															key: index,
+															label: item?.mes,
+															children: (
+																<div
+																	className="mb-10"
+																>
+																	<>
+																		{!isNil(informe) && (
+																			<>
+																				<div className="flex gap-2 flex-wrap">
+																					{informe?.puntuacion && (
+																						<Alert
+																							className="mb-5 bg-alert-success rounded-xl"
+																							hideIcon
+																						>
+																							<p className="text-[white] text-base py-5">
+																								Puntuación:{"  "}
+																								<span className="bg-white text-[black] rounded-lg px-2 py-2 text-center">
+																									{informe?.puntuacion}/
+																									{informe?.puntuacion_maxima}
+																								</span>
+																							</p>
+																						</Alert>
+																					)}
+																					<Alert
+																						className="mb-5 bg-primary rounded-xl"
+																						hideIcon
+																					>
+																						<p className="text-[white] text-base py-5">
+																							Firma Anciano:{"  "}
+																							<span className="bg-white text-[black] rounded-lg px-2 py-2 text-center">
+																								{informe?.firma_anciano ? (
+																									<span className="text-secondary font-bold">
+																										SI
+																									</span>
+																								) : (
+																									<span className="text-alert-error font-bold">
+																										NO
+																									</span>
+																								)}
+																							</span>
+																						</p>
+																					</Alert>
+																					<Alert
+																						className="mb-5 bg-secondary rounded-xl"
+																						hideIcon
+																					>
+																						<p className="text-[white] text-base py-5">
+																							Firma Pastor:{"  "}
+																							<span className="bg-white text-[black] rounded-lg px-2 py-2 text-center">
+																								{informe?.firma_pastor ? (
+																									<span className="text-secondary font-bold">
+																										SI
+																									</span>
+																								) : (
+																									<span className="text-alert-error font-bold">
+																										NO
+																									</span>
+																								)}
+																							</span>
+																						</p>
+																					</Alert>
+																					<Alert
+																						className="mb-5 bg-overlay rounded-xl"
+																						hideIcon
+																					>
+																						<p className="text-[white] text-base py-5">
+																							Firma Consejo Regional:{"  "}
+																							<span className="bg-white text-[black] rounded-lg px-2 py-2 text-center">
+																								{informe?.firma_consejo_regional ? (
+																									<span className="text-secondary font-bold">
+																										SI
+																									</span>
+																								) : (
+																									<span className="text-alert-error font-bold">
+																										NO
+																									</span>
+																								)}
+																							</span>
+																						</p>
+																					</Alert>
+																					<Alert
+																						className="mb-5 bg-secondary rounded-xl"
+																						hideIcon
+																					>
+																						<p className="text-[white] text-base py-5">
+																							Fecha de envío:{" "}
+																							<span className="bg-white text-[black] rounded-lg px-2 py-2 text-center">
+																								{informe?.fecha_enviado}
+																							</span>
+																						</p>
+																					</Alert>
+																					{informe?.observacion && (
+																						<Alert className="bg-overlay rounded-xl mb-5" whiteIcon={true}>
+																							<div className="flex items-center gap-2 text-[white] text-base py-5">
+																								<span className="whitespace-nowrap">Observación:</span>
+																								<div className="bg-white text-[black] rounded-lg px-3 py-1 text-center w-full">
+																									{informe?.observacion}
+																								</div>
+																							</div>
+																						</Alert>
+																					)}
+																					{informe?.alert > 0 && (
+																						<Alert className=" bg-[#ffc107] rounded-xl mb-5">
+																							<div className="flex items-center gap-2 text-[black] text-base py-5">
+																								<span className="whitespace-nowrap">Estado:</span>
+																								<div className="bg-white rounded-lg px-3 py-1 text-center w-full">
+																									{
+																										informe?.alert == 1 ?
+																										'Informe fuera de tiempo'
+																										: informe?.alert == 2 ?
+																										'Actividad fuera de tiempo'
+																										: 'Informe y actividad fuera de tiempo'
+																									}
+																								</div>
+																							</div>
+																						</Alert>
+																					)}
+																				</div>
+																			</>
+																		)}
+																		<div className="px-1">
+																			<InformeForm
+																				refetch={refetch}
+																				informe={informe ? informe : null}
+																				isAvailable={item?.activo}
+																				idPrecamporee={id}
+																				isRecurrent
+																				mes={item.value}
+																				className={classNamesForms}
+																				idCamporee={response?.data?.id_camporee}
+																			/>
+																		</div>
+																	</>
 																</div>
-                              </>
-                            </TabPane>
-                          );
-                        })}
+															)
+														}
+													})
+												}
+                      >
                       </Tabs>
                     </div>
                   ) : (

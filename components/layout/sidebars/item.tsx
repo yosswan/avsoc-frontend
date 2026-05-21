@@ -56,26 +56,26 @@ export const ItemNavbar: React.FC<itemNavbarsProps> = ({
                 module={ModuleMap[subItem.name as ModuleEnums]}
                 typePermisse={PermissionsEnums.VIEW}
               >
-                <Link key={subItem.name} href={subItem.href}>
-                  <a
-                    className={clsx(
-                      router.pathname.includes(subItem.href)
-                        ? "bg-active text-white font-bold opacity-100 "
-                        : "text-white hover:bg-active font-light  opacity-70",
-                      "group flex items-center px-3 pt-7 hover:opacity-90 text-base rounded-md f-18"
-                    )}
-                  >
-                    <Icon
-                      src={subItem.icon}
-                      fill="var(--color-white)"
-                      className="mr-5 flex-shrink-0 h-7 w-7"
-                    />
-                    {subItem.label}
-                  </a>
+                <Link
+                  key={subItem.name}
+                  href={subItem.href}
+                  className={clsx(
+                    router.pathname.includes(subItem.href)
+                      ? "bg-active text-white font-bold opacity-100 "
+                      : "text-white hover:bg-active font-light  opacity-70",
+                    "group flex items-center px-3 pt-7 hover:opacity-90 text-base rounded-md f-18"
+                  )}>
+
+                  <Icon
+                    src={subItem.icon}
+                    fill="var(--color-white)"
+                    className="mr-5 flex-shrink-0 h-7 w-7"
+                  />
+                  {subItem.label}
+
                 </Link>
               </Restricted>
             )}
-
             {subItem.dropdown &&
               subItem.dropdownVisible &&
               subItem.dropdown.map((dropdown: any, index: any) => {
@@ -88,21 +88,19 @@ export const ItemNavbar: React.FC<itemNavbarsProps> = ({
                     <Link
                       key={dropdown.name}
                       href={"/dashboard" + dropdown.href}
-                    >
-                      <a
-                        className={clsx(
-                          router.pathname.includes(dropdown.href)
-                            ? "bg-active text-yellow opacity-100 "
-                            : "text-white hover:bg-active font-light  opacity-70",
-                          "group flex items-center px-3 pt-3 hover:opacity-90 text-base rounded-md f-16"
-                        )}
-                      >
-                        <div
-                          className="mr-5 flex-shrink-0 h-6 w-6 text-white"
-                          aria-hidden="true"
-                        />
-                        {dropdown.label}
-                      </a>
+                      className={clsx(
+                        router.pathname.includes(dropdown.href)
+                          ? "bg-active text-yellow opacity-100 "
+                          : "text-white hover:bg-active font-light  opacity-70",
+                        "group flex items-center px-3 pt-3 hover:opacity-90 text-base rounded-md f-16"
+                      )}>
+
+                      <div
+                        className="mr-5 flex-shrink-0 h-6 w-6 text-white"
+                        aria-hidden="true"
+                      />
+                      {dropdown.label}
+
                     </Link>
                   </Restricted>
                 );

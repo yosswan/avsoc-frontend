@@ -41,7 +41,7 @@ const StyledButtonDisabled = `
 `;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const StyledButton = styled.button.attrs<any>(({ enabled }: any) => ({
+const StyledButton = styled.button.attrs<any>(({ $enabled }: any) => ({
   className: `
     relative
     inline-flex
@@ -55,7 +55,7 @@ const StyledButton = styled.button.attrs<any>(({ enabled }: any) => ({
     font-medium
     text-secondary-disable
     hover:text-secondary-hover   
-    ${enabled ? StyledButtonEnabled : StyledButtonDisabled}
+    ${$enabled ? StyledButtonEnabled : StyledButtonDisabled}
 `,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }))<any>``;
@@ -70,7 +70,7 @@ const PageActive = `
 `;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const PageContainer = styled.div.attrs<any>(({ active }: any) => ({
+const PageContainer = styled.div.attrs<any>(({ $active }: any) => ({
   className: `
     z-10
     relative
@@ -83,7 +83,7 @@ const PageContainer = styled.div.attrs<any>(({ active }: any) => ({
     f-16
     font-medium
     cursor-pointer
-    ${active ? PageActive : ""}
+    ${$active ? PageActive : ""}
 `,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }))<any>``;
@@ -107,7 +107,7 @@ export default function Pagination({
   return (
     <Container>
       <StyledButton
-        enabled={isNil(prevPage) ? undefined : "true"}
+        $enabled={isNil(prevPage) ? undefined : "true"}
         onClick={() => (isNil(prevPage) ? noop() : setPage(prevPage))}
       >
         <StyledSpan>Previous</StyledSpan>
@@ -118,14 +118,14 @@ export default function Pagination({
           <PageContainer
             key={`page-item-${page}`}
             onClick={() => setPage(page)}
-            active={page === currentPage ? "true" : undefined}
+            $active={page === currentPage ? "true" : undefined}
           >
             {page}
           </PageContainer>
         );
       })}
       <StyledButton
-        enabled={isNil(nextPage) ? undefined : "true"}
+        $enabled={isNil(nextPage) ? undefined : "true"}
         onClick={() => (isNil(nextPage) ? noop() : setPage(nextPage))}
       >
         <StyledSpan>Next</StyledSpan>

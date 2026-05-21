@@ -156,7 +156,7 @@ export const InputImage: React.FC<AlertProps> = ({
                 />
               </div>
               <Typography type="caption" className="f-12">
-                {error[name]?.message}
+                {String(error[name]?.message || '')}
               </Typography>
             </span>
           )}

@@ -13,7 +13,6 @@ import moment from "moment";
 import { isEmpty } from "lodash";
 
 const ViewAllOnlyMiembros = ({ data, hide, refetch }: any) => {
-  console.log("detalle all miembros per club", data);
   const { cedula, nombre, periodo, cargo, foto, activo } = data;
 
   const columnsPeriodos = [
@@ -273,7 +272,7 @@ const ViewAllOnlyMiembros = ({ data, hide, refetch }: any) => {
             columns={columnsPeriodos}
             dataSource={data?.periodos}
             pagination={false}
-            rowKey="periodos"
+            rowKey="fecha_inicio"
           />
         </div>
       )}

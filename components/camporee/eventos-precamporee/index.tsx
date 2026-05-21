@@ -32,6 +32,7 @@ import { Alert } from "components/common/alert";
 import { SelectInput } from "components/common/form/select/SelectInput";
 import { TypesSelectPrecamporeeMap } from "consts/typesSelectEnum";
 import { AlertSkeleton, CardSkeleton } from "components/common/skeleton";
+import { useRouter } from "next/router";
 
 const CreateEventPrecamporee = dynamic(() => import("./create"));
 const EditEventPrecamporee = dynamic(() => import("./edit"));
@@ -47,7 +48,7 @@ type Params = {
   page?: number;
   limit?: number;
   userId?: number;
-	light?: boolean;
+	light?: string;
   idCamporee: number | string | string[] | undefined;
 };
 
@@ -58,8 +59,21 @@ const EventosPrecamporee = ({
   const [params, setValue] = useQueryParams<Params>({
     limit: 6,
     idCamporee: idCamporee,
-		light: true,
   });
+	const [search, setSearch] = React.useState('')
+	const router = useRouter();
+
+	React.useEffect(() => {
+		if (router.isReady) {
+			setValue({
+				light: router.query['light'] as string || 'true',
+				search: router.query['search'] as string,
+			})
+			if (router.query['search']) setSearch(router.query['search'] as string);
+		}
+	}, [router.isReady])
+	
+
   const {
     Modal: ModalEditPrecamporee,
     hide: hideEditPrecamporee,
@@ -78,8 +92,10 @@ const EventosPrecamporee = ({
 
   const { data, isLoading, refetch } = useQuery<any>(
     [`${UseQueryEnums.GET_ALL_PRECAMPOREE_CAMPOREE}_${idCamporee}`, params],
-    () => CamporeeServices.getAllEventsPrecamporeeByIdCamporee(params)
+    () => CamporeeServices.getAllEventsPrecamporeeByIdCamporee(params),
+		{ enabled: !!idCamporee }
   );
+	const loading = isLoading || !idCamporee;
 
   const allPrecamporee = get(data, "data.data", []);
   const total = get(data, "data.total", 1);
@@ -150,6 +166,7 @@ const EventosPrecamporee = ({
     const value = e.target.value;
     setOnSearch(true);
     debouncedSearch(value);
+		setSearch(value);
   };
 
   return (
@@ -171,7 +188,8 @@ const EventosPrecamporee = ({
                   error={errors.search}
                   leftImg={Icons.search}
                   otherStyles="pt-3 pb-3 rounded-full"
-                  disabled={isLoading}
+                  disabled={loading}
+									value={search}
                 />
                 {data?.data?.modificacion && (
                   <Restricted
@@ -180,8 +198,8 @@ const EventosPrecamporee = ({
                   >
                     <Tooltip title="Agregar">
                       <div
-                        className={clsx("px-2", { "pointer-events-none opacity-50": isLoading })}
-                        onClick={isLoading ? undefined : showCreatePrecamporee}
+                        className={clsx("px-2", { "pointer-events-none opacity-50": loading })}
+                        onClick={loading ? undefined : showCreatePrecamporee}
                       >
                         <Button
                           labelProps="text-sm text-[black] font-bold"
@@ -190,9 +208,9 @@ const EventosPrecamporee = ({
                           boderRadius="rounded-full"
                           size="full"
                           type="submit"
-                          sizesButton="py-3"
+                          sizesButton="py-3 px-4"
                           className="bg-yellow w-[100px]"
-                          disabled={isLoading}
+                          disabled={loading}
                         />
                       </div>
                     </Tooltip>
@@ -211,13 +229,13 @@ const EventosPrecamporee = ({
 								label="Mostrar"
 								options={TypesSelectPrecamporeeMap}
 								maxwidth="max-w-[208px]"
-								value={'true'}
+								value={params.light}
 								setValue={updateQuery}
 								hideDeleteSelected
 							></SelectInput>
 						</Restricted>
 
-						{isLoading ? (
+						{loading ? (
               <>
 								<Restricted
 									module={ModuleEnums.EVENTO_PRECAMPOREE}
@@ -234,20 +252,20 @@ const EventosPrecamporee = ({
 							<Link
 								href={`${appRouter.dashboard.subLinks.informesMensuales.href}?fecha=${mes}`}
 							>
-								<a>
-									<Alert
-										className={`mb-5 bg-${informeMensualReady ? 'success' : 'error'} rounded-xl`}
-										hideIcon
-									>
-										<p className="text-[black] text-base py-5 m-auto">
-											<span className="font-bold">Informe Mensual{" "}</span>
-											<span className="bg-white text-[black] rounded-lg px-2 py-2 text-center">
-												{informeMensualReady ? 'Listo' : 'Pendiente'}
-											</span>
-										</p>
-									</Alert>
-								</a>
-							</Link>
+
+                              <Alert
+                                  className={`mb-5 bg-${informeMensualReady ? 'success' : 'error'} rounded-xl`}
+                                  hideIcon
+                              >
+                                  <p className="text-[black] text-base py-5 m-auto">
+                                      <span className="font-bold">Informe Mensual{" "}</span>
+                                      <span className="bg-white text-[black] rounded-lg px-2 py-2 text-center">
+                                          {informeMensualReady ? 'Listo' : 'Pendiente'}
+                                      </span>
+                                  </p>
+                              </Alert>
+
+                            </Link>
 						}
             <ul
               role="list"
@@ -337,14 +355,14 @@ const EventosPrecamporee = ({
                           <div className="-ml-px w-0 flex-1 flex">
                             <Link
                               href={`${appRouter.dashboard.href}/${appRouter.dashboard.subLinks.camporee.subLinks.events.href}/${appRouter.dashboard.subLinks.camporee.subLinks.events.subLinks.precamporee.href}/${appRouter.dashboard.subLinks.camporee.subLinks.events.subLinks.precamporee.subLinks.detail.href}/${item.id_camporee_precamporee}`}
-                            >
-                              <a className={`relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-${textColor}`}>
-                                <PlusIcon
-                                  className="w-5 h-5 text-gray-400"
-                                  aria-hidden="true"
-                                />
-                                <span className="ml-3">Detalle</span>
-                              </a>
+                              className={`relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-${textColor}`}>
+
+                              <PlusIcon
+                                className="w-5 h-5 text-gray-400"
+                                aria-hidden="true"
+                              />
+                              <span className="ml-3">Detalle</span>
+
                             </Link>
                           </div>
                         </Restricted>
@@ -362,7 +380,7 @@ const EventosPrecamporee = ({
               })}
               {/* return <ItemIcon icon={item?.icon} title={item?.title} />; */}
             </ul>
-            {!isEmpty(allPrecamporee) && !isLoading ? (
+            {!isEmpty(allPrecamporee) && !loading ? (
               <div className="mt-10 justify-center flex">
                 <Pagination
                   currentPage={parseInt(currentPage)}

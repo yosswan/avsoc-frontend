@@ -6,6 +6,7 @@ export interface TypographyProps {
   text?: string;
   className?: string;
   onClick?: () => void;
+  children?: React.ReactNode;
 }
 
 export const Typography: React.FC<TypographyProps> = ({

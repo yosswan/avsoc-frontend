@@ -14,13 +14,14 @@ type SelectInputProps = {
   className?: string;
   hideDeleteSelected?: boolean;
   setValue: (key: string, value: string | number | undefined) => void;
+	disabled?: boolean;
 };
 
-const Container = styled.div.attrs<any>(({ maxwidth, className }: any) => ({
+const Container = styled.div.attrs<any>(({ $maxwidth, className }: any) => ({
   className: `
     flex-auto,
 		${className},
-    ${maxwidth ? maxwidth : "max-w-[200px]"}
+    ${$maxwidth ? $maxwidth : "max-w-[200px]"}
 `,
 }))<any>``;
 
@@ -33,6 +34,7 @@ export function SelectInput({
   className,
   setValue,
   hideDeleteSelected,
+	disabled
 }: SelectInputProps) {
   const [selectedValue, selectValue] = useState<string | number | undefined>(
     value
@@ -47,16 +49,16 @@ export function SelectInput({
     selectValue(undefined);
   };
 
-  const handleChange = (value: string) => {
-    setValue(name, value);
-    selectValue(value);
+  const handleChange = (val: string) => {
+    setValue(name, val);
+    selectValue(val);
   };
 
   const values = entries(options);
 
   return (
-    <Container maxwidth={maxwidth} className={className}>
-      <Listbox value={selectedValue} onChange={handleChange}>
+    <Container $maxwidth={maxwidth} className={className}>
+      <Listbox value={selectedValue ?? ""} onChange={handleChange} disabled={disabled} >
         <div className="relative">
           <Listbox.Button className="relative w-full h-10 pl-3 pr-10 text-left bg-transparent shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-[black] focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-yellow sm:text-sm border-yellow border rounded-full">
             {(!isSelected() || hideDeleteSelected) && (

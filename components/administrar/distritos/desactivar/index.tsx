@@ -10,7 +10,6 @@ const DesactivarDistrito = ({ data, hide, refetch }: any) => {
   const { addToast } = useToasts();
 
   const [isLoading, setIsLoading] = React.useState(false);
-  console.log("a desactivar", data);
 
   const onDelete = () => {
     setIsLoading(true);
@@ -19,7 +18,6 @@ const DesactivarDistrito = ({ data, hide, refetch }: any) => {
         addToast("Se ha dado desactivado el distrito exitosamente", {
           appearance: "success",
         });
-        console.log("response dar de desactivar distrito:", response);
         refetch();
         hide();
         setIsLoading(false);

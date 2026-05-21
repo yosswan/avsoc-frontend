@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Typography } from "components/common/typography";
 import { Button } from "components/common/button/button";
 import { InputPassword } from "components/common/form/input-password";
-import { signIn } from "next-auth/client";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useToasts } from "react-toast-notifications";
 import { Logo } from "components/logo";
@@ -12,6 +12,7 @@ import { GetServerSideProps } from "next";
 import { InputEmail } from "components/common/form/input-email";
 import { Icons } from "consts/icons";
 import { getSession } from "lib/helper";
+import { getToken } from "next-auth/jwt";
 
 const SignIn = () => {
   const {
@@ -25,25 +26,27 @@ const SignIn = () => {
   const { addToast } = useToasts();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-  const handleSubmitData = (data: any) => {
+  const handleSubmitData = async (data: any) => {
     setIsLoading(true);
 
-    signIn("credentials", {
-      redirect: false,
-      email: data.email,
-      password: data.password,
-      callbackUrl: "/dashboard",
-    })
-      .then((response) => {
-        if (response?.error) {
-          addToast(response.error, { appearance: "error" });
-        } else {
-          router.push("/dashboard");
-        }
-      })
-      .finally(() => {
-        setIsLoading(false);
+    try {
+      const result = await signIn("credentials", {
+        redirect: false,
+        email: data.email,
+        password: data.password,
+        callbackUrl: "/dashboard",
       });
+
+      if (result?.error) {
+        addToast(result.error, { appearance: "error" });
+      } else {
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      addToast("Error de autenticación", { appearance: "error" });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const rules = {
@@ -153,9 +156,9 @@ const SignIn = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = getSession(context);
+  const session = await getToken({ req: context.req as any, secret: process.env.NEXTAUTH_SECRET });
 
-  if (session && session.access_token) {
+  if (session) {
     return {
       redirect: {
         destination: "/dashboard",

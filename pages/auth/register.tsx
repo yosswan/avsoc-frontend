@@ -34,6 +34,7 @@ import { IglesiasServices } from "services/Iglesias";
 import AsyncSelect from "react-select/async";
 import { customStyles } from "consts/stylesReactSelect.helper";
 import InfoAfterRegister from "components/auth/info-after-register";
+import { getToken } from "next-auth/jwt";
 
 const Register = () => {
   const {
@@ -522,9 +523,9 @@ const Register = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = getSession(context);
+  const session = await getToken({ req: context.req as any, secret: process.env.NEXTAUTH_SECRET });
 
-  if (session && session.access_token) {
+  if (session) {
     return {
       redirect: {
         destination: "/dashboard",

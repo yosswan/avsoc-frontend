@@ -4,7 +4,7 @@ import { Typography } from "../../common/typography";
 import { Icons } from "consts/icons";
 import clsx from "clsx";
 import { useUser } from "hooks/user";
-import { signOut } from "next-auth/client";
+import { signOut } from "next-auth/react";
 import Link from "next/dist/client/link";
 import { get } from "lodash";
 import { ValidateImageUser } from "lib/helper";

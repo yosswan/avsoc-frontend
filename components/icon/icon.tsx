@@ -35,13 +35,12 @@ export const Icon: React.FC<IconProps> = ({
       // style={stylesProps}
       fill={fill}
       className={clsx(
-        "w-full max-w-full h-full max-h-full",
         className,
         { "cursor-pointer": pointer },
         [fillPath && styles.svgFillPath],
         [fillCircle && styles.svgFillCircle],
         [fillLine && styles.svgFillLine],
-        [fillRect && styles.svgFillRectfillRect]
+        [fillRect && styles.svgFillRect]
       )}
     />
   );

@@ -7,7 +7,6 @@ import { isEmpty } from "lodash";
 import { Table } from "antd";
 
 const ViewClub = ({ data, hide, refetch }: any) => {
-  console.log("detalle", data);
   const {
     nombre,
     director,

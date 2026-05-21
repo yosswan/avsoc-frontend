@@ -78,7 +78,8 @@ const EventosCamporee = ({
 
   const { data, isLoading, refetch } = useQuery<any>(
     [`${UseQueryEnums.GET_EVENT_CAMPOREE_BY_ID}_${idCamporee}`, params],
-    () => CamporeeServices.getAllEventsCamporeeByIdCamporee(params)
+    () => CamporeeServices.getAllEventsCamporeeByIdCamporee(params),
+		{ enabled: !!idCamporee }
   );
 
   const allCamporee = get(data, "data.data", []);
@@ -188,7 +189,7 @@ const EventosCamporee = ({
                           boderRadius="rounded-full"
                           size="full"
                           type="submit"
-                          sizesButton="py-3"
+                          sizesButton="py-3 px-4"
                           className="bg-yellow w-[100px]"
                           disabled={isLoading}
                         />
@@ -302,14 +303,14 @@ const EventosCamporee = ({
                           <div className="-ml-px w-0 flex-1 flex">
                             <Link
                               href={`${appRouter.dashboard.href}/${appRouter.dashboard.subLinks.camporee.subLinks.events.href}/${appRouter.dashboard.subLinks.camporee.subLinks.events.subLinks.camporee.href}/${appRouter.dashboard.subLinks.camporee.subLinks.events.subLinks.camporee.subLinks.detail.href}/${item.id_camporee_evento}`}
-                            >
-                              <a className="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500">
-                                <PlusIcon
-                                  className="w-5 h-5 text-gray-400"
-                                  aria-hidden="true"
-                                />
-                                <span className="ml-3">Detalle</span>
-                              </a>
+                              className="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500">
+
+                              <PlusIcon
+                                className="w-5 h-5 text-gray-400"
+                                aria-hidden="true"
+                              />
+                              <span className="ml-3">Detalle</span>
+
                             </Link>
                           </div>
                         </Restricted>

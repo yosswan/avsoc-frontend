@@ -95,7 +95,6 @@ const AgregarMiembros = ({ hide, refetch }: any) => {
         addToast("Miembros agregados exitosamente", {
           appearance: "success",
         });
-        console.log("response create:", response);
         refetch();
         hide();
         setIsLoading(false);
@@ -115,10 +114,6 @@ const AgregarMiembros = ({ hide, refetch }: any) => {
     }
     setSelectValueMiembros(selected);
   };
-
-  React.useEffect(() => {
-    console.log("cambia", selectValueMiembros);
-  }, [selectValueMiembros]);
 
   const promiseOptionsMiembros = (inputValue: any, callback: any) => {
     if (!inputValue && !dataMiembros) {
@@ -157,10 +152,6 @@ const AgregarMiembros = ({ hide, refetch }: any) => {
       return callback(options);
     }
   };
-
-  React.useEffect(() => {
-    console.log("errors", errors);
-  }, [errors]);
 
   return (
     <div className="text-center">

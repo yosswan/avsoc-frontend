@@ -70,18 +70,7 @@ type Params = {
   id_camporee_precamporee: any;
 };
 
-const classNamesForms = "w-full px-4 md:w-[550px] mx-auto md:mt-8";
-
 const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
-  const { Modal, hide, isShow, show } = useModal();
-  const router = useRouter();
-
-  const {
-    Modal: ModalInscription,
-    hide: hideInscription,
-    isShow: isShowInscription,
-    show: showInscription,
-  } = useModal();
   const {
     Modal: ModalHelp,
     hide: hideHelp,
@@ -89,14 +78,11 @@ const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
     show: showHelp,
   } = useModal();
 
-  const { addToast } = useToasts();
-
   const profile = useUser();
 
   const dataUser = get(profile, "data", []);
 
   const [onSearch, setOnSearch] = React.useState(false);
-  const [clubesType, setClubesType] = React.useState<any>({});
   const [clubesTypeMap, setClubesTypeMap] = React.useState<any>({});
   const [consejosTypeMap, setConsejosTypeMap] = React.useState<any>({});
   const [eventoPrecamporeeTypeMap, setEventoPrecamporeeTypeMap] =
@@ -104,10 +90,7 @@ const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
   const [eventoCamporeeTypeMap, setEventoCamporeeTypeMap] = React.useState<any>(
     {}
   );
-  const [isEdit, setIsEdit] = React.useState(false);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [subject, setSubject] = React.useState(new Subject<string>());
   const [params, setValue] = useQueryParams<Params>({ idCamporee });
   const {
     data: response,
@@ -115,7 +98,8 @@ const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
     refetch,
   } = useQuery<any>(
     [`${UseQueryEnums.GET_ALL_INFORMES_CAMPOREE}_${idCamporee}`, params],
-    () => CamporeeServices.getAllResultados(params)
+    () => CamporeeServices.getAllResultados(params),
+		{ enabled: !!idCamporee }
   );
 
   const {
@@ -124,7 +108,8 @@ const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
     refetch: refetchClubesFilter,
   } = useQuery<any>(
     [`${UseQueryEnums.GET_ALL_CLUBES_TYPE}_${idCamporee}`],
-    () => CamporeeServices.getAllClubesType(idCamporee)
+    () => CamporeeServices.getAllClubesType(idCamporee),
+		{ enabled: !!idCamporee }
   );
 
   const {
@@ -133,7 +118,8 @@ const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
     refetch: refetchConsejosFilter,
   } = useQuery<any>(
     [`${UseQueryEnums.GET_ALL_CONSEJOS_TYPE}_${idCamporee}`],
-    () => ConsejosRegionalesServices.getAll(idCamporee)
+    () => ConsejosRegionalesServices.getAll(),
+		{ enabled: !!idCamporee }
   );
 
   const {
@@ -142,7 +128,8 @@ const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
     refetch: refetchCamporeeFilter,
   } = useQuery<any>(
     [`${UseQueryEnums.GET_ALL_EVENTO_CAMPOREE_TYPE}_${idCamporee}`],
-    () => CamporeeServices.getAllCamporeeType(idCamporee)
+    () => CamporeeServices.getAllCamporeeType(idCamporee),
+		{ enabled: !!idCamporee }
   );
 
   const {
@@ -151,18 +138,18 @@ const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
     refetch: refetchPrecamporeeFilter,
   } = useQuery<any>(
     [`${UseQueryEnums.GET_ALL_EVENTO_PRECAMPOREE_TYPE}_${idCamporee}`],
-    () => CamporeeServices.getAllPreCamporeeType(idCamporee)
+    () => CamporeeServices.getAllPreCamporeeType(idCamporee),
+		{ enabled: !!idCamporee }
   );
 
   const values = get(response, "data", []);
 
-  const [tabs, setTabs] = React.useState<any>();
   const updateQuery = (key: string, value: number | string | undefined) => {
     setValue({ [key]: value });
   };
 
   React.useEffect(() => {
-    if (!isLoadingClubesFilter) {
+    if (!isLoadingClubesFilter && !!idCamporee) {
       const aux: any = {};
 
       clubesFilter.data.map((item: any) => {
@@ -173,7 +160,7 @@ const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
   }, [clubesFilter]);
 
   React.useEffect(() => {
-    if (!isLoadingConsejosFilter) {
+    if (!isLoadingConsejosFilter && !!idCamporee) {
       const aux: any = {};
 
       consejosFilter.data.map((item: any) => {
@@ -184,7 +171,7 @@ const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
   }, [consejosFilter]);
 
   React.useEffect(() => {
-    if (!isLoadingCamporeeFilter) {
+    if (!isLoadingCamporeeFilter && !!idCamporee) {
       const aux: any = {};
 
       camporeeFilter.data.map((item: any) => {
@@ -195,7 +182,7 @@ const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
   }, [camporeeFilter]);
 
   React.useEffect(() => {
-    if (!isLoadingPrecamporeeFilter) {
+    if (!isLoadingPrecamporeeFilter && !!idCamporee) {
       const aux: any = {};
 
       precamporeeFilter.data.map((item: any) => {
@@ -205,83 +192,10 @@ const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
     }
   }, [precamporeeFilter]);
 
-  const findInforme = (mes: string) => {
-    if (!isEmpty(response?.data?.informes)) {
-      const informe = response?.data?.informes[0]?.informes?.find(
-        (item: any) => item.mes === mes
-      );
-
-      // console.log("el informe", informe);
-      return informe;
-    }
-  };
-
-  // React.useEffect(() => {
-  //   if (!isNil(response) && response?.data?.meses) {
-  //     const aux: any = [];
-  //     response?.data?.meses?.forEach((item: any, index: number) => {
-  //       const informe = findInforme(item.value);
-  //       console.log("el infomre lleg", informe);
-  //       aux.push({
-  //         name: item.mes,
-  //         component: (
-  //           <InformeForm
-  //             refetch={refetch}
-  //             informe={informe ? informe : null}
-  //             isAvailable={item?.activo}
-  //             idPrecamporee={id}
-  //             isRecurrent
-  //             mes={item.value}
-  //             className={classNamesForms}
-  //           />
-  //         ),
-  //         current: index === 0 ? true : false,
-  //       });
-  //     });
-  //     setTabs([...aux]);
-  //   }
-  // }, [response]);
-
-  const {
-    register,
-    handleSubmit,
-    setValue: setValueForm,
-    control,
-    formState: { errors },
-    watch,
-  } = useForm({ mode: "onChange" });
-  const rules = {
-    puntuacion: {
-      // required: { value: true, message: "Este campo es requerido" },
-      max: {
-        value: values?.puntuacion_maxima,
-        message: `Debe ser menor o igual a ${values?.puntuacion_maxima}`,
-      },
-    },
-    clasificado: {
-      // required: { value: true, message: "Este campo es requerido" },
-    },
-  };
-
-  const handleChangeSearch = (e: any) => {
-    const value = e.target.value;
-    setOnSearch(true);
-    return subject.next(value);
-  };
-
   const howManyStarts = (text: string) => {
     const start = text.split(" ");
 
     return parseInt(start[0]);
-  };
-
-  const paintStarts = (text: string) => {
-    const quantityStarts = howManyStarts(text);
-    for (let i = 0; i < 5; i++) {
-      <StarIcon
-        className={clsx("w-5", { "opacity-50": i > quantityStarts })}
-      ></StarIcon>;
-    }
   };
 
   const dataColumns = () => {
@@ -310,6 +224,7 @@ const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
                   for (let i = 0; i < 5; i++) {
                     starts.push(
                       <StarIcon
+                        key={i}
                         className={clsx("w-5", {
                           "opacity-50": i >= quantityStarts,
                         })}
@@ -359,13 +274,14 @@ const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
         // width: "30%",
         render: (values: any) => (
           <div className="flex gap-1 items-center">
-            {values?.level &&
+              {values?.level &&
               (() => {
                 const quantityStarts = howManyStarts(values.level);
                 let starts: any = [];
                 for (let i = 0; i < 5; i++) {
                   starts.push(
                     <StarIcon
+                      key={i}
                       className={clsx("w-5", {
                         "opacity-50": i >= quantityStarts,
                       })}
@@ -404,24 +320,25 @@ const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
       // width: "30%",
       render: (values: any) => (
         <div className="flex gap-1 items-center">
-          {values?.level &&
-            (() => {
-              const quantityStarts = howManyStarts(values.level);
-              let starts: any = [];
-              for (let i = 0; i < 5; i++) {
-                starts.push(
-                  <StarIcon
-                    className={clsx("w-5", {
-                      "opacity-50": i >= quantityStarts,
-                    })}
-                  ></StarIcon>
-                );
-              }
-              return starts;
-            })()}
-        </div>
-      ),
-    },
+              {values?.level &&
+              (() => {
+                const quantityStarts = howManyStarts(values.level);
+                let starts: any = [];
+                for (let i = 0; i < 5; i++) {
+                  starts.push(
+                    <StarIcon
+                      key={i}
+                      className={clsx("w-5", {
+                        "opacity-50": i >= quantityStarts,
+                      })}
+                    ></StarIcon>
+                  );
+                }
+                return starts;
+              })()}
+          </div>
+        ),
+      },
 		{
 			title: "Puntuación",
 			dataIndex: "puntuacion",
@@ -448,22 +365,23 @@ const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
     return (
       <Table
         columns={columnsMiembros}
-        dataSource={allData.items}
+        dataSource={allData?.items}
         pagination={false}
-        rowKey="items"
+        rowKey="tipo"
         expandable={{
-          expandedRowRender: (record) => {
+          expandedRowRender: (record: any) => {
             if (record?.items) {
               return expandedTableItems(record);
             }
           },
-          rowExpandable: (record) => record.items,
+          rowExpandable: (record: any) => record?.items,
         }}
       />
     );
   };
 
 	const downloadSecureFile = async () => {
+		if (isLoading || !idCamporee) return;
 		try {
 			const response = await CamporeeServices.getResultadosFile(params);
 
@@ -509,6 +427,7 @@ const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
                   maxwidth="max-w-[208px]"
                   value={params.categoria}
                   setValue={updateQuery}
+									disabled={isLoading || !idCamporee}
                 ></SelectInput>
                 <SelectInput
                   className="mb-10 z-50 flex-auto"
@@ -518,6 +437,7 @@ const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
                   maxwidth="max-w-[208px]"
                   value={params.id_club}
                   setValue={updateQuery}
+									disabled={isLoading || !idCamporee}
                 ></SelectInput>
                 <SelectInput
                   className="mb-10 z-50 flex-auto"
@@ -527,6 +447,7 @@ const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
                   maxwidth="max-w-[208px]"
                   value={params.id_consejo}
                   setValue={updateQuery}
+									disabled={isLoading || !idCamporee}
                 ></SelectInput>
                 <SelectInput
                   className="mb-10 z-50 flex-auto"
@@ -536,6 +457,7 @@ const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
                   maxwidth="max-w-[208px]"
                   value={params.id_camporee_evento}
                   setValue={updateQuery}
+									disabled={isLoading || !idCamporee}
                 ></SelectInput>
                 <SelectInput
                   className="mb-10 z-50 flex-auto"
@@ -545,24 +467,25 @@ const ResultadosCamporee = ({ idCamporee, className, festival=false }: any) => {
                   maxwidth="max-w-[208px]"
                   value={params.id_camporee_precamporee}
                   setValue={updateQuery}
+									disabled={isLoading || !idCamporee}
                 ></SelectInput>
               </div>
-							{isLoading ? (
+							{isLoading || !idCamporee ? (
                 <TableSkeleton rows={10} columns={4} />
               ) : (
               <Table
                 columns={columns}
                 dataSource={values?.entidades}
                 pagination={false}
-                rowKey="id_club"
+                rowKey="id"
                 className="table_club_miembros table_ant_custom shadow-md overflow-x-auto border-b border-gray-200 rounded-lg"
                 expandable={{
-                  expandedRowRender: (record) => {
+                  expandedRowRender: (record: any) => {
                     if (record?.items) {
                       return expandedTableItems(record);
                     }
                   },
-                  rowExpandable: (record) => record.items,
+                  rowExpandable: (record: any) => record?.items,
                 }}
               />
 							)}

@@ -5,21 +5,13 @@ import { Icon } from "components/icon";
 import { Icons } from "consts";
 
 export interface AlertProps {
-  /**
-   * color background.
-   */
   color?: "success" | "danger" | string;
-  /**
-   * Message that goes inside the alert.
-   */
   message?: string;
-  /**
-   * Icon use to replace the default.
-   */
   customIcon?: string;
   className?: string;
   hideIcon?: boolean;
-	whiteIcon?: boolean;
+  whiteIcon?: boolean;
+  children?: React.ReactNode;
 }
 
 /**

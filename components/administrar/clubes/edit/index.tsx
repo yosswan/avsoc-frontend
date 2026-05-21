@@ -271,7 +271,11 @@ const EditClub = ({ data, hide, refetch }: any) => {
 
   const uploadButton = (
     <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      {loading ? (
+        <LoadingOutlined />
+      ) : (
+        <PlusOutlined />
+      )}
       <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   );

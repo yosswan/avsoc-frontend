@@ -9,6 +9,7 @@ import { GetServerSideProps } from "next";
 import { GenerateErrorToast, getSession } from "lib/helper";
 import { AuthService } from "services";
 import { InputEmail } from "components/common/form/input-email";
+import { getToken } from "next-auth/jwt";
 
 const ForgotPassword = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -58,8 +59,8 @@ const ForgotPassword = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = getSession(context);
-  if (session && session.access_token) {
+  const session = await getToken({ req: context.req as any, secret: process.env.NEXTAUTH_SECRET });
+  if (session) {
     return {
       redirect: {
         destination: "/dashboard",
