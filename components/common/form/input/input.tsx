@@ -34,7 +34,7 @@ export const Input: React.FC<
   ...props
 }) => {
   const [showLabel, setShowLabel] = React.useState(false);
-  const registerAux = register(name, rules);
+  const registerAux = register ? register(name, rules) : null;
   return (
     <div className={clsx("relative flex flex-col py-2 w-full", className)}>
       <div className={clsx(styles.input)}>
@@ -117,9 +117,9 @@ export const Input: React.FC<
                     !error,
                 }
               )}
-              ref={registerAux && registerAux.ref}
+              ref={registerAux?.ref}
               onChange={(e) => {
-                registerAux && registerAux.onChange(e); // method from hook form register
+                registerAux?.onChange(e); // method from hook form register
                 onChangeCustom && onChangeCustom(e); // your method
                 e.target.value === ""
                   ? setShowLabel(false)
@@ -165,9 +165,9 @@ export const Input: React.FC<
                     !error,
                 }
               )}
-              ref={registerAux && registerAux.ref}
+              ref={registerAux?.ref}
               onChange={(e) => {
-                registerAux && registerAux.onChange(e); // method from hook form register
+                registerAux?.onChange(e); // method from hook form register
                 onChangeCustom && onChangeCustom(e); // your method
                 e.target.value === ""
                   ? setShowLabel(false)

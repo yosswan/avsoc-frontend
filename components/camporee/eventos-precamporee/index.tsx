@@ -4,8 +4,7 @@ import { useQuery } from "react-query";
 import { UseQueryEnums } from "consts/useQueryEnums";
 import { useQueryParams } from "consts/query.helper";
 import { CamporeeServices } from "services/Camporee";
-import { get, isEmpty, isNil, debounce } from "lodash";
-import { useForm } from "react-hook-form";
+import { get, isEmpty, debounce } from "lodash";
 import { InputText } from "components/common/form/input-text";
 import { ModuleEnums } from "consts/modulesEmuns";
 import { PermissionsEnums } from "consts/permissionsEnum";
@@ -87,7 +86,6 @@ const EventosPrecamporee = ({
     isShow: isShowCreatePrecamporee,
     show: showCreatePrecamporee,
   } = useModal();
-  const [onSearch, setOnSearch] = React.useState(false);
   const [dataEdit, setDataEdit] = React.useState();
 
   const { data, isLoading, refetch } = useQuery<any>(
@@ -123,17 +121,6 @@ const EventosPrecamporee = ({
     };
   }, [debouncedSearch]);
 
-  const {
-    register,
-    handleSubmit,
-    setValue: setValueForm,
-    formState: { errors },
-    watch,
-  } = useForm({ mode: "onChange" });
-
-  const handleSubmitData = (data: any) => {
-  };
-
   const updateQuery = React.useCallback(
 		(key: string, value: number | string | undefined) => {
 			setValue({ [key]: value });
@@ -155,37 +142,24 @@ const EventosPrecamporee = ({
     showEditPrecamporee();
   };
 
-  React.useEffect(() => {
-    if (!isNil(params.search) && !isEmpty(params.search)) {
-      setValueForm("search", params.search);
-      updateQuery("page", undefined);
-    }
-  }, []);
-
   const handleChangeSearch = (e: any) => {
     const value = e.target.value;
-    setOnSearch(true);
     debouncedSearch(value);
-		setSearch(value);
+    setSearch(value);
   };
 
   return (
     <div className="text-center w-full">
       <div className={clsx("container-form mt-5 mb-11 text-left", className)}>
-        <form
-              className="w-full text-left"
-              onSubmit={handleSubmit(handleSubmitData)}
-            >
+        <div className="w-full text-left">
               <div className="flex justify-center items-center mb-5">
                 <InputText
                   name="search"
                   title="Search"
                   labelVisible={false}
-                  isFill={!!watch("search")}
-                  register={register}
+                  isFill={!!search}
                   // rules={rules.search}
                   onChangeCustom={handleChangeSearch}
-                  error={errors.search}
                   leftImg={Icons.search}
                   otherStyles="pt-3 pb-3 rounded-full"
                   disabled={loading}
@@ -207,7 +181,7 @@ const EventosPrecamporee = ({
                           fill
                           boderRadius="rounded-full"
                           size="full"
-                          type="submit"
+                          type="button"
                           sizesButton="py-3 px-4"
                           className="bg-yellow w-[100px]"
                           disabled={loading}
@@ -217,7 +191,7 @@ const EventosPrecamporee = ({
                   </Restricted>
                 )}
               </div>
-            </form>
+            </div>
 
 						<Restricted
 							module={ModuleEnums.EVENTO_PRECAMPOREE}

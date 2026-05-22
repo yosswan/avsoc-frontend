@@ -2,7 +2,7 @@
 import { Listbox, Transition } from "@headlessui/react";
 import { ChevronDownIcon, XIcon } from "@heroicons/react/solid";
 import { entries, get, isNil } from "lodash";
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import styled from "styled-components";
 
 type SelectInputProps = {
@@ -39,6 +39,10 @@ export function SelectInput({
   const [selectedValue, selectValue] = useState<string | number | undefined>(
     value
   );
+
+  useEffect(() => {
+    selectValue(value);
+  }, [value]);
 
   const isSelected = () => {
     return !isNil(selectedValue);
