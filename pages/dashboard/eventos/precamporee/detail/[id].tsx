@@ -50,7 +50,7 @@ import { Collapse } from "antd";
 import { ArrowRightIcon, DocumentTextIcon } from "@heroicons/react/solid";
 import { Alert } from "components/common/alert";
 import { InformeView } from "components/events/precamporee/view-informe";
-const { Panel } = Collapse;
+
 const { TabPane } = Tabs;
 
 type Params = {
@@ -348,90 +348,79 @@ const EventPrecamporeeDetail = () => {
                   collapsible="header"
                   expandIcon={({ isActive }) => (
                     <ArrowRightIcon
-                      className={clsx(
-                        "w-10 h-10 absolute top-0 left-5 bottom-0 m-auto",
-                        {
-                          "rotate-90": isActive,
-                        }
-                      )}
+                      className={clsx("w-10 h-10", {
+                        "rotate-90": isActive,
+                      })}
                     />
                   )}
-                >
-                  {values?.informes?.map((itemClub: any, index: any) => {
-                    return (
-                      <React.Fragment key={index}>
-                        <Panel
-                          header={
-                            <div className={`item bg-${itemClub.pending ? 'error' : itemClub.ready ? 'success' : 'yellow'} flex text-center justify-center w-full`}>
-                              <Typography
-                                type="label"
-                                className={clsx(
-                                  "font-bold block text-primary text-3xl px-2 py-3 cursor-pointer"
-                                )}
-                              >
-                                {itemClub?.club}
-                              </Typography>
-                            </div>
-                          }
-                          key={index}
-                          // extra={
-                          // 		<></>
-                          //     }
-                          className={`custom-collapse-header ${itemClub.pending ? 'pending' : itemClub.ready ? 'ready' : ''} justify-normal`}
+                  items={values?.informes?.map((itemClub: any, index: any) => ({
+                    key: index,
+                    label: (
+                      <div className={`item bg-${itemClub.pending ? 'error' : itemClub.ready ? 'success' : 'yellow'} flex text-center justify-center w-full`}>
+                        <Typography
+                          type="label"
+                          className={clsx(
+                            "font-bold block text-primary text-3xl px-2 py-3 cursor-pointer"
+                          )}
                         >
-													{
-														values?.mensual ?
-															<Tabs
-																type="card"
-																className="tabs-antd-custom justify-center"
-																items={
-																	itemClub?.informes?.map(
-																		(informe: any, index: any) => {
-																			return {
-																				key: index,
-																				label: informe?.nombre_mes,
-																				children: (
-																					<div
-																						className="mb-10"
-																					>
-																						<InformeView
-																							handlePreviewImage={handlePreviewImage}
-																							handleShowApprove={handleShowApprove}
-																							handleShowLoadScore={handleShowLoadScore}
-																							index={index}
-																							informe={informe}
-																							isFirmado={isFirmado}
-																						/>
-																					</div>
-																				)
-																			}
-																		}
-																	)
-																}
-															>
-															</Tabs>
-														: 
-															itemClub?.informes?.map(
-																(informe: any, index: any) => {
-																	return (
-																		<InformeView
-																			key={index}
-																			handlePreviewImage={handlePreviewImage}
-																			handleShowApprove={handleShowApprove}
-																			handleShowLoadScore={handleShowLoadScore}
-																			index={index}
-																			informe={informe}
-																			isFirmado={isFirmado}
-																		/>
-																	);
-																}
-															)
-													}
-                        </Panel>
-                      </React.Fragment>
-                    );
-                  })}
-                </Collapse>
+                          {itemClub?.club}
+                        </Typography>
+                      </div>
+                    ),
+                    className: `custom-collapse-header ${itemClub.pending ? 'pending' : itemClub.ready ? 'ready' : ''} justify-normal`,
+                    children: (
+                      <>
+                        {values?.mensual ?
+                          <Tabs
+                            type="card"
+                            className="tabs-antd-custom justify-center"
+                            items={
+                              itemClub?.informes?.map(
+                                (informe: any, index: any) => {
+                                  return {
+                                    key: index,
+                                    label: informe?.nombre_mes,
+                                    children: (
+                                      <div
+                                        className="mb-10"
+                                      >
+                                        <InformeView
+                                          handlePreviewImage={handlePreviewImage}
+                                          handleShowApprove={handleShowApprove}
+                                          handleShowLoadScore={handleShowLoadScore}
+                                          index={index}
+                                          informe={informe}
+                                          isFirmado={isFirmado}
+                                        />
+                                      </div>
+                                    )
+                                  }
+                                }
+                              )
+                            }
+                          >
+                          </Tabs>
+                        : 
+                          itemClub?.informes?.map(
+                            (informe: any, index: any) => {
+                              return (
+                                <InformeView
+                                  key={index}
+                                  handlePreviewImage={handlePreviewImage}
+                                  handleShowApprove={handleShowApprove}
+                                  handleShowLoadScore={handleShowLoadScore}
+                                  index={index}
+                                  informe={informe}
+                                  isFirmado={isFirmado}
+                                />
+                              );
+                            }
+                          )
+                        }
+                      </>
+                    ),
+                  }))}
+                />
               </Restricted>
               <Restricted
                 module={ModuleEnums.EVENTO_PRECAMPOREE}

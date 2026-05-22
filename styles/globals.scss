@@ -194,10 +194,8 @@ body {
   margin-top: 6%;
 }
 .custom-collapse.ant-collapse .custom-collapse-header .ant-collapse-header {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
   background-color: var(--color-yellow);
+  align-items: center;
 }
 
 .custom-collapse.ant-collapse .custom-collapse-header.pending .ant-collapse-header {
@@ -211,7 +209,10 @@ body {
 .custom-collapse.ant-collapse
   .custom-collapse-header.justify-normal
   .ant-collapse-header {
-  justify-content: center;
+  .ant-collapse-header-text {
+    text-align: center;
+    flex: 1;
+  }
 }
 
 .custom-collapse.ant-collapse > .ant-collapse-item {

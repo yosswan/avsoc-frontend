@@ -187,7 +187,7 @@ export const Input: React.FC<
           {leftImg && (
             <div
               onClick={leftClick}
-              className="absolute left-7 top-1/3 w-5 h-5"
+              className="absolute left-7 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center"
             >
               <Icon
                 src={leftImg}
@@ -199,7 +199,7 @@ export const Input: React.FC<
           {rightImg && (
             <div
               onClick={rightClick}
-              className="absolute right-4 top-1/3 w-5 h-5"
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center"
             >
               <Icon
                 src={rightImg}

@@ -13,7 +13,7 @@ import { TrashIcon } from '@heroicons/react/solid';
 import { useModal } from "hooks/modal";
 import DeleteActividad from "./delete-actividad";
 
-const { TabPane } = Tabs;
+
 
 type InformeMensualProps = {
   refetch: any;
@@ -214,11 +214,9 @@ export const InformeMensual: React.FC<InformeMensualProps> = ({
 									closeIcon: <div className="w-4 text-overlay hover:text-primary"><TrashIcon /></div>,
 									children: (
 										<div
-											key={index}
 											className="mt-0 w-full md:max-w-[650px] mx-auto mb-20"
 										>
 											<ActividadForm
-												key={index}
 												className="shadow-lg"
 												refetch={refetch}
 												hide={hideCreateActivity}
@@ -234,8 +232,7 @@ export const InformeMensual: React.FC<InformeMensualProps> = ({
 							}
 						)
 					}
-				>
-				</Tabs>
+				/>
 			</div>
 			<ModalDelete isShow={isShowDelete}>
 				<DeleteActividad hide={hideDelete} refetch={refetch} id_actividad={toDelete.id} name_actividad={toDelete.name} />
@@ -253,10 +250,9 @@ export const InformeMensual: React.FC<InformeMensualProps> = ({
 							<table className="min-w-full divide-y divide-gray-300">
 								<thead className="bg-gray-50"></thead>
 								<tbody className="divide-y divide-yellow bg-white">
-									<tr
-										key=""
-										className="divide-x divide-yellow"
-									>
+<tr
+		className="divide-x divide-yellow"
+	>
 										<td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-bold text-[black] sm:pl-6">
 											Nº Reuniones
 										</td>
@@ -273,10 +269,9 @@ export const InformeMensual: React.FC<InformeMensualProps> = ({
 											%
 										</td>
 									</tr>
-									<tr
-										key=""
-										className="divide-x divide-yellow"
-									>
+<tr
+		className="divide-x divide-yellow"
+	>
 										<td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-bold text-[black] sm:pl-6">
 											Nº Juntas Planeación:
 										</td>
@@ -296,10 +291,9 @@ export const InformeMensual: React.FC<InformeMensualProps> = ({
 											}
 										</td>
 									</tr>
-									<tr
-										key=""
-										className="divide-x divide-yellow"
-									>
+<tr
+		className="divide-x divide-yellow"
+	>
 										<td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-bold text-[black] sm:pl-6">
 											N° Células Juveniles:
 										</td>
@@ -314,10 +308,9 @@ export const InformeMensual: React.FC<InformeMensualProps> = ({
 										</td>
 									</tr>
 
-									<tr
-										key=""
-										className="divide-x divide-yellow"
-									>
+<tr
+		className="divide-x divide-yellow"
+	>
 										<td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-bold text-[black] sm:pl-6">
 											Inscritos del mes:
 										</td>
@@ -335,10 +328,9 @@ export const InformeMensual: React.FC<InformeMensualProps> = ({
 										</td>
 									</tr>
 
-									<tr
-										key=""
-										className="divide-x divide-yellow"
-									>
+<tr
+		className="divide-x divide-yellow"
+	>
 										<td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-bold text-[black] sm:pl-6">
 											Blanco de Estudios Bíblicos:
 										</td>
@@ -356,10 +348,9 @@ export const InformeMensual: React.FC<InformeMensualProps> = ({
 										</td>
 									</tr>
 
-									<tr
-										key=""
-										className="divide-x divide-yellow"
-									>
+<tr
+		className="divide-x divide-yellow"
+	>
 										<td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-bold text-[black] sm:pl-6">
 											Miembros Dando Estudio Bíblico:
 										</td>
@@ -393,195 +384,125 @@ export const InformeMensual: React.FC<InformeMensualProps> = ({
 						<Tabs
 							type="card"
 							className="tabs-antd-custom justify-center"
-						>
-							{itemClub?.informe?.actividades?.map(
-								(item: any, index: number) => {
-									return (
-										<TabPane
-											tab={item?.name}
-											key={index}
-											className="mb-10"
-										>
-											<div className="container-actividad border border-gray-200 p-2 rounded-3xl">
-												<div className="mt-8 flex flex-col justify-center">
-													<div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8 flex">
-														<div className="inline-block min-w-full mx-auto py-2 align-middle md:px-6 lg:px-8">
-															<div className="overflow-hidden shadow ring-1 ring-yellow ring-opacity-5 md:rounded-none">
-																<table className="min-w-full divide-y divide-gray-300">
-																	<thead className="bg-gray-50"></thead>
-																	<tbody className="divide-y divide-yellow bg-white">
-																		<tr
-																			key=""
-																			className="divide-x divide-yellow"
-																		>
-																			<td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-bold text-[black] sm:pl-6">
-																				Tipo:
-																			</td>
-																			<td className="whitespace-nowrap p-4 text-sm text-gray-500 font-medium">
-																				{item?.tipo}
-																			</td>
-																		</tr>
-																		<tr
-																			key=""
-																			className="divide-x divide-yellow"
-																		>
-																			<td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-bold text-[black] sm:pl-6">
-																				Lugar:
-																			</td>
-																			<td className="p-4 text-sm text-gray-500 font-medium">
-																				{item?.lugar}
-																			</td>
-																		</tr>
-																		<tr
-																			key=""
-																			className="divide-x divide-yellow"
-																		>
-																			<td className="whitespace-nowrap py-4 pl-4 pr-4 text-sm font-bold text-[black] sm:pl-6">
-																				Fecha:
-																			</td>
-																			<td className="p-4 text-sm text-gray-500 font-medium">
-																				{item?.fecha}
-																			</td>
-																		</tr>
-																	</tbody>
-																</table>
-															</div>
-														</div>
-													</div>
-												</div>
-
-												<div className="flex flex-col justify-center">
-													<div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8 flex">
-														<div className="inline-block min-w-full mx-auto py-2 align-middle md:px-6 lg:px-8">
-															<div className="overflow-hidden shadow ring-1 ring-yellow ring-opacity-5 md:rounded-none">
-																<table className="min-w-full divide-y divide-gray-300">
-																	<thead className="bg-gray-50"></thead>
-																	<tbody className="divide-y divide-yellow bg-white">
-																		<tr
-																			key=""
-																			className="divide-x divide-yellow"
-																		>
-																			<td className="text-center whitespace-nowrap py-4 pl-4 pr-4 text-sm font-bold text-[black] sm:pl-6">
-																				Descripción
-																			</td>
-																		</tr>
-																		<tr
-																			key=""
-																			className="divide-x divide-yellow"
-																		>
-																			<td className="text-center p-4 text-sm text-gray-500 font-medium">
-																				{
-																					item?.descripcion
-																				}
-																			</td>
-																		</tr>
-																	</tbody>
-																</table>
-															</div>
-														</div>
-													</div>
-												</div>
-
-												<div className="flex flex-col justify-center">
-													<div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8 flex">
-														<div className="inline-block min-w-full mx-auto py-2 align-middle md:px-6 lg:px-8">
-															<div className="overflow-hidden shadow ring-1 ring-yellow ring-opacity-5 md:rounded-none">
-																<table className="min-w-full divide-y divide-gray-300">
-																	<thead className="bg-gray-50"></thead>
-																	<tbody className="divide-y divide-yellow bg-white">
-																		<tr
-																			key=""
-																			className="divide-x divide-yellow"
-																		>
-																			<td className="text-center whitespace-nowrap py-4 pl-4 pr-4 text-sm font-bold text-[black] sm:pl-6">
-																				Objetivo
-																			</td>
-																		</tr>
-																		<tr
-																			key=""
-																			className="divide-x divide-yellow"
-																		>
-																			<td className="text-center p-4 text-sm text-gray-500 font-medium">
-																				{item?.objetivo}
-																			</td>
-																		</tr>
-																	</tbody>
-																</table>
-															</div>
-														</div>
-													</div>
-												</div>
-
-												<div className="flex flex-col justify-center">
-													<div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8 flex">
-														<div className="inline-block min-w-full mx-auto py-2 align-middle md:px-6 lg:px-8">
-															<div className="overflow-hidden shadow ring-1 ring-yellow ring-opacity-5 md:rounded-none">
-																<table className="min-w-full divide-y divide-gray-300">
-																	<thead className="bg-gray-50"></thead>
-																	<tbody className="divide-y divide-yellow bg-white">
-																		<tr
-																			key=""
-																			className="divide-x divide-yellow"
-																		>
-																			<td className="text-center whitespace-nowrap py-4 pl-4 pr-4 text-sm font-bold text-[black] sm:pl-6">
-																				Asistencia
-																			</td>
-																		</tr>
-																	</tbody>
-																</table>
-															</div>
-														</div>
-													</div>
-												</div>
-
-												<div className="flex flex-col justify-center">
-													<div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8 flex">
-														<div className="inline-block min-w-full mx-auto py-2 align-middle md:px-6 lg:px-8">
-															<div className="shadow ring-1 ring-yellow ring-opacity-5 md:rounded-none">
-																<table className="min-w-full divide-y divide-gray-300">
-																	<thead className="bg-gray-50"></thead>
-																	<tbody className="divide-y divide-yellow bg-white">
-																		<tr
-																			key=""
-																			className="divide-x divide-yellow"
-																		>
-																			<td className="text-center py-4 pl-4 pr-4 text-sm font-bold text-[black] sm:pl-6">
-																				Nº Miembros:
-																			</td>
-																			<td className="text-center whitespace-nowrap p-4 text-sm text-gray-500 font-medium">
-																				{
-																					item?.asistencia_miembros
-																				}
-																			</td>
-																			<td className="text-center py-4 pl-4 pr-4 text-sm font-bold text-[black] sm:pl-6">
-																				Nº Visitas:
-																			</td>
-																			<td className="text-center whitespace-nowrap p-4 text-sm text-gray-500 font-medium">
-																				{
-																					item?.asistencia_no_miembros
-																				}
-																			</td>
-																		</tr>
-																	</tbody>
-																</table>
-															</div>
-														</div>
-													</div>
-												</div>
-
-												<div className="text-center flex justify-center mt-5">
-													<img
-														src={item?.foto}
-														className="max-w-sm rounded-lg"
-														alt=""
-													/>
-												</div>
+							items={itemClub?.informe?.actividades?.map(
+								(item: any, index: number) => ({
+									key: index,
+									label: item?.name,
+									className: "mb-10",
+									children: (
+										<div className="container-actividad border border-gray-200 p-2 rounded-3xl">
+											<div className="overflow-x-auto rounded-lg shadow ring-1 ring-yellow ring-opacity-5 mb-4">
+												<table className="min-w-full divide-y divide-gray-300">
+													<tbody className="divide-y divide-yellow bg-white">
+														<tr className="flex flex-col sm:table-row">
+															<td className="py-2 px-3 text-sm font-bold text-[black]">
+																Tipo:
+															</td>
+															<td className="py-2 px-3 text-sm text-gray-500 font-medium">
+																{item?.tipo}
+															</td>
+														</tr>
+														<tr className="flex flex-col sm:table-row">
+															<td className="py-2 px-3 text-sm font-bold text-[black]">
+																Lugar:
+															</td>
+															<td className="py-2 px-3 text-sm text-gray-500 font-medium">
+																{item?.lugar}
+															</td>
+														</tr>
+														<tr className="flex flex-col sm:table-row">
+															<td className="py-2 px-3 text-sm font-bold text-[black]">
+																Fecha:
+															</td>
+															<td className="py-2 px-3 text-sm text-gray-500 font-medium">
+																{item?.fecha}
+															</td>
+														</tr>
+													</tbody>
+												</table>
 											</div>
-										</TabPane>
-									);
-								}
+
+											<div className="overflow-x-auto rounded-lg shadow ring-1 ring-yellow ring-opacity-5 mb-4">
+												<table className="min-w-full divide-y divide-gray-300">
+													<tbody className="divide-y divide-yellow bg-white">
+														<tr>
+															<td className="text-center py-2 px-3 text-sm font-bold text-[black]">
+																Descripción
+															</td>
+														</tr>
+														<tr>
+															<td className="text-center py-2 px-3 text-sm text-gray-500 font-medium">
+																{item?.descripcion}
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+
+											<div className="overflow-x-auto rounded-lg shadow ring-1 ring-yellow ring-opacity-5 mb-4">
+												<table className="min-w-full divide-y divide-gray-300">
+													<tbody className="divide-y divide-yellow bg-white">
+														<tr>
+															<td className="text-center py-2 px-3 text-sm font-bold text-[black]">
+																Objetivo
+															</td>
+														</tr>
+														<tr>
+															<td className="text-center py-2 px-3 text-sm text-gray-500 font-medium">
+																{item?.objetivo}
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+
+											<div className="overflow-x-auto rounded-lg shadow ring-1 ring-yellow ring-opacity-5 mb-4">
+												<table className="min-w-full divide-y divide-gray-300">
+													<tbody className="divide-y divide-yellow bg-white">
+														<tr>
+															<td className="text-center py-2 px-3 text-sm font-bold text-[black]">
+																Asistencia
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+
+											<div className="overflow-x-auto rounded-lg shadow ring-1 ring-yellow ring-opacity-5 mb-4">
+												<table className="min-w-full divide-y divide-gray-300">
+													<tbody className="divide-y divide-yellow bg-white">
+														<tr className="flex flex-col sm:table-row">
+															<td className="py-2 px-3 text-sm font-bold text-[black]">
+																Nº Miembros:
+															</td>
+															<td className="py-2 px-3 text-sm text-gray-500 font-medium">
+																{item?.asistencia_miembros}
+															</td>
+														</tr>
+														<tr className="flex flex-col sm:table-row">
+															<td className="py-2 px-3 text-sm font-bold text-[black]">
+																Nº Visitas:
+															</td>
+															<td className="py-2 px-3 text-sm text-gray-500 font-medium">
+																{item?.asistencia_no_miembros}
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+
+											<div className="text-center flex justify-center mt-5">
+												<img
+													src={item?.foto}
+													className="max-w-sm rounded-lg"
+													alt=""
+												/>
+											</div>
+										</div>
+									),
+								})
 							)}
-						</Tabs>
+						/>
 					</div>
 				)}
 			</div>

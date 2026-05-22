@@ -36,7 +36,7 @@ import { Help } from "components/common/help";
 import { HelpFormInformesMensuales } from "help/informes-mensuales/form";
 import { InformeMensual } from "components/informes-mensuales/informe-mensual";
 import PermissionContext from "context/PermissionProvider/PermissionContext";
-const { Panel } = Collapse;
+
 
 export type Params = {
   fecha?: any;
@@ -191,101 +191,90 @@ const Dashboard = () => {
 									className="w-full custom-collapse mt-0"
 									collapsible="header"
 									expandIcon={({ isActive }) => (
-										<>
-											<ArrowRightIcon
+										<ArrowRightIcon
+											className={clsx("w-10 h-10", {
+												"rotate-90": isActive,
+											})}
+										/>
+									)}
+									items={values?.map((itemClub: any, index: any) => ({
+										key: index,
+										label: (
+											<div className={`item bg-${itemClub.pending ? 'error' : itemClub.ready ? 'success' : 'yellow'} flex text-center justify-center w-full`}>
+												<Typography
+													type="label"
+													className={clsx(
+														"font-bold block text-primary text-3xl px-2 py-3 cursor-pointer"
+													)}
+												>
+													{itemClub?.club}
+												</Typography>
+											</div>
+										),
+										extra: (
+											<PlusCircleIcon
+												onClick={() => handleOnView(itemClub?.detalle)}
 												className={clsx(
-													"w-10 h-10 absolute top-0 left-5 bottom-0 m-auto",
-													{
-														"rotate-90": isActive,
-													}
+													"w-12 h-12 cursor-pointer"
 												)}
 											/>
-										</>
-									)}
-								>
-									{values?.map((itemClub: any, index: any) => {
-										return (
-											<React.Fragment key={index}>
-												<Panel
-													header={
-														<div className={`item bg-${itemClub.pending ? 'error' : itemClub.ready ? 'success' : 'yellow'} flex text-center justify-center w-full`}>
-															<Typography
-																type="label"
-																className={clsx(
-																	"font-bold block text-primary text-3xl px-2 py-3 cursor-pointer"
-																)}
-															>
-																{itemClub?.club}
-															</Typography>
-														</div>
-													}
-													key={index}
-													extra={
-														<>
-															<PlusCircleIcon
-																onClick={() => handleOnView(itemClub?.detalle)}
-																className={clsx(
-																	"w-12 h-12 absolute top-0 right-5 bottom-0 m-auto cursor-pointer"
-																)}
-															/>
-														</>
-													}
-													className={`custom-collapse-header ${itemClub.pending ? 'pending' : itemClub.ready ? 'ready' : ''} justify-normal`}
+										),
+										className: `custom-collapse-header ${itemClub.pending ? 'pending' : itemClub.ready ? 'ready' : ''} justify-normal`,
+										children: (
+											<>
+												<InformeMensual
+													itemClub={itemClub}
+													hideCreateActivity={hideCreateActivity}
+													showCreateActivity={showCreateActivity}
+													params={params}
+													refetch={refetch}
+												/>
+												<Restricted
+													module={ModuleEnums.INFORMES_MENSUALES}
+													typePermisse={PermissionsEnums.APPROVE_FORM}
 												>
-													<InformeMensual
-														itemClub={itemClub}
-														hideCreateActivity={hideCreateActivity}
-														showCreateActivity={showCreateActivity}
-														params={params}
-														refetch={refetch}
-													/>
-													<Restricted
-														module={ModuleEnums.INFORMES_MENSUALES}
-														typePermisse={PermissionsEnums.APPROVE_FORM}
-													>
-														{itemClub?.informe?.editar && (
-															<div className="mt-0 justify-center text-center flex w-full">
-																<Button
-																	labelProps="f-18 font-bold"
-																	label={"Aprobar Informe"}
-																	fill
-																	className="bg-alert-success border-alert-success max-w-[200px]"
-																	boderRadius="rounded-full"
-																	size="full"
-																	sizesButton="py-3"
-																	onClick={() =>
-																		handleShowApprove(itemClub?.informe?.id)
-																	}
-																/>
-															</div>
-														)}
-													</Restricted>
-													<Restricted
-														module={ModuleEnums.INFORMES_MENSUALES}
-														typePermisse={PermissionsEnums.LOAD_SCORE}
-													>
-														{itemClub?.informe?.editar && (
-															<div className="mt-28 justify-center text-center flex w-full">
-																<Button
-																	labelProps="f-18 font-bold"
-																	label={"Cargar Puntuación"}
-																	fill
-																	className="bg-alert-success border-alert-success max-w-[200px]"
-																	boderRadius="rounded-full"
-																	size="full"
-																	sizesButton="py-3"
-																	onClick={() =>
-																		handleShowLoadScore(itemClub?.informe)
-																	}
-																/>
-															</div>
-														)}
-													</Restricted>
-												</Panel>
-											</React.Fragment>
-										);
-									})}
-								</Collapse>
+													{itemClub?.informe?.editar && (
+														<div className="mt-0 justify-center text-center flex w-full">
+															<Button
+																labelProps="f-18 font-bold"
+																label={"Aprobar Informe"}
+																fill
+																className="bg-alert-success border-alert-success max-w-[200px]"
+																boderRadius="rounded-full"
+																size="full"
+																sizesButton="py-3"
+																onClick={() =>
+																	handleShowApprove(itemClub?.informe?.id)
+																}
+															/>
+														</div>
+													)}
+												</Restricted>
+												<Restricted
+													module={ModuleEnums.INFORMES_MENSUALES}
+													typePermisse={PermissionsEnums.LOAD_SCORE}
+												>
+													{itemClub?.informe?.editar && (
+														<div className="mt-28 justify-center text-center flex w-full">
+															<Button
+																labelProps="f-18 font-bold"
+																label={"Cargar Puntuación"}
+																fill
+																className="bg-alert-success border-alert-success max-w-[200px]"
+																boderRadius="rounded-full"
+																size="full"
+																sizesButton="py-3"
+																onClick={() =>
+																	handleShowLoadScore(itemClub?.informe)
+																}
+															/>
+														</div>
+													)}
+												</Restricted>
+											</>
+										),
+									}))}
+								/>
 							) : (
 								<InformeMensual
 									itemClub={values[0]}

@@ -32,7 +32,8 @@ export const Icon: React.FC<IconProps> = ({
     <SVG
       src={src}
       onClick={onClick}
-      // style={stylesProps}
+      width="100%"
+      height="100%"
       fill={fill}
       className={clsx(
         className,

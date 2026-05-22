@@ -46,7 +46,7 @@ import { useToasts } from "react-toast-notifications";
 import { HelpListEventCamporeeDetail } from "help/camporee/eventos-camporee/detail";
 import { Help } from "components/common/help";
 
-const { Panel } = Collapse;
+
 const { TabPane } = Tabs;
 
 type Params = {
@@ -678,260 +678,230 @@ const EventCamporeeDetail = () => {
                       collapsible="header"
                       expandIcon={({ isActive }) => (
                         <ArrowRightIcon
-                          className={clsx(
-                            "w-10 h-10 absolute top-4 left-2 md:top-0 md:left-5 md:bottom-0 m-auto",
-
-                            {
-                              "rotate-90": isActive,
-                            }
-                          )}
+                          className={clsx("w-10 h-10", {
+                            "rotate-90": isActive,
+                          })}
                         />
                       )}
-                    >
-                      {values?.datos_inscripcion?.map(
-                        (itemClub: any, index: any) => {
-                          return (
-                            <React.Fragment key={index}>
-                              {itemClub?.inscrito && (
-                                <>
-                                  <Panel
-                                    header={
-                                      // <div className="item bg-yellow flex text-center justify-between pl-24 pr-3 w-full">
-                                      <div className="flex items-center">
-                                        {itemClub?.observacion && (
-                                          <div className="w-5 h-5 rounded-full bg-alert-error"></div>
-                                        )}
-                                        <Typography
-                                          type="label"
-                                          className={clsx(
-                                            "font-bold block text-primary text-3xl px-2 py-3 cursor-pointer"
-                                          )}
-                                        >
-                                          {itemClub?.nombre}
-                                        </Typography>
-                                      </div>
-                                      // </div>
-                                    }
-                                    extra={
-                                      <>
-                                        {isPermitted() && (
-                                          <div className="justify-items-end gap-4 z-50 flex-initial flex items-center">
-                                            <Restricted
-                                              module={
-                                                ModuleEnums.EVENTO_CAMPOREE
-                                              }
-                                              typePermisse={
-                                                PermissionsEnums.LOAD_SCORE
-                                              }
-                                            >
-                                              {actionIsPermitted() && (
-                                                <Input
-                                                  name={`puntuacion[${index}]`}
-                                                  title="Puntuación"
-                                                  defaultValue={getPuntuacion(
-                                                    itemClub
-                                                  )}
-                                                  disabled={
-                                                    !values?.calificable ||
-                                                    (!itemClub.clasificado &&
-                                                      dataUser.scope_actual ==
-                                                        RoleEnums.LIDER_JUVENIL)
-                                                  }
-                                                  type="number"
-                                                  // labelVisible
-                                                  isFill={
-                                                    !!watch(
-                                                      `puntuacion[${index}]`
-                                                    )
-                                                  }
-                                                  register={register}
-                                                  rules={rules.puntuacion}
-                                                  error={errors.puntuacion}
-                                                  isArray
-                                                  arrayIndex={index}
-                                                  className="placeholder:font-bold placeholder:text-[black] text-[black] font-bold disabled:text-[black]"
-                                                  otherStyles="pt-3 pb-3 rounded-full text-sm disabled:bg-[#fff8f8]"
-                                                />
-                                              )}
-                                            </Restricted>
-                                            <Restricted
-                                              module={
-                                                ModuleEnums.EVENTO_CAMPOREE
-                                              }
-                                              typePermisse={
-                                                PermissionsEnums.CHECK_CLASIFICATION
-                                              }
-                                            >
-                                              {actionIsPermitted() && (
-                                                <InputCheck
-                                                  name={`clasificado[${index}]`}
-                                                  title="Clasificado"
-                                                  defaultChecked={
-                                                    itemClub?.clasificado
-                                                  }
-                                                  disabled={
-                                                    !values?.calificable
-                                                  }
-                                                  labelVisible
-                                                  isFill={
-                                                    !!watch(
-                                                      `clasificado[${index}]`
-                                                    )
-                                                  }
-                                                  register={register}
-                                                  rules={rules.clasificado}
-                                                  error={errors.clasificado}
-                                                  otherStyles="pt-3 pb-3 rounded-full text-sm disabled:bg-[#0c0c0c9e]"
-                                                >
-                                                  Clasificado
-                                                </InputCheck>
-                                              )}
-                                            </Restricted>
-                                          </div>
-                                        )}
-                                      </>
-                                    }
-                                    key={index}
-                                    className="custom-collapse-header"
+                      items={values?.datos_inscripcion
+                        ?.filter((itemClub: any) => itemClub?.inscrito)
+                        ?.map((itemClub: any, index: any) => ({
+                          key: index,
+                          label: (
+                            // <div className="item bg-yellow flex text-center justify-between pl-24 pr-3 w-full">
+                            <div className="flex items-center">
+                              {itemClub?.observacion && (
+                                <div className="w-5 h-5 rounded-full bg-alert-error"></div>
+                              )}
+                              <Typography
+                                type="label"
+                                className={clsx(
+                                  "font-bold block text-primary text-3xl px-2 py-3 cursor-pointer"
+                                )}
+                              >
+                                {itemClub?.nombre}
+                              </Typography>
+                            </div>
+                            // </div>
+                          ),
+                          extra: (
+                            <>
+                              {isPermitted() && (
+                                <div className="justify-items-end gap-4 z-50 flex-initial flex items-center">
+                                  <Restricted
+                                    module={ModuleEnums.EVENTO_CAMPOREE}
+                                    typePermisse={PermissionsEnums.LOAD_SCORE}
                                   >
-                                    {itemClub?.observacion && (
-                                      <Alert
-                                        color="danger"
-                                        message="Observación pendiente"
-                                        className="mb-5"
+                                    {actionIsPermitted() && (
+                                      <Input
+                                        name={`puntuacion[${index}]`}
+                                        title="Puntuación"
+                                        defaultValue={getPuntuacion(itemClub)}
+                                        disabled={
+                                          !values?.calificable ||
+                                          (!itemClub.clasificado &&
+                                            dataUser.scope_actual ==
+                                              RoleEnums.LIDER_JUVENIL)
+                                        }
+                                        type="number"
+                                        // labelVisible
+                                        isFill={
+                                          !!watch(`puntuacion[${index}]`)
+                                        }
+                                        register={register}
+                                        rules={rules.puntuacion}
+                                        error={errors.puntuacion}
+                                        isArray
+                                        arrayIndex={index}
+                                        className="placeholder:font-bold placeholder:text-[black] text-[black] font-bold disabled:text-[black]"
+                                        otherStyles="pt-3 pb-3 rounded-full text-sm disabled:bg-[#fff8f8]"
                                       />
                                     )}
-                                    <div className="container-form shadow-md pb-10 px-5 w-fullS">
-                                      <div className="gap-x-6 gap-y-10 grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 text-left ">
-                                        <React.Fragment key={index}>
-                                          <div className="item col-span-1">
-                                            <Typography
-                                              type="label"
-                                              className={clsx(
-                                                "ml-3 font-bold mb-2 block f-18"
-                                              )}
-                                            >
-                                              Nivel
-                                            </Typography>
-                                            <Typography
-                                              type="span"
-                                              className={clsx(
-                                                "ml-3 font-normal mb-2 block f-18"
-                                              )}
-                                            >
-                                              {itemClub?.nivel}
-                                            </Typography>
-                                          </div>
-                                          {!values?.inscripcion_federacion &&
-                                            values?.eliminatoria && (
-                                              <div className="item col-span-1">
-                                                <Typography
-                                                  type="label"
-                                                  className={clsx(
-                                                    "ml-3 font-bold mb-2 block f-18"
-                                                  )}
-                                                >
-                                                  Clasificado
-                                                </Typography>
-                                                <Typography
-                                                  type="span"
-                                                  className={clsx(
-                                                    "ml-3 font-normal mb-2 block f-18"
-                                                  )}
-                                                >
-                                                  {itemClub?.clasificado ? (
-                                                    <span className="text-secondary font-bold">
-                                                      SI
-                                                    </span>
-                                                  ) : (
-                                                    <span className="text-alert-error font-bold">
-                                                      NO
-                                                    </span>
-                                                  )}
-                                                </Typography>
-                                              </div>
-                                            )}
-
-                                          <div className="item col-span-1">
-                                            <Typography
-                                              type="label"
-                                              className={clsx(
-                                                "ml-3 font-bold mb-2 block f-18"
-                                              )}
-                                            >
-                                              Puntuación
-                                            </Typography>
-                                            <Typography
-                                              type="span"
-                                              className={clsx(
-                                                "ml-3 font-normal mb-2 block f-18"
-                                              )}
-                                            >
-                                              {itemClub?.puntuacion
-                                                ? itemClub?.puntuacion
-                                                : "N/A"}
-                                            </Typography>
-                                          </div>
-                                          {!values?.inscripcion_federacion &&
-                                            values?.eliminatoria && (
-                                              <div className="item col-span-1">
-                                                <Typography
-                                                  type="label"
-                                                  className={clsx(
-                                                    "ml-3 font-bold mb-2 block f-18"
-                                                  )}
-                                                >
-                                                  Puntuación Eliminatoria
-                                                </Typography>
-                                                <Typography
-                                                  type="span"
-                                                  className={clsx(
-                                                    "ml-3 font-normal mb-2 block f-18"
-                                                  )}
-                                                >
-                                                  {itemClub?.puntuacion_eliminatoria
-                                                    ? itemClub?.puntuacion_eliminatoria
-                                                    : "N/A"}
-                                                </Typography>
-                                              </div>
-                                            )}
-                                          {!isEmpty(
-                                            itemClub?.participantes
-                                          ) && (
-                                            <div className="item col-span-full">
-                                              <>
-                                                <Typography
-                                                  type="label"
-                                                  className={clsx(
-                                                    "ml-3 font-bold mb-2 block f-18"
-                                                  )}
-                                                >
-                                                  Participantes
-                                                </Typography>
-
-                                                <Table
-                                                  columns={columnsMiembros}
-                                                  dataSource={
-                                                    itemClub?.participantes
-                                                  }
-                                                  className="table_club_miembros w-full table_ant_custom shadow-md overflow-x-auto border-b border-gray-200 rounded-lg"
-                                                  pagination={false}
-                                                  rowKey="cedula"
-                                                />
-                                              </>
-                                            </div>
-                                          )}
-                                        </React.Fragment>
-                                      </div>
-                                    </div>
-                                  </Panel>
-                                </>
+                                  </Restricted>
+                                  <Restricted
+                                    module={ModuleEnums.EVENTO_CAMPOREE}
+                                    typePermisse={
+                                      PermissionsEnums.CHECK_CLASIFICATION
+                                    }
+                                  >
+                                    {actionIsPermitted() && (
+                                      <InputCheck
+                                        name={`clasificado[${index}]`}
+                                        title="Clasificado"
+                                        defaultChecked={
+                                          itemClub?.clasificado
+                                        }
+                                        disabled={!values?.calificable}
+                                        labelVisible
+                                        isFill={
+                                          !!watch(`clasificado[${index}]`)
+                                        }
+                                        register={register}
+                                        rules={rules.clasificado}
+                                        error={errors.clasificado}
+                                        otherStyles="pt-3 pb-3 rounded-full text-sm disabled:bg-[#0c0c0c9e]"
+                                      >
+                                        Clasificado
+                                      </InputCheck>
+                                    )}
+                                  </Restricted>
+                                </div>
                               )}
-                            </React.Fragment>
-                          );
-                        }
-                      )}
-                    </Collapse>
+                            </>
+                          ),
+                          className: "custom-collapse-header",
+                          children: (
+                            <>
+                              {itemClub?.observacion && (
+                                <Alert
+                                  color="danger"
+                                  message="Observación pendiente"
+                                  className="mb-5"
+                                />
+                              )}
+                              <div className="container-form shadow-md pb-10 px-5 w-fullS">
+                                <div className="gap-x-6 gap-y-10 grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 text-left ">
+                                  <React.Fragment key={index}>
+                                    <div className="item col-span-1">
+                                      <Typography
+                                        type="label"
+                                        className={clsx(
+                                          "ml-3 font-bold mb-2 block f-18"
+                                        )}
+                                      >
+                                        Nivel
+                                      </Typography>
+                                      <Typography
+                                        type="span"
+                                        className={clsx(
+                                          "ml-3 font-normal mb-2 block f-18"
+                                        )}
+                                      >
+                                        {itemClub?.nivel}
+                                      </Typography>
+                                    </div>
+                                    {!values?.inscripcion_federacion &&
+                                      values?.eliminatoria && (
+                                        <div className="item col-span-1">
+                                          <Typography
+                                            type="label"
+                                            className={clsx(
+                                              "ml-3 font-bold mb-2 block f-18"
+                                            )}
+                                          >
+                                            Clasificado
+                                          </Typography>
+                                          <Typography
+                                            type="span"
+                                            className={clsx(
+                                              "ml-3 font-normal mb-2 block f-18"
+                                            )}
+                                          >
+                                            {itemClub?.clasificado ? (
+                                              <span className="text-secondary font-bold">
+                                                SI
+                                              </span>
+                                            ) : (
+                                              <span className="text-alert-error font-bold">
+                                                NO
+                                              </span>
+                                            )}
+                                          </Typography>
+                                        </div>
+                                      )}
+
+                                    <div className="item col-span-1">
+                                      <Typography
+                                        type="label"
+                                        className={clsx(
+                                          "ml-3 font-bold mb-2 block f-18"
+                                        )}
+                                      >
+                                        Puntuación
+                                      </Typography>
+                                      <Typography
+                                        type="span"
+                                        className={clsx(
+                                          "ml-3 font-normal mb-2 block f-18"
+                                        )}
+                                      >
+                                        {itemClub?.puntuacion
+                                          ? itemClub?.puntuacion
+                                          : "N/A"}
+                                      </Typography>
+                                    </div>
+                                    {!values?.inscripcion_federacion &&
+                                      values?.eliminatoria && (
+                                        <div className="item col-span-1">
+                                          <Typography
+                                            type="label"
+                                            className={clsx(
+                                              "ml-3 font-bold mb-2 block f-18"
+                                            )}
+                                          >
+                                            Puntuación Eliminatoria
+                                          </Typography>
+                                          <Typography
+                                            type="span"
+                                            className={clsx(
+                                              "ml-3 font-normal mb-2 block f-18"
+                                            )}
+                                          >
+                                            {itemClub?.puntuacion_eliminatoria
+                                              ? itemClub?.puntuacion_eliminatoria
+                                              : "N/A"}
+                                          </Typography>
+                                        </div>
+                                      )}
+                                    {!isEmpty(itemClub?.participantes) && (
+                                      <div className="item col-span-full">
+                                        <>
+                                          <Typography
+                                            type="label"
+                                            className={clsx(
+                                              "ml-3 font-bold mb-2 block f-18"
+                                            )}
+                                          >
+                                            Participantes
+                                          </Typography>
+
+                                          <Table
+                                            columns={columnsMiembros}
+                                            dataSource={itemClub?.participantes}
+                                            className="table_club_miembros w-full table_ant_custom shadow-md overflow-x-auto border-b border-gray-200 rounded-lg"
+                                            pagination={false}
+                                            rowKey="cedula"
+                                          />
+                                        </>
+                                      </div>
+                                    )}
+                                  </React.Fragment>
+                                </div>
+                              </div>
+                            </>
+                          ),
+                        }))}
+                    />
                   )}
                 </form>
               )}
