@@ -37,7 +37,7 @@ export interface AlertProps {
   // color: "success" | "danger";
   // message?: string;
   // customIcon?: string;
-  rules: any;
+  rules?: any;
   error: any;
   control: any;
   register: any;

@@ -102,9 +102,6 @@ const EditPersonalInformation = ({ data, hide, refetch }: any) => {
     fecha_nacimiento: {
       required: { value: true, message: "Este campo es requerido" },
     },
-    direccion: {
-      required: { value: true, message: "Este campo es requerido" },
-    },
     tipo_sangre: {
       required: { value: true, message: "Este campo es requerido" },
     },
@@ -117,16 +114,10 @@ const EditPersonalInformation = ({ data, hide, refetch }: any) => {
     fecha_bautizo: {
       // required: { value: true, message: "Este campo es requerido" },
     },
-    profesion: {
-      required: { value: true, message: "Este campo es requerido" },
-    },
     sexo: {
       required: { value: true, message: "Este campo es requerido" },
     },
     estado_civil: {
-      required: { value: true, message: "Este campo es requerido" },
-    },
-    foto: {
       required: { value: true, message: "Este campo es requerido" },
     },
     check: {},
@@ -343,7 +334,6 @@ const EditPersonalInformation = ({ data, hide, refetch }: any) => {
                 title="Dirección"
                 isFill={!!watch("direccion")}
                 register={register}
-                rules={rules.direccion}
                 error={errors.direccion}
                 className="mb-3 md:mb-5"
                 otherStyles="rounded-full text-sm pt-3 pb-3"
@@ -376,7 +366,6 @@ const EditPersonalInformation = ({ data, hide, refetch }: any) => {
                   title="Profesión"
                   isFill={!!watch("profesion")}
                   register={register}
-                  rules={rules.profesion}
                   error={errors.profesion}
                   className="mb-3 md:mb-5"
                   otherStyles="rounded-full text-sm pt-3 pb-3"
@@ -469,7 +458,6 @@ const EditPersonalInformation = ({ data, hide, refetch }: any) => {
                 name="foto"
                 label="Foto de perfil"
                 register={register}
-                rules={rules.foto}
                 error={errors.foto}
                 setErrorRHF={setError}
                 setValueRHF={setValue}

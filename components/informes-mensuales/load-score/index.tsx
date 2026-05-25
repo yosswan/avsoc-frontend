@@ -31,14 +31,11 @@ const LoadScore = ({ data, hide, refetch }: any) => {
   const rules = {
     puntuacion: {
       required: { value: true, message: "Este campo es requerido" },
-      min: { value: 1, message: "Debe ser mayor a 0" },
+      min: { value: 0, message: "Debe ser mayor o igual a 0" },
       max: {
         value: data?.puntuacion_maxima,
         message: `Debe ser menor o igual a ${data?.puntuacion_maxima}`,
       },
-    },
-    nota: {
-      required: { value: true, message: "Este campo es requerido" },
     },
   };
   const [isLoading, setIsLoading] = React.useState(false);
@@ -105,7 +102,6 @@ const LoadScore = ({ data, hide, refetch }: any) => {
                 labelVisible
                 isTextArea
                 register={register}
-                rules={rules.nota}
                 error={errors.nota}
                 className="mb-3 md:mb-5"
                 otherStyles="pt-3 pb-3 rounded-lg text-sm"

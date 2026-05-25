@@ -3,9 +3,6 @@ import { getSession, signIn } from "next-auth/react";
 
 const config: AxiosRequestConfig = {
   baseURL: process.env.NEXT_PUBLIC_API,
-  headers: {
-    "Content-Type": "application/json",
-  },
 };
 
 const client = axios.create(config);
