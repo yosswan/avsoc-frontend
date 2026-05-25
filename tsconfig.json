@@ -12,6 +12,9 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "react-toast-notifications": [
+        "./lib/toast-wrapper"
       ]
     },
     "strict": true,

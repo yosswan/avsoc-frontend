@@ -4,7 +4,7 @@ module.exports = {
     node: true,
     es6: true,
   },
-  parserOptions: { ecmaVersion: 8 },
+  parserOptions: { ecmaVersion: 2021 },
   ignorePatterns: ["node_modules/*", ".next/*", ".out/*", "!.prettierrc.js"],
   extends: ["eslint:recommended"],
   overrides: [

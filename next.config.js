@@ -14,6 +14,10 @@ const nextConfig = {
     includePaths: [path.join(__dirname, "styles")],
   },
   webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'react-toast-notifications': path.join(__dirname, 'lib/toast-wrapper.tsx'),
+    };
     config.resolve.extensionAlias = {
       '.js': ['.ts', '.tsx', '.js', '.jsx'],
     };
