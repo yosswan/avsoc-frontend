@@ -16,6 +16,7 @@ import clsx from "clsx";
 import { GenerateErrorToast } from "lib/helper";
 import { isNil, isEmpty } from "lodash";
 import { PresidentesConsejoRegional } from "services/PresidentesConsejoRegional";
+import { PresidentesFederacion } from "services/PresidentesFederacion";
 import { customStyles } from "consts/stylesReactSelect.helper";
 import { FileService } from "services/Image";
 import { RcFile } from "antd/lib/upload";
@@ -29,6 +30,10 @@ const CreateFederacion = ({ hide, refetch }: any) => {
   const [loading, setLoading] = React.useState(false);
   const [imageUrl, setImageUrl] = React.useState<string>();
   const [dataPresidentesConsejo, setDataPresidentesConsejo] =
+    React.useState<any>();
+  const [selectValuePresidenteFederacion, setSelectValuePresidenteFederacion] =
+    React.useState<{ value: Number; label: string }>();
+  const [dataPresidentesFederacion, setDataPresidentesFederacion] =
     React.useState<any>();
   // const { data: presidentesConsejo, isLoading } = useQuery<any>(
   //   [UseQueryEnums.GET_PRESIDENTES_CONSEJO],
@@ -57,6 +62,7 @@ const CreateFederacion = ({ hide, refetch }: any) => {
       abreviatura: data?.abreviatura,
       logo: imageUrl,
       cedula_presidente: selectValue?.value,
+      cedula_presidente_federacion: selectValuePresidenteFederacion?.value,
     };
 
     setIsLoading(true);
@@ -78,6 +84,9 @@ const CreateFederacion = ({ hide, refetch }: any) => {
   const handleChangeSelect = (selected: any) => {
     setSelectValue(selected);
   };
+  const handleChangeSelectPresidenteFederacion = (selected: any) => {
+    setSelectValuePresidenteFederacion(selected);
+  };
 
   const promiseOptions = (inputValue: any, callback: any) => {
     if (!inputValue && !dataPresidentesConsejo) {
@@ -93,6 +102,33 @@ const CreateFederacion = ({ hide, refetch }: any) => {
       });
     } else {
       const filter = dataPresidentesConsejo?.data?.filter((item: any) =>
+        item.nombres
+          ?.toString()
+          ?.toLowerCase()
+          .includes(inputValue?.toString()?.toLowerCase())
+      );
+
+      const options = filter?.map((item: any) => {
+        return { value: item.cedula, label: item.nombres };
+      });
+      return callback(options);
+    }
+  };
+
+  const promiseOptionsPresidentesFederacion = (inputValue: any, callback: any) => {
+    if (!inputValue && !dataPresidentesFederacion) {
+      return PresidentesFederacion.getAll({
+        paginate: false,
+        idConsejo: 0,
+      }).then((response) => {
+        setDataPresidentesFederacion(response);
+        const options = response?.data?.map((item: any) => {
+          return { value: item.cedula, label: item.nombres };
+        });
+        return options;
+      });
+    } else {
+      const filter = dataPresidentesFederacion?.data?.filter((item: any) =>
         item.nombres
           ?.toString()
           ?.toLowerCase()
@@ -180,7 +216,7 @@ const CreateFederacion = ({ hide, refetch }: any) => {
               <div className="col-span-2">
                 <div className={"relative py-2 w-full mb-3 md:mb-5"}>
                   <p className={"ml-3 font-normal mb-2 block f-18"}>
-                    Presidente del consejo
+                    Presidente del Consejo Regional de Clubes
                   </p>
                   {/* {!isLoading && ( */}
                   <AsyncSelect
@@ -193,7 +229,21 @@ const CreateFederacion = ({ hide, refetch }: any) => {
                     className={"text-sm"}
                     onChange={handleChangeSelect}
                   />
-                </div>
+            </div>
+            <div className={"relative py-2 w-full mb-3 md:mb-5"}>
+              <p className={"ml-3 font-normal mb-2 block f-18"}>
+                Presidente de la federación
+              </p>
+              <AsyncSelect
+                cacheOptions
+                defaultOptions
+                loadOptions={promiseOptionsPresidentesFederacion}
+                styles={customStyles}
+                value={selectValuePresidenteFederacion}
+                className={"text-sm"}
+                onChange={handleChangeSelectPresidenteFederacion}
+              />
+            </div>
               </div>
             </div>
             <div className="flex-auto">
@@ -243,12 +293,7 @@ const CreateFederacion = ({ hide, refetch }: any) => {
                 disabled={
                   !isDirty ||
                   !isValid ||
-                  !!isLoading ||
-                  isEmpty(selectValue?.label) ||
-                  isNil(selectValue?.label) ||
-                  isNil(selectValue) ||
-                  isEmpty(imageUrl) ||
-                  isNil(imageUrl)
+                  !!isLoading
                 }
               />
             </div>

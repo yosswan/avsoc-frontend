@@ -14,10 +14,15 @@ const ViewFederacion = ({ data, hide, refetch }: any) => {
     nro_gm,
     logo,
     nombre,
-    email,
+    email_presidente,
     foto_presidente,
     cedula_presidente,
-    telefono,
+    telefono_presidente,
+    presidente_federacion,
+    foto_presidente_federacion,
+    cedula_presidente_federacion,
+    email_presidente_federacion,
+    telefono_presidente_federacion,
   } = data;
   return (
     <div className="text-center">
@@ -123,13 +128,13 @@ const ViewFederacion = ({ data, hide, refetch }: any) => {
         </div>
       </div>
 
-      <div className="item mx-auto text-center justify-center mt-8">
+      <div className="flex flex-col md:flex-row gap-4 mt-8 justify-center">
         <div className="bg-yellow p-4 mx-auto max-w-[300px] rounded-md">
           <Typography
             type="title"
-            className={clsx("ml-3 font-bold mb-2 block f-24")}
+            className={clsx("font-bold mb-2 block f-24 text-center min-h-[3.5rem]")}
           >
-            Presidente
+            Presidente del CRC
           </Typography>
           <Typography
             type="label"
@@ -146,7 +151,7 @@ const ViewFederacion = ({ data, hide, refetch }: any) => {
                 type="label"
                 className={clsx(" font-normal mb-2 block text-sm")}
               >
-                {email ? email : "N/A"}
+                {email_presidente ? email_presidente : "N/A"}
               </Typography>
               <Typography
                 type="label"
@@ -158,7 +163,46 @@ const ViewFederacion = ({ data, hide, refetch }: any) => {
                 type="label"
                 className={clsx(" font-normal mb-2 block text-sm")}
               >
-                {telefono ? "Telf: " + telefono : "N/A"}
+                {telefono_presidente ? "Telf: " + telefono_presidente : "N/A"}
+              </Typography>
+            </IconWithText>
+          </Typography>
+        </div>
+        <div className="bg-yellow p-4 mx-auto max-w-[300px] rounded-md">
+          <Typography
+            type="title"
+            className={clsx("font-bold mb-2 block f-24 text-center min-h-[3.5rem]")}
+          >
+            Presidente de la Federación
+          </Typography>
+          <Typography
+            type="label"
+            className={clsx("ml-3 font-normal mb-2 block f-20")}
+          >
+            <IconWithText
+              classNameContainer="justify-center gap-2"
+              icon={foto_presidente_federacion}
+              text={presidente_federacion}
+              isUser
+              isVertical
+            >
+              <Typography
+                type="label"
+                className={clsx(" font-normal mb-2 block text-sm")}
+              >
+                {email_presidente_federacion ? email_presidente_federacion : "N/A"}
+              </Typography>
+              <Typography
+                type="label"
+                className={clsx(" font-normal mb-2 block text-sm")}
+              >
+                {cedula_presidente_federacion ? "CI-" + cedula_presidente_federacion : "N/A"}
+              </Typography>
+              <Typography
+                type="label"
+                className={clsx(" font-normal mb-2 block text-sm")}
+              >
+                {telefono_presidente_federacion ? "Telf: " + telefono_presidente_federacion : "N/A"}
               </Typography>
             </IconWithText>
           </Typography>
