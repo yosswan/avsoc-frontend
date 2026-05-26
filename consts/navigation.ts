@@ -70,7 +70,7 @@ export const navigation = [
       },
 			{
         id: 3,
-        name: "listado",
+        name: "festival_sj",
         label: "Festival SJ",
         href: `${appRouter.dashboard.href}${appRouter.dashboard.subLinks.festival.href}`,
         icon: Icons.festival,

@@ -9,6 +9,7 @@ export enum ModuleEnums {
   EVENTO_PRECAMPOREE = "evento-precamporee-detail",
   EVENTO_CAMPOREE = "evento-camporee-detail",
   INFORMES_MENSUALES = "informes_mensuales",
+  FESTIVAL_SJ = "festival_sj",
 }
 
 export const ModuleMap = {
@@ -21,4 +22,5 @@ export const ModuleMap = {
   [ModuleEnums.EVENTO_PRECAMPOREE]: ModuleEnums.EVENTO_PRECAMPOREE,
   [ModuleEnums.EVENTO_CAMPOREE]: ModuleEnums.EVENTO_CAMPOREE,
   [ModuleEnums.INFORMES_MENSUALES]: ModuleEnums.INFORMES_MENSUALES,
+  [ModuleEnums.FESTIVAL_SJ]: ModuleEnums.FESTIVAL_SJ,
 };

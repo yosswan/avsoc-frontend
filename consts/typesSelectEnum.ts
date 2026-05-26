@@ -13,12 +13,19 @@ export enum ExtendedTypesSelectEnums {
 	SOCIEDAD_DE_JOVENES = "sociedad de jovenes",
 }
 
-export const TypesSelectMap = {
+export const ExtendedTypesSelectMap = {
   [TypesSelectEnums.CONQUISTADORES]: TypesSelectEnums.CONQUISTADORES,
   [TypesSelectEnums.GUIAS_MAYORES]: TypesSelectEnums.GUIAS_MAYORES,
   [TypesSelectEnums.INTEGRADO]: TypesSelectEnums.INTEGRADO,
   [TypesSelectEnums.AVENTUREROS]: TypesSelectEnums.AVENTUREROS,
 	[ExtendedTypesSelectEnums.SOCIEDAD_DE_JOVENES]: ExtendedTypesSelectEnums.SOCIEDAD_DE_JOVENES,
+};
+
+export const TypesSelectMap = {
+  [TypesSelectEnums.CONQUISTADORES]: TypesSelectEnums.CONQUISTADORES,
+  [TypesSelectEnums.GUIAS_MAYORES]: TypesSelectEnums.GUIAS_MAYORES,
+  [TypesSelectEnums.INTEGRADO]: TypesSelectEnums.INTEGRADO,
+  [TypesSelectEnums.AVENTUREROS]: TypesSelectEnums.AVENTUREROS,
 };
 
 export enum TypesSelectPrecamporeeEnums {

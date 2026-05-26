@@ -7,26 +7,23 @@ export type Permission = string;
 type Props = {
   typePermisse: Permission;
   module: any;
+  or?: any;
   fallback?: JSX.Element | string;
   children?: React.ReactNode;
 };
 
-// This component is meant to be used everywhere a restriction based on user permission is needed
 const Restricted: React.FunctionComponent<Props> = ({
   typePermisse,
-  fallback,
   module,
+  or,
+  fallback,
   children,
 }) => {
-  // We "connect" to the provider thanks to the PermissionContext
   const allowed = usePermission(typePermisse, module);
-
-  // If the user has that permission, render the children
-  if (allowed) {
+  const allowedOr = or ? usePermission(typePermisse, or) : false;
+  if (allowed || allowedOr) {
     return <>{children}</>;
   }
-
-  // Otherwise, render the fallback
   return <>{fallback}</>;
 };
 

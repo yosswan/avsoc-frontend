@@ -20,7 +20,9 @@ import { Button } from "components/common/button";
 import { useModal } from "hooks/modal";
 import {
   TypesSelectEnums,
-  TypesSelectMap,
+  ExtendedTypesSelectMap,
+  ExtendedTypesSelectEnums,
+	TypesSelectMap,
 } from "consts/typesSelectEnum";
 import { Spinner } from "components/common/spinner/spinner";
 import ApproveInforme from "components/informes-mensuales/approve-informe";
@@ -36,6 +38,8 @@ import { Help } from "components/common/help";
 import { HelpFormInformesMensuales } from "help/informes-mensuales/form";
 import { InformeMensual } from "components/informes-mensuales/informe-mensual";
 import PermissionContext from "context/PermissionProvider/PermissionContext";
+import { useUser } from "hooks/user";
+import { RoleEnums } from "consts/rolesEnum";
 
 
 export type Params = {
@@ -45,12 +49,17 @@ export type Params = {
 const format_date = "YYYY-MM-DD";
 
 const Dashboard = () => {
+  const { data: userData } = useUser();
   const [dataApprove, setDataApprove] = React.useState<any>();
   const [dataLoadScore, setDataLoadScore] = React.useState<any>();
   const [dataView, setDataView] = React.useState<any>();
+  const defaultTipo =
+    userData?.scope_actual === RoleEnums.PRESIDENTE_FEDERACION
+      ? ExtendedTypesSelectEnums.SOCIEDAD_DE_JOVENES
+      : TypesSelectEnums.INTEGRADO;
   const [params, setValue] = useQueryParams<Params>({
-    tipo: TypesSelectEnums.INTEGRADO,
-		fecha: moment(new Date()).format(format_date),
+    tipo: defaultTipo,
+    fecha: moment(new Date()).format(format_date),
   });
   const {
     data: response,
@@ -119,6 +128,11 @@ const Dashboard = () => {
 
   const values = get(response, "data", []);
 
+  const selectOptions =
+    userData?.scope_actual === RoleEnums.PRESIDENTE_CONSEJO
+      ? TypesSelectMap
+      : ExtendedTypesSelectMap;
+
   return (
     <LayoutDashboard title="Informes Mensuales">
       {isLoading ? (
@@ -138,7 +152,7 @@ const Dashboard = () => {
                       className="z-50 flex-auto"
                       name="tipo"
                       label="Tipo"
-                      options={TypesSelectMap}
+                      options={selectOptions}
                       maxwidth="max-w-full"
                       value={params.tipo}
                       setValue={updateQuery}

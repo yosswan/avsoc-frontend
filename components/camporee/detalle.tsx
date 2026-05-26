@@ -218,6 +218,7 @@ const CamporeeDetail = ({ festival = false }: { festival?: boolean }) => {
                   <Restricted
                     module={ModuleEnums.CAMPOREE}
                     typePermisse={PermissionsEnums.INSCRIBIR_CLUB_TO_CAMPOREE}
+                    or={ModuleEnums.FESTIVAL_SJ}
                   >
                     <div className="mt-8">
                       <Button

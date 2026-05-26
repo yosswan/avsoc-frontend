@@ -70,6 +70,7 @@ const BoxInfo = ({
             <Restricted
               module={ModuleEnums.CAMPOREE}
               typePermisse={PermissionsEnums.EDIT}
+              or={ModuleEnums.FESTIVAL_SJ}
             >
               {withEditButton && (
                 <Tooltip title="Editar">

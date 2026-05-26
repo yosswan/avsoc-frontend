@@ -30,26 +30,54 @@ export const ItemNavbar: React.FC<itemNavbarsProps> = ({
         return (
           <Fragment key={subItem.id}>
             {subItem.dropdown ? (
-              <div
-                className={clsx(
-                  router.pathname.includes(subItem.href)
-                    ? "bg-active text-white font-bold opacity-100 "
-                    : "text-white hover:bg-active font-light  opacity-70",
-                  "group flex items-center px-3 pt-7 hover:opacity-90 text-base rounded-md f-18 cursor-pointer"
-                )}
-                onClick={() =>
-                  setNavigation(
-                    showSubmenu(subItem, positionMenu, positionSubMenu)
-                  )
-                }
-              >
-                <Icon
-                  src={subItem.icon}
-                  fill="var(--color-white)"
-                  className="mr-4 flex-shrink-0 h-7 w-7"
-                />
-                {subItem.label}
-              </div>
+              ModuleMap[subItem.name as ModuleEnums] ? (
+                <Restricted
+                  module={ModuleMap[subItem.name as ModuleEnums]}
+                  typePermisse={PermissionsEnums.VIEW}
+                >
+                  <div
+                    className={clsx(
+                      router.pathname.includes(subItem.href)
+                        ? "bg-active text-white font-bold opacity-100 "
+                        : "text-white hover:bg-active font-light  opacity-70",
+                      "group flex items-center px-3 pt-7 hover:opacity-90 text-base rounded-md f-18 cursor-pointer"
+                    )}
+                    onClick={() =>
+                      setNavigation(
+                        showSubmenu(subItem, positionMenu, positionSubMenu)
+                      )
+                    }
+                  >
+                    <Icon
+                      src={subItem.icon}
+                      fill="var(--color-white)"
+                      className="mr-4 flex-shrink-0 h-7 w-7"
+                    />
+                    {subItem.label}
+                  </div>
+                </Restricted>
+              ) : (
+                <div
+                  className={clsx(
+                    router.pathname.includes(subItem.href)
+                      ? "bg-active text-white font-bold opacity-100 "
+                      : "text-white hover:bg-active font-light  opacity-70",
+                    "group flex items-center px-3 pt-7 hover:opacity-90 text-base rounded-md f-18 cursor-pointer"
+                  )}
+                  onClick={() =>
+                    setNavigation(
+                      showSubmenu(subItem, positionMenu, positionSubMenu)
+                    )
+                  }
+                >
+                  <Icon
+                    src={subItem.icon}
+                    fill="var(--color-white)"
+                    className="mr-4 flex-shrink-0 h-7 w-7"
+                  />
+                  {subItem.label}
+                </div>
+              )
             ) : (
               <Restricted
                 key={positionSubMenu}

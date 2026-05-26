@@ -187,6 +187,7 @@ const CamporeeList = ({ type, festival = false }: { type?: ExtendedTypesSelectEn
           <Restricted
             module={ModuleEnums.CAMPOREE}
             typePermisse={PermissionsEnums.VIEW}
+            or={ModuleEnums.FESTIVAL_SJ}
           >
             <Tooltip title="Ver detalle">
               <div className="flex-shrink-0 h-10 w-8 ml-5">
@@ -257,6 +258,7 @@ const CamporeeList = ({ type, festival = false }: { type?: ExtendedTypesSelectEn
             <Restricted
               module={ModuleEnums.CAMPOREE}
               typePermisse={PermissionsEnums.ADD}
+              or={ModuleEnums.FESTIVAL_SJ}
             >
               <div
                 className={clsx("px-2", { "pointer-events-none opacity-50": isLoading })}

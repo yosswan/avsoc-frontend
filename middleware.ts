@@ -15,7 +15,7 @@ export default auth((request) => {
   }
 
   if (pathname.includes("informes-mensuales") || pathname.includes("miembros")) {
-    let module = ModuleEnums.CAMPOREE;
+    let module = ModuleEnums.CLUBES;
     if (pathname.includes("informes-mensuales")) {
       module = ModuleEnums.INFORMES_MENSUALES;
     } else if (pathname.includes("miembros")) {

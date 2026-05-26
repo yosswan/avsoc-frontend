@@ -65,6 +65,11 @@ export const PermissionByRol = [
       },
 
       {
+        name: ModuleEnums.FESTIVAL_SJ,
+        permissionsActions: [PermissionsEnums.DETAIL, PermissionsEnums.VIEW],
+      },
+
+      {
         name: ModuleEnums.EVENTO_PRECAMPOREE,
         permissionsActions: [
           PermissionsEnums.DETAIL,
@@ -143,6 +148,11 @@ export const PermissionByRol = [
       },
 
       {
+        name: ModuleEnums.FESTIVAL_SJ,
+        permissionsActions: [PermissionsEnums.DETAIL, PermissionsEnums.VIEW],
+      },
+
+      {
         name: ModuleEnums.EVENTO_PRECAMPOREE,
         permissionsActions: [
           PermissionsEnums.DETAIL,
@@ -212,6 +222,11 @@ export const PermissionByRol = [
       },
 
       {
+        name: ModuleEnums.FESTIVAL_SJ,
+        permissionsActions: [PermissionsEnums.DETAIL, PermissionsEnums.VIEW],
+      },
+
+      {
         name: ModuleEnums.EVENTO_PRECAMPOREE,
         permissionsActions: [
           PermissionsEnums.DETAIL,
@@ -266,6 +281,11 @@ export const PermissionByRol = [
       },
       {
         name: ModuleEnums.CAMPOREE,
+        permissionsActions: [PermissionsEnums.DETAIL, PermissionsEnums.VIEW],
+      },
+
+      {
+        name: ModuleEnums.FESTIVAL_SJ,
         permissionsActions: [PermissionsEnums.DETAIL, PermissionsEnums.VIEW],
       },
 
@@ -326,6 +346,11 @@ export const PermissionByRol = [
       },
 
       {
+        name: ModuleEnums.FESTIVAL_SJ,
+        permissionsActions: [PermissionsEnums.DETAIL, PermissionsEnums.VIEW],
+      },
+
+      {
         name: ModuleEnums.EVENTO_PRECAMPOREE,
         permissionsActions: [
           PermissionsEnums.DETAIL,
@@ -374,6 +399,11 @@ export const PermissionByRol = [
       },
       {
         name: ModuleEnums.CAMPOREE,
+        permissionsActions: [PermissionsEnums.DETAIL, PermissionsEnums.VIEW],
+      },
+
+      {
+        name: ModuleEnums.FESTIVAL_SJ,
         permissionsActions: [PermissionsEnums.DETAIL, PermissionsEnums.VIEW],
       },
 
@@ -456,6 +486,73 @@ export const PermissionByRol = [
           PermissionsEnums.VIEW_DATA_FORMS,
           PermissionsEnums.VIEW,
           PermissionsEnums.SELECT_TYPE_CAMPOREE,
+        ],
+      },
+    ],
+  },
+  {
+    role: RoleEnums.PRESIDENTE_FEDERACION,
+    modules: [
+      {
+        name: ModuleEnums.DISTRITOS,
+        permissionsActions: [PermissionsEnums.VIEW, PermissionsEnums.DETAIL],
+      },
+      {
+        name: ModuleEnums.FEDERACIONES,
+        permissionsActions: [PermissionsEnums.VIEW, PermissionsEnums.DETAIL],
+      },
+      {
+        name: ModuleEnums.IGLESIAS,
+        permissionsActions: [PermissionsEnums.DETAIL, PermissionsEnums.VIEW],
+      },
+      {
+        name: ModuleEnums.CLUBES,
+        permissionsActions: [
+          PermissionsEnums.ADD,
+          PermissionsEnums.EDIT,
+          PermissionsEnums.DETAIL,
+          PermissionsEnums.VIEW,
+          PermissionsEnums.DESACTIVAR_ENTIDAD,
+        ],
+      },
+      {
+        name: ModuleEnums.MIEMBROS,
+        permissionsActions: [
+          PermissionsEnums.DETAIL,
+          PermissionsEnums.VIEW,
+          PermissionsEnums.DETALLE_MIEMBRO,
+        ],
+      },
+      {
+        name: ModuleEnums.FESTIVAL_SJ,
+        permissionsActions: [PermissionsEnums.DETAIL, PermissionsEnums.VIEW],
+      },
+      {
+        name: ModuleEnums.EVENTO_PRECAMPOREE,
+        permissionsActions: [
+          PermissionsEnums.DETAIL,
+          PermissionsEnums.VIEW,
+          PermissionsEnums.VIEW_DATA_FORMS,
+          PermissionsEnums.APPROVE_FORM,
+        ],
+      },
+      {
+        name: ModuleEnums.EVENTO_CAMPOREE,
+        permissionsActions: [
+          PermissionsEnums.DETAIL,
+          PermissionsEnums.VIEW,
+          PermissionsEnums.VIEW_CLUBES_INSCRITOS,
+          PermissionsEnums.LOAD_SCORE,
+          PermissionsEnums.CHECK_CLASIFICATION,
+          PermissionsEnums.INSCRIBIR_CLUB,
+        ],
+      },
+      {
+        name: ModuleEnums.INFORMES_MENSUALES,
+        permissionsActions: [
+          PermissionsEnums.APPROVE_FORM,
+          PermissionsEnums.VIEW_DATA_FORMS,
+          PermissionsEnums.VIEW,
         ],
       },
     ],
