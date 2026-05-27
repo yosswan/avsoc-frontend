@@ -1,7 +1,8 @@
 import { getPagination } from "lib/pagination.helper";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
 import { isNil, noop } from "lodash";
-import { useEffect } from "react";
+import { useMemo, useCallback } from "react";
+import React from "react";
 import styled from "styled-components";
 
 export type PaginationProps = {
@@ -88,27 +89,30 @@ const PageContainer = styled.div.attrs<any>(({ $active }: any) => ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }))<any>``;
 
-export default function Pagination({
+const Pagination = React.memo(({
   currentPage,
   total,
   limit,
   setPage,
-}: PaginationProps) {
-  const { prevPage, pages, nextPage } = getPagination(
-    currentPage,
-    total,
-    limit
+}: PaginationProps) => {
+  const { prevPage, pages, nextPage } = useMemo(
+    () => getPagination(currentPage, total, limit),
+    [currentPage, total, limit]
   );
-  // console.log("cu", currentPage);
-  // console.log("to", total);
-  // console.log("limi", limit);
-  // useEffect(() => {}, [pages]);
+
+  const goToPrev = useCallback(() => {
+    if (!isNil(prevPage)) setPage(prevPage);
+  }, [prevPage, setPage]);
+
+  const goToNext = useCallback(() => {
+    if (!isNil(nextPage)) setPage(nextPage);
+  }, [nextPage, setPage]);
 
   return (
     <Container>
       <StyledButton
         $enabled={isNil(prevPage) ? undefined : "true"}
-        onClick={() => (isNil(prevPage) ? noop() : setPage(prevPage))}
+        onClick={goToPrev}
       >
         <StyledSpan>Previous</StyledSpan>
         <ChevronLeftIcon className="h-5 w-5 text-white" aria-hidden="true" />
@@ -126,11 +130,13 @@ export default function Pagination({
       })}
       <StyledButton
         $enabled={isNil(nextPage) ? undefined : "true"}
-        onClick={() => (isNil(nextPage) ? noop() : setPage(nextPage))}
+        onClick={goToNext}
       >
         <StyledSpan>Next</StyledSpan>
         <ChevronRightIcon className="h-5 w-5 text-white" aria-hidden="true" />
       </StyledButton>
     </Container>
   );
-}
+});
+
+export default Pagination;

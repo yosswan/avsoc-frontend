@@ -2,17 +2,18 @@ import clsx from "clsx";
 import { Icon } from "components/icon";
 import { Icons } from "consts";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useCallback } from "react";
 
-export default function Back({ className }: any) {
+const Back = React.memo(({ className }: any) => {
   const router = useRouter();
+  const handleBack = useCallback(() => { router.back(); }, [router]);
   return (
     <div
       className={clsx("flex justify-items-start text-left w-full", className)}
     >
       <div
         className="container-back flex gap-3 items-center border-yellow px-4 border rounded-md py-1 hover:bg-yellow cursor-pointer"
-        onClick={() => router.back()}
+        onClick={handleBack}
       >
         <Icon
           src={Icons.arrowSolidLeft}
@@ -23,4 +24,6 @@ export default function Back({ className }: any) {
       </div>
     </div>
   );
-}
+});
+
+export default Back;

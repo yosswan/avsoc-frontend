@@ -13,7 +13,7 @@ export interface SpinnerProps {
 /**
  * Primary UI component for user interaction
  */
-export const Spinner: React.FC<SpinnerProps> = ({ type, className }) => {
+export const Spinner: React.FC<SpinnerProps> = React.memo(({ type, className }) => {
   return (
     <>
       {type === "loadingButton" && (
@@ -55,4 +55,4 @@ export const Spinner: React.FC<SpinnerProps> = ({ type, className }) => {
       )}
     </>
   );
-};
+});

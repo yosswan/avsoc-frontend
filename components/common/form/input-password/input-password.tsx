@@ -10,12 +10,12 @@ export const InputPassword: React.FC<
 		React.InputHTMLAttributes<HTMLInputElement> & {
 			validate?: boolean;
 		}
-> = ({ rules, validate = true, ...props }) => {
+> = React.memo(({ rules, validate = true, ...props }) => {
 	const [isVisible, setIsVisible] = React.useState(false);
 
-	const handleClick = () => {
-		setIsVisible(!isVisible);
-	};
+	const handleClick = React.useCallback(() => {
+		setIsVisible((prev) => !prev);
+	}, []);
 
 	// const img = isVisible ? (
 	// 	<Icon src={Icons.eye} fillPath className="text-gray-900 cursor-pointer" />
@@ -50,10 +50,10 @@ export const InputPassword: React.FC<
 				type={isVisible ? 'text' : 'password'}
 				rules={finalRules}
 				rightImg={isVisible ? Icons.showPassword : Icons.hidePassword}
-				rightClick={() => handleClick()}
+				rightClick={handleClick}
 				labelVisible
 				{...props}
 			></Input>
 		</>
 	);
-};
+});

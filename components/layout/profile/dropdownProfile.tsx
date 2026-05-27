@@ -1,5 +1,5 @@
 import { Menu, Transition } from "@headlessui/react";
-import { Fragment } from "react";
+import React, { Fragment } from "react";
 import { Typography } from "../../common/typography";
 import { Icons } from "consts/icons";
 import clsx from "clsx";

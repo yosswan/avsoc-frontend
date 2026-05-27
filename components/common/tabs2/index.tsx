@@ -1,31 +1,23 @@
 import clsx from "clsx";
-import React from "react";
+import React, { useCallback } from "react";
 
 export interface TypographyProps {
   tabs: any;
   setTabs: any;
 }
 
-export function TabsComponent({ tabs, setTabs }: TypographyProps) {
-  const handleChangeTab = (index: any) => {
-    setTabs((prev: any) => {
-      const aux = prev;
+function TabsComponent({ tabs, setTabs }: TypographyProps) {
+  const handleChangeTab = useCallback((index: any) => {
+    setTabs((prev: any) =>
+      prev.map((tab: any, i: any) => ({
+        ...tab,
+        current: i === index,
+      }))
+    );
+  }, [setTabs]);
 
-      prev.find((tab: any, index: any) => {
-        if (tab.current) {
-          aux[index].current = false;
-        }
-      });
-
-      aux[index].current = true;
-
-      return [...aux];
-    });
-  };
-
-  const CurrentComponent = () => {
-    return tabs.find((tab: any) => tab.current)?.component;
-  };
+  const currentTab = tabs.find((tab: any) => tab.current);
+  const CurrentComponent = currentTab?.component;
 
   return (
     <>
@@ -52,7 +44,7 @@ export function TabsComponent({ tabs, setTabs }: TypographyProps) {
       </div>
 
       <div className="flex mt-10 w-full">
-        <CurrentComponent />
+        {CurrentComponent && <CurrentComponent />}
       </div>
     </>
   );

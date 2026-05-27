@@ -6,13 +6,13 @@ import { Fragment, useCallback, useRef, useState } from "react";
 export const useModal = () => {
 	const [isShow, setIsShow] = useState(false);
 	const ref = useRef<any>(null);
-	const hide = () => {
+	const hide = useCallback(() => {
 		setIsShow(false);
-	};
+	}, []);
 
-	const show = () => {
+	const show = useCallback(() => {
 		setIsShow(true);
-	};
+	}, []);
 
 	const Modal = useCallback(({ children, isShow }: { children?: React.ReactNode; isShow: boolean }) => {
 		return (
@@ -42,7 +42,6 @@ export const useModal = () => {
 								<Dialog.Overlay className="fixed inset-0 bg-[#18191B] opacity-75 transition-opacity" />
 							</Transition.Child>
 
-							{/* This element is to trick the browser into centering the modal contents. */}
 							<span
 								className="hidden sm:inline-block sm:align-middle sm:h-screen"
 								aria-hidden="true"
@@ -77,7 +76,7 @@ export const useModal = () => {
 				</Transition.Root>
 			)
 		);
-	}, []);
+	}, [hide]);
 
 	return { Modal, hide, isShow, show };
 };

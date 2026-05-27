@@ -57,7 +57,7 @@ export const GenerateErrorHtml = (errors: any) => {
   let errorHtml: any;
   if (Object.keys(errors).length > 0) {
     errorHtml = (
-      <ul className="m-0" key={Math.floor(Math.random() * 1000)}>
+      <ul className="m-0">
         {Object.keys(errors).map((item, posicion) => {
           return (
             <li key={posicion}>
@@ -83,15 +83,13 @@ export const GenerateErrorHtml = (errors: any) => {
 
 export const GenerateErrorToast = (error: any, addToast: any) => {
   if (error?.errors && Object.keys(error.errors).length > 0) {
-    {
-      error = error.errors;
-      Object.keys(error).map((item) => {
-        console.log(error[item]);
-        return addToast(`${item} : ${error[item]}`, {
-          appearance: "error",
-        });
+    const errs = error.errors;
+    Object.keys(errs).forEach((item) => {
+      console.log(errs[item]);
+      addToast(`${item} : ${errs[item]}`, {
+        appearance: "error",
       });
-    }
+    });
   } else {
     addToast(`${"Error: "} ${error.message}`, {
       appearance: "error",

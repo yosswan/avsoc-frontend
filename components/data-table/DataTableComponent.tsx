@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useMemo } from "react";
 import Pagination, { PaginationProps } from "components/pagination/Pagination";
 import { isEmpty } from "lodash";
 import styled from "styled-components";
@@ -52,15 +53,15 @@ const PaginationContainer = styled.div.attrs({
 `,
 })``;
 
-export default function DataTableComponent<T>({
+const DataTableComponent = React.memo(<T extends unknown>({
   columns,
   data,
   currentPage,
   limit,
   total,
   setPage,
-}: DataTableProps<T> & PaginationProps) {
-  const rows = data.map((value, i) => {
+}: DataTableProps<T> & PaginationProps) => {
+  const rows = useMemo(() => data.map((value, i) => {
     const cells = columns.map((column) => {
       return {
         className: column.tdClassName,
@@ -73,7 +74,7 @@ export default function DataTableComponent<T>({
       key,
       cells,
     };
-  });
+  }), [data, columns]);
 
   return (
     <>
@@ -134,4 +135,6 @@ export default function DataTableComponent<T>({
       )}
     </>
   );
-}
+});
+
+export default DataTableComponent;

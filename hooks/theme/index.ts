@@ -4,8 +4,8 @@ import * as React from 'react';
 export const useTheme = () => {
 	const { theme, setTheme } = React.useContext(ThemeContext);
 
-	return {
+	return React.useMemo(() => ({
 		theme,
 		setTheme,
-	};
+	}), [theme, setTheme]);
 };

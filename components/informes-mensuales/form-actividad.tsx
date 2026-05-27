@@ -33,7 +33,44 @@ type InformeFormProps = {
   dateSelected?: any;
 };
 
-export const ActividadForm: React.FC<InformeFormProps> = ({
+const rules = {
+  nombre: {
+    required: { value: true, message: "Este campo es requerido" },
+  },
+  tipo: {
+    required: { value: true, message: "Este campo es requerido" },
+  },
+  mes: {
+    required: { value: true, message: "Este campo es requerido" },
+  },
+  fecha_realizado: {
+    required: { value: true, message: "Este campo es requerido" },
+  },
+  files: {
+    required: { value: true, message: "Este campo es requerido" },
+    validate: (value: any) => {
+      if (value.length < 1) {
+        return "Debe subir 1 archivo";
+      }
+    },
+  },
+};
+
+function dataBase64toFile(image: any, filename: string) {
+  var arr = image.split(","),
+    mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]),
+    n = bstr.length,
+    u8arr = new Uint8Array(n);
+
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+
+  return new File([u8arr], filename, { type: mime });
+}
+
+export const ActividadForm: React.FC<InformeFormProps> = React.memo(({
   hide,
   refetch,
   isEditable,
@@ -42,8 +79,7 @@ export const ActividadForm: React.FC<InformeFormProps> = ({
   data,
 }) => {
   const [isLoading, setIsLoading] = React.useState(false);
-	const [loading, setLoading] = React.useState(false);
-  // const [mes, setMes] = React.useState(mesInforme);
+  const [loading, setLoading] = React.useState(false);
   const { addToast } = useToasts();
   const [fechaRealizado, setFechaRealizado] = React.useState();
   const [fileList, setFileList] = React.useState<UploadFile[] | any>([]);
@@ -57,59 +93,17 @@ export const ActividadForm: React.FC<InformeFormProps> = ({
     watch,
   } = useForm<any>({
     mode: "onChange",
-    // defaultValues: {  }
   });
 
-  const rules = {
-    nombre: {
-      required: { value: true, message: "Este campo es requerido" },
-    },
-    tipo: {
-      required: { value: true, message: "Este campo es requerido" },
-    },
-    mes: {
-      required: { value: true, message: "Este campo es requerido" },
-    },
-    fecha_realizado: {
-      required: { value: true, message: "Este campo es requerido" },
-    },
-    files: {
-      required: { value: true, message: "Este campo es requerido" },
-      validate: (value: any) => {
-        // console.log("en la validacion:", value);
-        // console.log("en la validacion lenght:", value?.length);
-        if (value.length < 1) {
-          // console.log("NO APROBADO");
-          return "Debe subir 1 archivo";
-        }
-      },
-    },
-  };
-  function dataBase64toFile(image: any, filename: string) {
-    var arr = image.split(","),
-      mime = arr[0].match(/:(.*?);/)[1],
-      bstr = atob(arr[1]),
-      n = bstr.length,
-      u8arr = new Uint8Array(n);
-
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
-    }
-
-    return new File([u8arr], filename, { type: mime });
-  }
   React.useEffect(() => {
     if (!isNil(data)) {
       const images = [
         {
-          //originFileObj: dataBase64toFile(data?.foto, "imagen1"),
           preview: data?.foto,
           name: "imagen1",
           status: "done",
         },
       ];
-      // const images: any = [];
-      //  console.log("transfoooor:", images);
       setValueRHF("nombre", data.name);
       setValueRHF("description", data.descripcion);
       setValueRHF("lugar", data.lugar);
@@ -117,16 +111,18 @@ export const ActividadForm: React.FC<InformeFormProps> = ({
       setValueRHF("nro_miembros", data.asistencia_miembros);
       setValueRHF("nro_visitas", data.asistencia_no_miembros);
       setValueRHF("fecha_realizado", data.fecha);
-      // setValueRHF("tipo", data?.tipo);
       const imagesOnlyBase = [data?.foto];
-
       setValueRHF("files", imagesOnlyBase);
       setFechaRealizado(data.fecha);
       setFileList(images);
     }
-  }, [dateSelected]);
+  }, [data, setValueRHF]);
 
-  const onHandleSubmit = (form: any) => {
+  const handleChangeTipo = React.useCallback((option: OptionType) => {
+    setValueRHF("tipo", option, { shouldValidate: true });
+  }, [setValueRHF]);
+
+  const onHandleSubmit = React.useCallback((form: any) => {
 
     const finalData = {
       fecha: moment(form?.fecha_realizado).format(formatDates),
@@ -157,7 +153,7 @@ export const ActividadForm: React.FC<InformeFormProps> = ({
         GenerateErrorToast(e, addToast);
         setIsLoading(false);
       });
-  };
+  }, [data, addToast, refetch, hide]);
 
   return (
     <div className="text-center">
@@ -190,9 +186,7 @@ export const ActividadForm: React.FC<InformeFormProps> = ({
                 register={register}
                 rules={rules.tipo}
                 error={errors.tipo}
-                handleChange={(data: OptionType) =>
-                  setValueRHF("tipo", data, { shouldValidate: true })
-                }
+                handleChange={handleChangeTipo}
                 myDefaultValue={{
                   value: data?.tipo,
                   text: data?.tipo,
@@ -210,9 +204,7 @@ export const ActividadForm: React.FC<InformeFormProps> = ({
                 register={register}
                 rules={rules.tipo}
                 error={errors.tipo}
-                handleChange={(data: OptionType) =>
-                  setValueRHF("tipo", data, { shouldValidate: true })
-                }
+                handleChange={handleChangeTipo}
                 disabled={data && !isEditable}
               />
             )}
@@ -363,4 +355,4 @@ export const ActividadForm: React.FC<InformeFormProps> = ({
       </div>
     </div>
   );
-};
+});

@@ -29,7 +29,7 @@ export interface ButtonProps {
  */
 export const Button: React.FC<
 	ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>
-> = ({
+> = React.memo(({
 	size,
 	label,
 	disabled,
@@ -313,7 +313,7 @@ export const Button: React.FC<
 			)}
 		</>
 	);
-};
+});
 
 export const ButtonContent: React.FC<
 	ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>

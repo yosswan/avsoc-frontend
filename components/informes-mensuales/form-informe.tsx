@@ -32,7 +32,37 @@ type InformeFormProps = {
   isEditable?: boolean;
 };
 
-export const InformeForm: React.FC<InformeFormProps> = ({
+const rules = {
+  nro_juntas_planeacion: {
+    required: { value: true, message: "Este campo es requerido" },
+  },
+  nro_juntas_padres: {
+    required: { value: true, message: "Este campo es requerido" },
+  },
+  nro_cedulas_juveniles: {
+    required: { value: true, message: "Este campo es requerido" },
+  },
+  involucrados_sj: {
+    required: { value: true, message: "Este campo es requerido" },
+  },
+  blanco_estudios_biblicos: {
+    required: { value: true, message: "Este campo es requerido" },
+  },
+  blanco_reclutas: {
+    required: { value: true, message: "Este campo es requerido" },
+  },
+  miembro_dando_estudio_biblico: {
+    required: { value: true, message: "Este campo es requerido" },
+  },
+  miembro_recibiendo_estudio_biblico: {
+    required: { value: true, message: "Este campo es requerido" },
+  },
+  nro_bautismos: {
+    required: { value: true, message: "Este campo es requerido" },
+  },
+};
+
+export const InformeForm: React.FC<InformeFormProps> = React.memo(({
   hide,
   refetch,
   isEditable,
@@ -40,7 +70,6 @@ export const InformeForm: React.FC<InformeFormProps> = ({
   data,
 }) => {
   const [isLoading, setIsLoading] = React.useState(false);
-  // const [mes, setMes] = React.useState(mesInforme);
   const { addToast } = useToasts();
   const [fechaRealizado, setFechaRealizado] = React.useState();
   const [fileList, setFileList] = React.useState<UploadFile[] | any>([]);
@@ -54,58 +83,9 @@ export const InformeForm: React.FC<InformeFormProps> = ({
     watch,
   } = useForm<any>({
     mode: "onChange",
-    // defaultValues: {  }
   });
 
-  const rules = {
-    nro_juntas_planeacion: {
-      required: { value: true, message: "Este campo es requerido" },
-    },
-    nro_juntas_padres: {
-      required: { value: true, message: "Este campo es requerido" },
-    },
-    nro_cedulas_juveniles: {
-      required: { value: true, message: "Este campo es requerido" },
-    },
-    involucrados_sj: {
-      required: { value: true, message: "Este campo es requerido" },
-    },
-    blanco_estudios_biblicos: {
-      required: { value: true, message: "Este campo es requerido" },
-    },
-    blanco_reclutas: {
-      required: { value: true, message: "Este campo es requerido" },
-    },
-    miembro_dando_estudio_biblico: {
-      required: { value: true, message: "Este campo es requerido" },
-    },
-    miembro_recibiendo_estudio_biblico: {
-      required: { value: true, message: "Este campo es requerido" },
-    },
-    nro_bautismos: {
-      required: { value: true, message: "Este campo es requerido" },
-    },
-  };
-
-  React.useEffect(() => {
-    if (!isNil(data)) {
-
-      setValueRHF("nro_juntas_planeacion", data.reuniones_directiva);
-      setValueRHF("nro_juntas_padres", data.reuniones_padres);
-      setValueRHF("nro_cedulas_juveniles", data.numero_gpss);
-      setValueRHF("involucrados_sj", data.involucrados_sj);
-      setValueRHF("blanco_estudios_biblicos", data.blanco_estudios_biblicos);
-      setValueRHF("blanco_reclutas", data.blanco_reclutas);
-      setValueRHF("miembro_dando_estudio_biblico", data.miembros_dando_e_b);
-      setValueRHF(
-        "miembro_recibiendo_estudio_biblico",
-        data.miembros_recibiendo_e_b
-      );
-      setValueRHF("nro_bautismos", data.numero_bautismos);
-    }
-  }, []);
-
-  const onHandleSubmit = (form: any) => {
+  const onHandleSubmit = React.useCallback((form: any) => {
 
     const finalData = {
       mes: data?.mes,
@@ -135,7 +115,21 @@ export const InformeForm: React.FC<InformeFormProps> = ({
         GenerateErrorToast(e, addToast);
         setIsLoading(false);
       });
-  };
+  }, [data, refetch, addToast, hide]);
+
+  React.useEffect(() => {
+    if (!isNil(data)) {
+      setValueRHF("nro_juntas_planeacion", data.reuniones_directiva);
+      setValueRHF("nro_juntas_padres", data.reuniones_padres);
+      setValueRHF("nro_cedulas_juveniles", data.numero_gpss);
+      setValueRHF("involucrados_sj", data.involucrados_sj);
+      setValueRHF("blanco_estudios_biblicos", data.blanco_estudios_biblicos);
+      setValueRHF("blanco_reclutas", data.blanco_reclutas);
+      setValueRHF("miembro_dando_estudio_biblico", data.miembros_dando_e_b);
+      setValueRHF("miembro_recibiendo_estudio_biblico", data.miembros_recibiendo_e_b);
+      setValueRHF("nro_bautismos", data.numero_bautismos);
+    }
+  }, [data, setValueRHF]);
 
   return (
     <div className="text-center">
@@ -304,4 +298,4 @@ export const InformeForm: React.FC<InformeFormProps> = ({
       </div>
     </div>
   );
-};
+});

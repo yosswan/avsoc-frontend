@@ -2,7 +2,7 @@
 import { Listbox, Transition } from "@headlessui/react";
 import { ChevronDownIcon, XIcon } from "@heroicons/react/solid";
 import { entries, get, isNil } from "lodash";
-import { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useCallback, useMemo, useState, useEffect } from "react";
 import styled from "styled-components";
 
 type SelectInputProps = {
@@ -25,7 +25,7 @@ const Container = styled.div.attrs<any>(({ $maxwidth, className }: any) => ({
 `,
 }))<any>``;
 
-export function SelectInput({
+export const SelectInput = React.memo(({
   name,
   label,
   options,
@@ -35,7 +35,7 @@ export function SelectInput({
   setValue,
   hideDeleteSelected,
 	disabled
-}: SelectInputProps) {
+}: SelectInputProps) => {
   const [selectedValue, selectValue] = useState<string | number | undefined>(
     value
   );
@@ -44,21 +44,21 @@ export function SelectInput({
     selectValue(value);
   }, [value]);
 
-  const isSelected = () => {
+  const isSelected = useCallback(() => {
     return !isNil(selectedValue);
-  };
+  }, [selectedValue]);
 
-  const clearFilter = () => {
+  const clearFilter = useCallback(() => {
     setValue(name, undefined);
     selectValue(undefined);
-  };
+  }, [name, setValue]);
 
-  const handleChange = (val: string) => {
+  const handleChange = useCallback((val: string) => {
     setValue(name, val);
     selectValue(val);
-  };
+  }, [name, setValue]);
 
-  const values = entries(options);
+  const values = useMemo(() => entries(options), [options]);
 
   return (
     <Container $maxwidth={maxwidth} className={className}>
@@ -123,4 +123,4 @@ export function SelectInput({
       </Listbox>
     </Container>
   );
-}
+});

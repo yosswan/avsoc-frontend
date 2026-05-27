@@ -127,7 +127,7 @@ const CamporeeList = ({ type, festival = false }: { type?: ExtendedTypesSelectEn
   const handleSubmitData = (data: any) => {
   };
 
-  const columns: TableColumnType[] = [
+  const columns: TableColumnType[] = React.useMemo(() => [
     {
       name: "nombre",
       label: "Nombre",
@@ -208,7 +208,7 @@ const CamporeeList = ({ type, festival = false }: { type?: ExtendedTypesSelectEn
         </div>
       ),
     },
-  ];
+  ], [festival, type]);
 
   const values = get(response, "data.data", []);
   const total = get(response, "data.total", 1);

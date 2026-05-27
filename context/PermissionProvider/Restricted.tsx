@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import usePermission from "./usePermission";
 
@@ -12,7 +12,7 @@ type Props = {
   children?: React.ReactNode;
 };
 
-const Restricted: React.FunctionComponent<Props> = ({
+const Restricted: React.FC<Props> = ({
   typePermisse,
   module,
   or,
@@ -27,4 +27,4 @@ const Restricted: React.FunctionComponent<Props> = ({
   return <>{fallback}</>;
 };
 
-export default Restricted;
+export default React.memo(Restricted);

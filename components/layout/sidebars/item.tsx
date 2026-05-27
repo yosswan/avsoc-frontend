@@ -43,9 +43,7 @@ export const ItemNavbar: React.FC<itemNavbarsProps> = ({
                       "group flex items-center px-3 pt-7 hover:opacity-90 text-base rounded-md f-18 cursor-pointer"
                     )}
                     onClick={() =>
-                      setNavigation(
-                        showSubmenu(subItem, positionMenu, positionSubMenu)
-                      )
+                      showSubmenu(subItem, positionMenu, positionSubMenu)
                     }
                   >
                     <Icon
@@ -65,9 +63,7 @@ export const ItemNavbar: React.FC<itemNavbarsProps> = ({
                     "group flex items-center px-3 pt-7 hover:opacity-90 text-base rounded-md f-18 cursor-pointer"
                   )}
                   onClick={() =>
-                    setNavigation(
-                      showSubmenu(subItem, positionMenu, positionSubMenu)
-                    )
+                    showSubmenu(subItem, positionMenu, positionSubMenu)
                   }
                 >
                   <Icon

@@ -11,6 +11,7 @@ import "styles/globals.scss";
 import "styles/fonts.scss";
 import "styles/styles-ant.scss";
 import PermissionProvider from "context/PermissionProvider/PermissionProvider";
+import { NavigationProvider } from "context/navigation";
 import Head from "next/head";
 import { Session } from "next-auth";
 
@@ -28,6 +29,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps<{ s
   const [theme, setTheme] = React.useState<ThemeType>("light");
   const permissionsRef = React.useRef<any>(null);
   const [mounted, setMounted] = React.useState(false);
+  const themeValue = React.useMemo(() => ({ theme, setTheme }), [theme, setTheme]);
 
   React.useEffect(() => {
     setMounted(true);
@@ -78,12 +80,13 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps<{ s
         {/* @ts-ignore - react-query v3 type compatibility */}
         <QueryClientProvider client={queryClient}>
           <PermissionProvider client={permissionsRef}>
-            <ToastProvider
+            <NavigationProvider>
+              <ToastProvider
               autoDismissTimeout={4000}
               autoDismiss
               placement="top-center"
             >
-              <ThemeContext.Provider value={{ theme, setTheme }}>
+              <ThemeContext.Provider value={themeValue}>
                 <div
                   className={clsx(
                     "font-montserrat min-h-screen text-gray-800",
@@ -95,6 +98,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps<{ s
                 </div>
               </ThemeContext.Provider>
             </ToastProvider>
+            </NavigationProvider>
           </PermissionProvider>
         </QueryClientProvider>
       </SessionProvider>

@@ -13,10 +13,7 @@ type ItemType = {
 	option: string;
 };
 
-/**
- * Use to notificate the user something happened
- */
-export const Tabs: React.FC<TabsProps> = ({
+export const Tabs: React.FC<TabsProps> = React.memo(({
 	itemsNavigation,
 	currentNavigation,
 	setNavigation,
@@ -52,4 +49,4 @@ export const Tabs: React.FC<TabsProps> = ({
 			</nav>
 		</div>
 	);
-};
+});

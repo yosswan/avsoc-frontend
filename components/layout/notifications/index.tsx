@@ -1,4 +1,4 @@
-import { Fragment, useRef } from 'react';
+import React, { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import clsx from 'clsx';
 import { XIcon } from '@heroicons/react/outline';
@@ -14,8 +14,8 @@ interface LayoutDashboardProps {
 }
 export const Notifications: React.FC<LayoutDashboardProps> = ({
 	sidebarOpen = false,
-	setSidebarOpen = () => {},
-	initialFocus = useRef(null),
+	setSidebarOpen,
+	initialFocus,
 }) => {
 	return (
 		<Transition.Root show={sidebarOpen} as={Fragment}>

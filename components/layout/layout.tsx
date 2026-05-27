@@ -7,7 +7,7 @@ import { SidebarMobile } from "components/layout/sidebars/mobile";
 import { SidebarDesktop } from "components/layout/sidebars/desktop";
 import { DropdownProfile } from "components/layout/profile/dropdownProfile";
 import { Icons } from "consts/icons";
-import { navigation as menu } from "consts/navigation";
+import { useNavigation } from "context/navigation";
 import Styles from "./styles.module.scss";
 
 interface LayoutDashboardProps {
@@ -21,36 +21,9 @@ export const LayoutDashboard: React.FC<LayoutDashboardProps> = ({
 }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notifications, setNotifications] = useState(false);
-  let refNotifications = React.useRef(null);
-  let refSidebarMobile = React.useRef(null);
-
-  //Menu
-  const [navigation, setNavigation] = React.useState(menu);
-  const [updateShowSubMenu, setUpdateShowSubMenu] = React.useState(false);
-
-  React.useEffect(() => {
-    if (updateShowSubMenu) {
-      setUpdateShowSubMenu(false);
-    }
-  }, [updateShowSubMenu]);
-
-  const showSubmenu = (item: any, positionMenu: any, positionSubMenu: any) => {
-    let auxMenu = navigation;
-    // console.log("posicion menu:", positionMenu);
-    // console.log("posicion SubMenu:", positionSubMenu);
-    // console.log(
-    //   "LOO",
-    //   auxMenu[positionMenu].subNavigation[positionSubMenu].dropdownVisible
-    // );
-
-    auxMenu[positionMenu].subNavigation[positionSubMenu].dropdownVisible =
-      !auxMenu[positionMenu].subNavigation[positionSubMenu].dropdownVisible;
-
-    // console.log("sin: ", auxMenu);
-    // console.log("con: ", [...auxMenu]);
-
-    return [...auxMenu];
-  };
+  const refNotifications = React.useRef(null);
+  const refSidebarMobile = React.useRef(null);
+  const { navigation, setNavigation, showSubmenu } = useNavigation();
 
   return (
     <div className="h-screen flex overflow-hidden bg-gray-100">
