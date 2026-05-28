@@ -39,6 +39,7 @@ import { TrashIcon } from "@heroicons/react/solid";
 import { useUser } from "hooks/user";
 import { RoleEnums } from "consts/rolesEnum";
 import { SelectInput } from "components/common/form/select/SelectInput";
+import { ExtendedTypesSelectMap } from "consts/typesSelectEnum";
 import { Help } from "components/common/help";
 import { HelpListClubes } from "help/administrar/clubes/list";
 
@@ -51,6 +52,7 @@ type Params = {
   limit?: number;
   userId?: number;
   id_consejo?: any;
+  tipo?: any;
 };
 
 const HeaderClassName = `
@@ -423,6 +425,15 @@ const Clubes = () => {
                   options={consejosTypeMap}
                   maxwidth="max-w-[208px]"
                   value={params.id_consejo}
+                  setValue={updateQuery}
+                ></SelectInput>
+                <SelectInput
+                  className="mb-10 z-50 flex-auto"
+                  name="tipo"
+                  label="Tipo"
+                  options={ExtendedTypesSelectMap}
+                  maxwidth="max-w-[208px]"
+                  value={params.tipo}
                   setValue={updateQuery}
                 ></SelectInput>
               </div>
