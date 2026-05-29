@@ -103,14 +103,29 @@ export const DragAndDrop: React.FC<AlertProps> = ({
   const handleChange: UploadProps["onChange"] = async ({
     fileList: newFileList,
   }) => {
+    const removedFiles = fileList.filter(
+      (oldFile) => !newFileList.some((newFile) => newFile.uid === oldFile.uid)
+    );
+
+    for (const removedFile of removedFiles) {
+      const fileUrl = removedFile.url || removedFile.preview || removedFile.response;
+      if (fileUrl) {
+        try {
+          await FileService.delete(fileUrl as string);
+        } catch (error) {
+          console.error("Error deleting file:", error);
+        }
+      }
+    }
+
     const aux: string[] = [];
 
-		for (const file of newFileList) {
-			if (file.status === "done") {
-				if (!file.url && !file.preview) {
-					file.preview = file.response;
+		for (const f of newFileList) {
+			if (f.status === "done") {
+				if (!f.url && !f.preview) {
+					f.preview = f.response;
 				}
-				aux.push(file.url || (file.preview as string));
+				aux.push(f.url || (f.preview as string));
 			}
 		}
 

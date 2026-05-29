@@ -13,6 +13,12 @@ class Service {
     const fileName = await this.client.post(endpoint, form);
 		return `${process.env.NEXT_PUBLIC_STORAGE}/${fileName}`;
   }
+
+  async delete(fileUrl: string): Promise<void> {
+    await this.client.delete('/files', {
+      params: { url: fileUrl },
+    });
+  }
 }
 
 export const FileService = new Service(axiosClient);
