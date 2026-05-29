@@ -84,10 +84,7 @@ export const InformeForm: React.FC<InformeFormProps> = ({
     files: {
       required: { value: true, message: "Este campo es requerido" },
       validate: (value: any) => {
-        // console.log("en la validacion:", value);
-        // console.log("en la validacion lenght:", value?.length);
         if (value.length < 1) {
-          // console.log("NO APROBADO");
           return "Debe subir al menos un archivo";
         }
       },

@@ -78,26 +78,8 @@ export const DragAndDrop: React.FC<AlertProps> = ({
   setFileList,
 	setLoading,
 }) => {
-  // const [fileList, setFileList] = React.useState<UploadFile[]>([]);
-  const [fileListBase64, setFileListBase64] = React.useState<any>();
-  const [loadingFiles, setLoadingFiles] = React.useState(false);
-  const [previewVisible, setPreviewVisible] = React.useState(false);
-  const [previewImage, setPreviewImage] = React.useState("");
-  const [previewTitle, setPreviewTitle] = React.useState("");
 
-  const getBase64 = (file: RcFile): Promise<string> =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = (error) => reject(error);
-    });
   const beforeUpload = (file: RcFile) => {
-    if (fileList.length > maxFiles) {
-      message.error(`Solo puede subir ${maxFiles} archivo${maxFiles > 1 ? 's' : ''}`);
-      return Upload.LIST_IGNORE;
-    }
-
     const isValid = file.type === "image/jpeg" || file.type === "image/png" 
 		|| file.type == "image/gif" || file.type == "application/pdf" 
 		|| file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
@@ -115,88 +97,40 @@ export const DragAndDrop: React.FC<AlertProps> = ({
       return Upload.LIST_IGNORE;
     }
 
-    return isValid && isLt2M;
+    return true;
   };
 
   const handleChange: UploadProps["onChange"] = async ({
     fileList: newFileList,
-    ...rest
   }) => {
+    const aux: string[] = [];
 
-    // if (rest.file.status === "uploading") {
-    //   setFileList(newFileList);
-    //   //  setLoading(true);
-    //   return;
-    // }
-
-    // console.log("el resto", rest);
-    // if (rest.file.status === "done") {
-    // setLoadingFiles(true);
-    // console.log("los file", newFileList);
-    // console.log("los file legth", newFileList.length);
-    const aux: any[] = [];
-    const filesNumber = newFileList.length;
-    // console.log("la cantidad:", filesNumber);
-    await Promise.all(newFileList.map(async (file, index) => {
-      // console.log("diooooos", file);
-
-      if (file.status === "done") {
-        if (!file.url && !file.preview) {
-          // file.preview = await getBase64(file.originFileObj as RcFile);
-          file.preview = await FileService.upload(file.originFileObj as RcFile);
-        }
-
-        aux.push(file.url || (file.preview as string));
-      }
-
-      if (file.status === "done") {
-        if (index === newFileList.length - 1) {
-          // setLoadingFiles(false);
-        }
-      }
-			return file;
-    }));
-		if (setLoading) {
-			if (newFileList.length == aux.length) setLoading(false);
-			else setLoading(true);
-		}
-    if (filesNumber < minFiles) {
-      setErrorRHF(name, {
-        type: "custom",
-        message: `Debe subir ${minFiles} archivo${ minFiles > 1 ? 's' : ''}`,
-      });
-			setValueRHF(name, aux);
-    } else {
-			//setFileListBase64(aux.slice());
-			setValueRHF(name, aux, {
-				shouldValidate: true,
-				shouldDirty: true,
-			});
+		for (const file of newFileList) {
+			if (file.status === "done") {
+				if (!file.url && !file.preview) {
+					file.preview = file.response;
+				}
+				aux.push(file.url || (file.preview as string));
+			}
 		}
 
-    // console.log("Elaux:", aux);
+		setLoading?.(aux.length !== newFileList.length);
+
+		setValueRHF(name, aux, {
+			shouldValidate: true,
+			shouldDirty: true,
+		});
     setFileList(newFileList);
-    // }
   };
 
-  /*React.useEffect(() => {
-    console.log("en base 64:", fileListBase64);
-  }, [fileListBase64]);*/
-
-  // React.useEffect(() => {
-  //   console.log("los files:", fileList);
-  // }, [fileList]);
-
-  const handlePreview = async (file: UploadFile) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj as RcFile);
+  const customRequest = async (options: any) => {
+    const { file, onSuccess, onError } = options;
+    try {
+      const url = await FileService.upload(file as RcFile);
+      onSuccess(url, file);
+    } catch (error) {
+      onError(error);
     }
-
-    setPreviewImage(file.url || (file.preview as string));
-    setPreviewVisible(true);
-    setPreviewTitle(
-      file.name || file.url!.substring(file.url!.lastIndexOf("/") + 1)
-    );
   };
 
   return (
@@ -213,6 +147,7 @@ export const DragAndDrop: React.FC<AlertProps> = ({
         <>
           <Dragger
             {...props}
+            customRequest={customRequest}
             onChange={handleChange}
             fileList={fileList}
             maxCount={maxFiles}
@@ -253,13 +188,13 @@ export const DragAndDrop: React.FC<AlertProps> = ({
 															className="w-20 h-20 object-cover"
 															alt=""
 														/>
-													: <div className="w-20">
+													: <div className="w-20" key={index}>
 															<DocumentTextIcon />
 															<Typography type="title" className="font-bold">
 																{ item.preview.split('.').at(-1)?.toLocaleUpperCase() }
 															</Typography>
 														</div>
-												: <Spinner type="loadingPage" />
+												: <Spinner type="loadingPage" key={index} />
                       );
                     })}
                   </div>
