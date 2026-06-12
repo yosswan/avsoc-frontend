@@ -1,25 +1,12 @@
-import { Input } from "components/common/form/input";
-import { GetServerSideProps } from "next";
 import * as React from "react";
 import AsyncSelect from "react-select/async";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Button } from "components/common/button/button";
-// import { useQuery } from "react-query";
-// import { UseQueryEnums } from "consts/useQueryEnums";
-import { ConsejosRegionalesServices, PersonasServices } from "services";
 import { Spinner } from "components/common/spinner/spinner";
 import { useToasts } from "react-toast-notifications";
-import { Upload, message } from "antd";
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-import { Typography } from "components/common/typography";
-import clsx from "clsx";
 import { GenerateErrorToast } from "lib/helper";
-import { isNil, isEmpty, get } from "lodash";
-import { PastoresService } from "services/Pastores";
-import { DistritosServices } from "services/Distritos";
+import { isNil, isEmpty } from "lodash";
 import { customStyles } from "consts/stylesReactSelect.helper";
-import { AncianosService } from "services/Ancianos";
-import { IglesiasServices } from "services/Iglesias";
 import { MiembrosServices } from "services/Miembros";
 import { InputListSearch } from "components/common/form/input-list-search";
 import { OptionType } from "interfaces";
@@ -46,26 +33,11 @@ const AgregarMiembros = ({ hide, refetch }: any) => {
   const { addToast } = useToasts();
 
   const [isLoading, setIsLoading] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
   const [dataMiembros, setDataMiembros] = React.useState<any>();
+  const [cargosPorMiembro, setCargosPorMiembro] = React.useState<Record<number, OptionType>>({});
+  const [submitted, setSubmitted] = React.useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    reset,
-    formState: { errors, isDirty, isValid },
-    watch,
-  } = useForm({ mode: "onChange" });
-  const rules = {
-    name: {
-      required: { value: true, message: "Este campo es requerido" },
-    },
-    miembros: {
-      required: { value: true, message: "Este campo es requerido" },
-    },
-  };
+  const { register, handleSubmit } = useForm();
 
   React.useEffect(() => {
     if (!isNil(AllCargos)) {
@@ -82,15 +54,27 @@ const AgregarMiembros = ({ hide, refetch }: any) => {
     }
   }, [AllCargos]);
 
-  const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
-    {
-      control, // control props comes from useForm (optional: if you are using FormContext)
-      name: "miembros", // unique name for your Field Array
+  const handleSubmitData = () => {
+    setSubmitted(true);
+
+    if (isEmpty(selectValueMiembros)) {
+      addToast("Debe seleccionar al menos un miembro", { appearance: "error" });
+      return;
     }
-  );
-  const handleSubmitData = (data: any) => {
+
+    if (selectValueMiembros?.some((_, i) => !cargosPorMiembro[i])) {
+      addToast("Debe seleccionar un cargo para cada miembro", { appearance: "error" });
+      return;
+    }
+
     setIsLoading(true);
-    MiembrosServices.create(data)
+    const payload = {
+      miembros: selectValueMiembros?.map((miembro: any, i: number) => ({
+        ...miembro,
+        cargoSelected: cargosPorMiembro[i],
+      })) || [],
+    };
+    MiembrosServices.create(payload)
       .then((response: any) => {
         addToast("Miembros agregados exitosamente", {
           appearance: "success",
@@ -110,7 +94,11 @@ const AgregarMiembros = ({ hide, refetch }: any) => {
       const pos = selectValueMiembros?.findIndex(
         (item: any) => item.value === eventData.removedValue?.value
       );
-      remove(pos);
+      setCargosPorMiembro((prev) => {
+        const next = { ...prev };
+        delete next[pos as number];
+        return next;
+      });
     }
     setSelectValueMiembros(selected);
   };
@@ -170,9 +158,17 @@ const AgregarMiembros = ({ hide, refetch }: any) => {
                 styles={customStyles}
                 value={selectValueMiembros}
                 className={"text-sm"}
-                onChange={handleChangeSelectMiembros}
+                onChange={(selected, eventData) => {
+                  handleChangeSelectMiembros(selected, eventData);
+                  setSubmitted(false);
+                }}
                 isMulti
               />
+              {submitted && isEmpty(selectValueMiembros) && (
+                <span className="flex items-center mt-3 text-alert-error font-montserrat text-sm">
+                  Debe seleccionar al menos un miembro.
+                </span>
+              )}
             </div>
 
             <div className={"relative py-2 w-full mb-3 md:mb-5"}>
@@ -191,15 +187,13 @@ const AgregarMiembros = ({ hide, refetch }: any) => {
                     className="mb-4"
                     options={dataCargos || []}
                     register={register}
-                    rules={rules.miembros}
-                    required
-                    error={errors.cargos}
+                    error={submitted && !cargosPorMiembro[index] ? { message: "Este campo es requerido" } : undefined}
                     customClassNamesOptions="max-h-32 w-full overflow-auto bg-white py-1 text-base sm:text-sm"
                     handleChange={(data: OptionType) => {
-                      append({
-                        ...selectValueMiembros[index],
-                        cargoSelected: { ...data },
-                      });
+                      setCargosPorMiembro((prev) => ({
+                        ...prev,
+                        [index]: data,
+                      }));
                     }}
                   />
                 </React.Fragment>

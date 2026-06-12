@@ -192,7 +192,7 @@ const CamporeeList = ({ type, festival = false }: { type?: ExtendedTypesSelectEn
             <Tooltip title="Ver detalle">
               <div className="flex-shrink-0 h-10 w-8 ml-5">
                 <Link
-                  href={`${appRouter.dashboard.href}${festival ? appRouter.dashboard.subLinks.festival.href : appRouter.dashboard.subLinks.camporee.href}${type ? `/${type}` : ''}/${appRouter.dashboard.subLinks.camporee.subLinks.detail.href}/${value.id}`}
+                  href={`${appRouter.dashboard.href}${festival ? appRouter.dashboard.subLinks.festival.href : appRouter.dashboard.subLinks.camporee.href}${type && !festival ? `/${type}` : ''}/${appRouter.dashboard.subLinks.camporee.subLinks.detail.href}/${value.id}`}
                 >
 
                   <Icon

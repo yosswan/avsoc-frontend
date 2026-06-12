@@ -45,3 +45,13 @@ yarn-error.log*
 
 # TypeScript incremental build cache
 *.tsbuildinfo
+
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Ignorar explícitamente el estado de instalación
+.yarn/install-state.gz
