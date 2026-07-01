@@ -103,6 +103,9 @@ const Register = () => {
   const rules = {
     email: {
       required: { value: true, message: "Este campo es requerido" },
+      validate: (value: string) =>
+        value?.toLowerCase().endsWith("@gmail.com") ||
+        "Solo se permiten correos gmail",
     },
     username: {
       required: { value: true, message: "Este campo es requerido" },

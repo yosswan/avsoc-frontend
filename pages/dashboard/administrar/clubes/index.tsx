@@ -130,6 +130,10 @@ const Clubes = () => {
 
   const updateQuery = React.useCallback(
     (key: string, value: number | string | undefined) => {
+      if (["id_consejo", "tipo"].includes(key)) {
+        setValue({ [key]: value, page: undefined });
+        return;
+      }
       setValue({ [key]: value });
     },
     [setValue]

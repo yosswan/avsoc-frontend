@@ -123,6 +123,10 @@ const EventosPrecamporee = ({
 
   const updateQuery = React.useCallback(
 		(key: string, value: number | string | undefined) => {
+			if (key === "light") {
+				setValue({ light: value as string|undefined, page: undefined });
+				return;
+			}
 			setValue({ [key]: value });
 		},
 		[setValue]

@@ -118,6 +118,10 @@ const Distritos = () => {
 
   const updateQuery = React.useCallback(
     (key: string, value: number | string | undefined) => {
+      if (key === "id_consejo") {
+        setValue({ [key]: value, page: undefined });
+        return;
+      }
       setValue({ [key]: value });
     },
     [setValue]

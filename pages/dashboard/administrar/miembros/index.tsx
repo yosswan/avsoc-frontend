@@ -121,6 +121,10 @@ const Miembros = () => {
 
   const updateQuery = React.useCallback(
     (key: string, value: number | string | undefined) => {
+      if (key === "fecha") {
+        setValue({ [key]: value as string|undefined, page: undefined });
+        return;
+      }
       setValue({ [key]: value });
     },
     [setValue]

@@ -10,7 +10,7 @@ import { Icons } from "consts";
 import { Typography } from "../typography";
 import { isEmpty } from "lodash";
 import { FileService } from "services/Image";
-import { DocumentTextIcon } from '@heroicons/react/solid';
+import { DocumentTextIcon, MusicNoteIcon } from '@heroicons/react/solid';
 import { Spinner } from "../spinner/spinner";
 
 const { Dragger } = Upload;
@@ -83,7 +83,8 @@ export const DragAndDrop: React.FC<AlertProps> = ({
     const isValid = file.type === "image/jpeg" || file.type === "image/png" 
 		|| file.type == "image/gif" || file.type == "application/pdf" 
 		|| file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-		|| file.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+		|| file.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+		|| file.type === "audio/mpeg";
 
     if (!isValid) {
       message.error("File format not allowed");
@@ -168,7 +169,7 @@ export const DragAndDrop: React.FC<AlertProps> = ({
             maxCount={maxFiles}
             disabled={disabled}
             // showUploadList={!loadingFiles}
-            accept=".jpg,.jpeg,.png,.docx,.pdf,.xlxs,.gif"
+            accept=".jpg,.jpeg,.png,.docx,.pdf,.xlxs,.gif,.mp3"
             beforeUpload={beforeUpload}
             // showUploadList={isEdit ? false : true}
             // disabled={fileList.length >= 3}
@@ -194,22 +195,39 @@ export const DragAndDrop: React.FC<AlertProps> = ({
                 {fileList /*&& !fileListBase64*/ && (
                   <div className="p-4 flex flex-wrap gap-4">
                     {fileList.map((item, index: any) => {
+                      const preview = item.preview as string | undefined;
+                      const extension = preview?.split('.').at(-1)?.toLowerCase();
+
+                      if (preview && (preview.endsWith('jpg') || preview.endsWith('jpeg') || preview.endsWith('png') || preview.startsWith('data:'))) {
+                        return (
+                          <img
+                            key={index}
+                            src={preview}
+                            className="w-20 h-20 object-cover"
+                            alt=""
+                          />
+                        );
+                      }
+
+                      if (extension === 'mp3') {
+                        return (
+                          <div className="w-40" key={index}>
+                            <MusicNoteIcon className="w-6 h-6 text-primary mb-2" />
+                            <audio controls crossOrigin="anonymous" className="w-full">
+                              <source src={preview} type="audio/mpeg" />
+                              Tu navegador no soporta audio.
+                            </audio>
+                          </div>
+                        );
+                      }
+
                       return (
-												item.preview ?
-													item.preview.endsWith('jpg') || item.preview.startsWith('data:') ?
-														<img
-															key={index}
-															src={item.preview}
-															className="w-20 h-20 object-cover"
-															alt=""
-														/>
-													: <div className="w-20" key={index}>
-															<DocumentTextIcon />
-															<Typography type="title" className="font-bold">
-																{ item.preview.split('.').at(-1)?.toLocaleUpperCase() }
-															</Typography>
-														</div>
-												: <Spinner type="loadingPage" key={index} />
+                        <div className="w-20" key={index}>
+                          <DocumentTextIcon />
+                          <Typography type="title" className="font-bold">
+                            {extension?.toUpperCase()}
+                          </Typography>
+                        </div>
                       );
                     })}
                   </div>
@@ -247,3 +265,4 @@ export const DragAndDrop: React.FC<AlertProps> = ({
     />
   );
 };
+
