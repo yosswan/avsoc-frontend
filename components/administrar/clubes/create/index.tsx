@@ -39,6 +39,7 @@ const CreateClub = ({ hide, refetch }: any) => {
   const [imageUrl, setImageUrl] = React.useState();
   const [dataDirector, setDataDirector] = React.useState<any>();
   const [dataIglesias, setDataIglesias] = React.useState<any>();
+  const lastFetchParams = React.useRef<{ tipo: string | undefined }>({ tipo: undefined });
   // const { data: presidentesConsejo, isLoading } = useQuery<any>(
   //   [UseQueryEnums.GET_PRESIDENTES_CONSEJO],
   //   () => ConsejosRegionalesServices.getAllPastores()
@@ -100,9 +101,13 @@ const CreateClub = ({ hide, refetch }: any) => {
   };
 
   const promiseOptionsDirector = (inputValue: any, callback: any) => {
-    if (!inputValue && !dataDirector) {
+    const currentTipo = watch("tipo")?.value;
+
+    if (!inputValue && (!dataDirector || lastFetchParams.current?.tipo !== currentTipo)) {
+      lastFetchParams.current = { tipo: currentTipo };
       return DirectorService.getAll({
         id_club: 0,
+        tipo: currentTipo,
       }).then((response) => {
         setDataDirector(response);
         const options = response?.data?.map((item: any) => {
@@ -113,6 +118,14 @@ const CreateClub = ({ hide, refetch }: any) => {
         });
         return options;
       });
+    } else if (!inputValue && dataDirector) {
+      const options = dataDirector?.data?.map((item: any) => {
+        return {
+          value: item.cedula,
+          label: `${item.nombres} ${item.apellidos}`,
+        };
+      });
+      return callback(options);
     } else {
       let filter = dataDirector?.data?.filter((item: any) =>
         item.nombres
@@ -228,6 +241,8 @@ const CreateClub = ({ hide, refetch }: any) => {
                 value={selectValueDirector}
                 className={"text-sm"}
                 onChange={handleChangeSelectDirector}
+                isDisabled={!watch("tipo")?.value}
+                key={watch("tipo")?.value || "sin-tipo"}
               />
             </div>
             
